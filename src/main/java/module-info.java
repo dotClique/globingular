@@ -1,9 +1,9 @@
-module javafxapp {
+module globingular {
 	requires javafx.fxml;
 	requires transitive javafx.graphics;
 	requires javafx.controls;
 	
-	exports javafxapp;
+	exports globingular;
 
-	opens javafxapp to javafx.fxml;
+	opens globingular to javafx.fxml;
 }
