@@ -46,13 +46,19 @@
             <version>4.0.16-alpha</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.testfx</groupId>
+            <artifactId>openjfx-monocle</artifactId>
+            <version>jdk-12.0.1+2</version>
+            <scope>test</scope>
+        </dependency>
 
         <!-- OrgJSON for JSON parsing -->
         <dependency>
-	    <groupId>org.json</groupId>
-	    <artifactId>json</artifactId>
-	    <version>20200518</version>
-	</dependency>
+	        <groupId>org.json</groupId>
+	        <artifactId>json</artifactId>
+	        <version>20200518</version>
+	    </dependency>
     </dependencies>
 
 
@@ -76,7 +82,7 @@
                 <version>3.0.0-M5</version>
                 <configuration>
                     <redirectTestOutputToFile>true</redirectTestOutputToFile>
-                    <argLine>@{argLine} --add-exports javafx.graphics/com.sun.javafx.application=ALL-UNNAMED</argLine>
+                    <argLine>@{argLine} --add-exports javafx.graphics/com.sun.javafx.application=ALL-UNNAMED --add-exports javafx.graphics/com.sun.glass.ui=ALL-UNNAMED --add-opens javafx.graphics/com.sun.glass.ui=ALL-UNNAMED -Djava.awt.headless=true -Dtestfx.robot=glass -Dtestfx.headless=true -Dprism.order=sw</argLine>
                 </configuration>
             </plugin>
 
