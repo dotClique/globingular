@@ -5,10 +5,10 @@ module globingular {
 	requires java.desktop;
 	requires batik.transcoder;
 	requires batik.bridge;
+	requires batik.dom;
 	requires javafx.swing;
 
 	exports globingular;
 
-	opens globingular to javafx.fxml, batik.bridge, batik.transcoder;
-
+	opens globingular to javafx.fxml;
 }
