@@ -3,6 +3,9 @@ module globingular {
 	requires transitive javafx.graphics;
 	requires javafx.controls;
 	requires java.desktop;
+	requires javafx.swing;
+
+	/* Batik dependencies */
 	requires batik.transcoder;
 	requires batik.bridge;
 	requires batik.dom;
@@ -22,11 +25,6 @@ module globingular {
 	requires xml.apis.ext;
 	requires xmlgraphics.commons;
 	requires jdk.xml.dom;
-	requires javafx.swing;
-
-	uses org.apache.batik.bridge.RhinoInterpreterFactory;
-
-	// provides org.apache.batik.script.InterpreterFactory with org.apache.batik.bridge.RhinoInterpreterFactory;
 
 	exports globingular;
 
