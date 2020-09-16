@@ -22,7 +22,7 @@ public class AppController {
 
     public void initialize() {
         BufferedImageTranscoder transcoder = new BufferedImageTranscoder();
-        try (InputStream file = getClass().getResourceAsStream("https://raw.githubusercontent.com/raphaellepuschitz/SVG-World-Map/master/src/world-states.svg")) {
+        try (InputStream file = getClass().getResourceAsStream("/svg/world-states.svg")) {
             TranscoderInput transcoderIn = new TranscoderInput(file);
             try {
                 transcoder.transcode(transcoderIn, null);
