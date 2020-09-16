@@ -24,7 +24,7 @@ public class CountryCollectorTest {
 
     @Test
     public void testConstructor() {
-        assertEquals(cc.numberVisited(), 2);
+        assertEquals(2, cc.numberVisited());
         assertTrue(cc.hasVisited("SE"));
         assertTrue(cc.hasVisited("DK"));
         assertFalse(cc.hasVisited("ES"));
