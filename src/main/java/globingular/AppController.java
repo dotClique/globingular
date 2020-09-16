@@ -1,6 +1,7 @@
 package globingular;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.embed.swing.SwingFXUtils;
@@ -12,6 +13,9 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class AppController {
+
+    @FXML
+    Button clickMeButton;
 
     @FXML
     ImageView imgView;
@@ -35,5 +39,8 @@ public class AppController {
 
     }
 
-
+    @FXML
+    void handleClickMeButtonAction() {
+        clickMeButton.setText("Thanks!");
+    }
 }
