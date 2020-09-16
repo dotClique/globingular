@@ -144,7 +144,7 @@
                 <version>1.2</version>
                 <executions>
                     <execution>
-                        <id>remove-a-file-in-sub-archive</id>
+                        <id>fix-batik-script</id>
                         <goals>
                             <goal>remove</goal>
                         </goals>
@@ -154,6 +154,21 @@
                                 <directory>${settings.localRepository}/org/apache/xmlgraphics/batik-script/1.13/batik-script-1.13.jar/META-INF/services</directory>
                                 <includes>
                                     <include>org.apache.batik.script.InterpreterFactory</include>
+                                </includes>
+                            </fileset>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>fix-xalan</id>
+                        <goals>
+                            <goal>remove</goal>
+                        </goals>
+                        <phase>process-resources</phase>
+                        <configuration>
+                            <fileset>
+                                <directory>${settings.localRepository}/xalan/xalan/2.7.2/xalan-2.7.2.jar/META-INF/services</directory>
+                                <includes>
+                                    <include>org.apache.xalan.extensions.bsf.BSFManager</include>
                                 </includes>
                             </fileset>
                         </configuration>
