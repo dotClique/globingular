@@ -3,7 +3,7 @@ image:
 
 tasks:
   - init: sdk use java 14.0.2.j9-adpt
-    command: cd src/main/java/globingular/
+    command: cd globingular
 
 ports:
   # used by virtual desktop and vnc, supports JavaFX
