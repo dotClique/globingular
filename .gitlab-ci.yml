@@ -36,6 +36,7 @@ cache:
 .verify: &verify
   stage: test
   script:
+    - 'cd globingular'
     - 'mvn $MAVEN_CLI_OPTS verify'
 
 # Verify merge requests using JDK8
