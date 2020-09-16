@@ -1,4 +1,4 @@
-package globingular;
+package globingular.json;
 
 public class JSONImporter {
 

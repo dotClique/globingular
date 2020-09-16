@@ -3,6 +3,6 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.control.Button?>
 
-<Pane xmlns:fx="http://javafx.com/fxml/1" fx:controller="globingular.AppController">
+<Pane xmlns:fx="http://javafx.com/fxml/1" fx:controller="globingular.ui.AppController">
     <Button fx:id="clickMeButton" text="Click me!" onAction="#handleClickMeButtonAction"/>
 </Pane>
