@@ -30,10 +30,20 @@ public class AppTest extends ApplicationTest {
         final ListView countriesList = (ListView) parent.lookup("#countriesList");
         final TextField countryInput = (TextField) parent.lookup("#countryInput");
         final Button countryAdd = (Button) parent.lookup("#countryAdd");
+        final Button countryDel = (Button) parent.lookup("#countryDel");
 
+        if (countriesList.getItems().contains("AU")) {
+            countryInput.setText("AU");
+            clickOn(countryDel);
+            Assertions.assertFalse(countriesList.getItems().contains("AU"));
+        }
         Assertions.assertFalse(countriesList.getItems().contains("AU"));
         countryInput.setText("AU");
         clickOn(countryAdd);
+        Assertions.assertEquals("", countryInput.getText());
         Assertions.assertTrue(countriesList.getItems().contains("AU"));
+        countryInput.setText("AU");
+        clickOn(countryDel);
+        Assertions.assertFalse(countriesList.getItems().contains("AU"));
     }
 }

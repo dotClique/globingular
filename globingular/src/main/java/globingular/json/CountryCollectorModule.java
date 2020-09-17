@@ -19,9 +19,7 @@ public class CountryCollectorModule extends Module {
 
     @Override
     public String getModuleName() {
-        System.out.println(this.getClass().getName());
         return this.getClass().getName();
-        // return "CountryCollectorModule";
     }
 
     @Override

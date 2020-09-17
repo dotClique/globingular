@@ -5,11 +5,11 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-
-<AnchorPane fx:controller="globingular.ui.AppController" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="globingular.ui.AppController">
    <children>
       <ListView fx:id="countriesList" layoutX="393.0" layoutY="8.0" prefHeight="200.0" prefWidth="200.0" />
-      <TextField fx:id="countryInput" onAction="#onCountryAdd" layoutX="393.0" layoutY="217.0" />
-      <Button fx:id="countryAdd" onAction="#onCountryAdd" layoutX="562.0" layoutY="217.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="28.0" text="+" />
+      <TextField fx:id="countryInput" layoutX="393.0" layoutY="217.0" onAction="#onCountryAdd" prefHeight="27.0" prefWidth="134.0" />
+      <Button fx:id="countryDel" layoutX="562.0" layoutY="217.0" mnemonicParsing="false" onAction="#onCountryDel" prefHeight="27.0" prefWidth="28.0" text="-" />
+      <Button fx:id="countryAdd" layoutX="530.0" layoutY="217.0" mnemonicParsing="false" onAction="#onCountryAdd" prefHeight="27.0" prefWidth="28.0" text="+" />
    </children>
 </AnchorPane>
