@@ -3,7 +3,5 @@ module globingular {
 	requires transitive javafx.graphics;
 	requires javafx.controls;
 	
-	exports globingular;
-
-	opens globingular to javafx.fxml;
+	opens globingular.ui to javafx.fxml;
 }

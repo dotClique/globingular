@@ -1,4 +1,4 @@
-package globingular;
+package globingular.ui;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
