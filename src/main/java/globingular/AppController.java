@@ -27,42 +27,10 @@ public class AppController {
     @FXML
     ImageView imgView;
 
-    public ArrayList<String> countryList() {
-        ArrayList<String> countries = new ArrayList<>();
-        countries.add("NP");
-        countries.add("US");
-        countries.add("RU");
-        countries.add("IR");
-        countries.add("AU");
-        countries.add("GL");
-
-        return countries;
-    }
-
-    public Document createDocument() {
-        try {
-            String parser = XMLResourceDescriptor.getXMLParserClassName();
-            SAXSVGDocumentFactory file =  new SAXSVGDocumentFactory(parser);
-            String uri = "/svg/world-states.svg";
-            InputStream stream = getClass().getResourceAsStream("/svg/world-states.svg");
-            Document doc = file.createDocument(uri, stream);
-
-            for (String country : countryList()) {
-                Element c = doc.getElementById(country);
-                c.setAttribute("style", "fill: #7fe5f0");
-            }
-
-            return doc;
-
-        } catch (IOException io) {
-            io.printStackTrace();
-
-        } return null;
-    }
-
     public void initialize() {
         BufferedImageTranscoder transcoder = new BufferedImageTranscoder();
-        TranscoderInput transcoderIn = new TranscoderInput(createDocument());
+        Document document = new CreateDocument().createDocument();
+        TranscoderInput transcoderIn = new TranscoderInput(document);
         try {
             transcoder.transcode(transcoderIn, null);
             Image img = SwingFXUtils.toFXImage(transcoder.getBufferedImage(), null);
