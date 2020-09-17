@@ -6,6 +6,5 @@ module globingular {
 	requires transitive com.fasterxml.jackson.core;
     requires transitive com.fasterxml.jackson.databind;
 
-	
-	opens globingular.ui to javafx.fxml;
+	opens globingular.ui to javafx.fxml, javafx.graphics;
 }
