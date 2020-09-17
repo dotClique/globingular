@@ -26,6 +26,9 @@ public class AppController implements Initializable {
     @FXML
     Button countryAdd;
 
+    @FXML
+    Button countryDel;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         persistence = new PersistenceHandler();
@@ -41,8 +44,21 @@ public class AppController implements Initializable {
     @FXML
     void onCountryAdd() {
         String input = countryInput.getText();
-        if (!input.isBlank())
+        if (!input.isBlank()) {
             countryCollector.setVisited(input);
+            countryInput.clear();
+        }
+        updateView();
+        persistence.saveState(countryCollector);
+    }
+
+    @FXML
+    void onCountryDel() {
+        String input = countryInput.getText();
+        if (!input.isBlank()) {
+            countryCollector.removeVisited(input);
+            countryInput.clear();
+        }
         updateView();
         persistence.saveState(countryCollector);
     }
