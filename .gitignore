@@ -1,4 +1,11 @@
 bin/
 target/
+
+# IntelliJ
 .idea/
 *.iml
+
+# VSCode
+.settings/
+.classpath
+.project
