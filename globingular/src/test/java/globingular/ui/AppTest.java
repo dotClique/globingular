@@ -27,7 +27,7 @@ public class AppTest extends ApplicationTest {
 
     @Test
     public void testController() {
-        final ListView countriesList = (ListView) parent.lookup("#countriesList");
+        final ListView<String> countriesList = (ListView<String>) parent.lookup("#countriesList");
         final TextField countryInput = (TextField) parent.lookup("#countryInput");
         final Button countryAdd = (Button) parent.lookup("#countryAdd");
         final Button countryDel = (Button) parent.lookup("#countryDel");

@@ -9,6 +9,15 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.embed.swing.SwingFXUtils;
+
+import org.apache.batik.transcoder.TranscoderException;
+import org.apache.batik.transcoder.TranscoderInput;
+
+import org.w3c.dom.Document;
+
 import globingular.core.CountryCollector;
 import globingular.json.PersistenceHandler;
 
@@ -18,7 +27,7 @@ public class AppController implements Initializable {
     private CountryCollector countryCollector;
 
     @FXML
-    ListView countriesList;
+    ListView<String> countriesList;
 
     @FXML
     TextField countryInput;
@@ -29,10 +38,26 @@ public class AppController implements Initializable {
     @FXML
     Button countryDel;
 
+    @FXML
+    ImageView imgView;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         persistence = new PersistenceHandler();
         countryCollector = persistence.loadState();
+
+        BufferedImageTranscoder transcoder = new BufferedImageTranscoder();
+        Document document = new CreateDocument().createDocument();
+        TranscoderInput transcoderIn = new TranscoderInput(document);
+        try {
+            transcoder.transcode(transcoderIn, null);
+            Image img = SwingFXUtils.toFXImage(transcoder.getBufferedImage(), null);
+            imgView.setImage(img);
+
+        } catch (TranscoderException e) {
+            e.printStackTrace();
+        }
+
         updateView();
     }
 
