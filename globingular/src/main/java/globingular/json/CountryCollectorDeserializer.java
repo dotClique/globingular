@@ -15,7 +15,7 @@ public class CountryCollectorDeserializer extends JsonDeserializer<CountryCollec
 
     @Override
     public CountryCollector deserialize(JsonParser p, DeserializationContext ctxt)
-            throws IOException, JsonProcessingException {
+            throws IOException {
 
         JsonNode node = p.getCodec().readTree(p);
 
