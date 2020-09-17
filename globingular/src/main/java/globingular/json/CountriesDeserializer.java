@@ -27,9 +27,4 @@ public class CountriesDeserializer {
         }
         return countries;
     }
-
-    public static void main(String[] args) {
-        CountriesDeserializer cd = new CountriesDeserializer();
-        System.out.println(cd.importAll().get(13));
-    }
 }
