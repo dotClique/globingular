@@ -25,6 +25,7 @@ module globingular {
 	requires xml.apis.ext;
 	requires xmlgraphics.commons;
 	requires jdk.xml.dom;
+	requires batik.swing;
 
 	exports globingular;
 
