@@ -1,6 +1,7 @@
 package globingular.core;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import globingular.json.CountriesSerializer;
 
 public class Country {
     private String countryCode;
