@@ -6,6 +6,11 @@ module globingular {
 	
 	requires transitive com.fasterxml.jackson.core;
     requires transitive com.fasterxml.jackson.databind;
+	requires java.desktop;
+	requires batik.transcoder;
+	requires javafx.swing;
+	requires batik.anim;
+	requires batik.util;
 
 	opens globingular.ui to javafx.fxml, javafx.graphics;
 }

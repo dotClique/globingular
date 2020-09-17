@@ -1,4 +1,4 @@
-package globingular;
+package globingular.ui;
 
 import org.apache.batik.anim.dom.SAXSVGDocumentFactory;
 import org.apache.batik.util.XMLResourceDescriptor;

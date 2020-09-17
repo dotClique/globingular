@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 
-<Pane prefHeight="600" prefWidth="800" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="globingular.AppController">
+<Pane prefHeight="600" prefWidth="800" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="globingular.ui.AppController">
     <Button fx:id="clickMeButton" onAction="#handleClickMeButtonAction" text="Click me!" />
    <HBox layoutX="32.0" layoutY="46.0" prefHeight="304.0" prefWidth="318.0">
          <ImageView fx:id="imgView" fitHeight="776.0" fitWidth="721.0" pickOnBounds="true" preserveRatio="true" />
