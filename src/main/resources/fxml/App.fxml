@@ -7,9 +7,7 @@
 
 <Pane prefHeight="600" prefWidth="800" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="globingular.AppController">
     <Button fx:id="clickMeButton" onAction="#handleClickMeButtonAction" text="Click me!" />
-   <HBox fx:id="hbox" layoutX="32.0" layoutY="46.0" prefHeight="304.0" prefWidth="318.0">
-      <children>
+   <HBox layoutX="32.0" layoutY="46.0" prefHeight="304.0" prefWidth="318.0">
          <ImageView fx:id="imgView" fitHeight="776.0" fitWidth="721.0" pickOnBounds="true" preserveRatio="true" />
-      </children>
    </HBox>
 </Pane>
