@@ -1,4 +1,4 @@
-package globingular;
+package globingular.json;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
