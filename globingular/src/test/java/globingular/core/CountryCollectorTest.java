@@ -14,14 +14,14 @@ public class CountryCollectorTest extends ApplicationTest {
     private CountryCollector cc;
 
     @Override
-    public void start(final Stage stage) throws Exception {
-        cc = new CountryCollector("SE");
+    public void start(final Stage stage) {
+        cc = new CountryCollector("SE", "DK");
     }
 
     @Test
     public void testToString() {
-        cc = new CountryCollector("SE");
-        assertEquals("[SE]", cc.toString());
+        CountryCollector cc2 = new CountryCollector("SE");
+        assertEquals("[SE]", cc2.toString());
     }
 
     @Test

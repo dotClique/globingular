@@ -4,6 +4,7 @@ import java.util.List;
 
 import javafx.beans.property.SetProperty;
 import javafx.beans.property.SimpleSetProperty;
+import javafx.collections.FXCollections;
 
 public class CountryCollector {
 
@@ -13,7 +14,7 @@ public class CountryCollector {
      * Defines a new CountryCollector-object without any visits
      */
     public CountryCollector() {
-        this.visits = new SimpleSetProperty<>();
+        this.visits = new SimpleSetProperty<>(FXCollections.observableSet());
     }
 
     /**
@@ -23,9 +24,7 @@ public class CountryCollector {
      */
     public CountryCollector(String... countries) {
         this();
-        for (String string : countries) {
-            this.setVisited(string);
-        }
+        this.visits.set(FXCollections.observableSet(countries));
     }
 
     /**
@@ -68,6 +67,6 @@ public class CountryCollector {
 
     @Override
     public String toString() {
-        return this.visits.toString();
+        return this.visits.getValue().toString();
     }
 }
