@@ -1,18 +1,19 @@
 package globingular.core;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+
+import javafx.beans.property.SetProperty;
+import javafx.beans.property.SimpleSetProperty;
 
 public class CountryCollector {
 
-    private Set<String> visits;
+    final private SetProperty<String> visits;
 
     /**
      * Defines a new CountryCollector-object without any visits
      */
     public CountryCollector() {
-        this.visits = new HashSet<>();
+        this.visits = new SimpleSetProperty<>();
     }
 
     /**
@@ -22,7 +23,9 @@ public class CountryCollector {
      */
     public CountryCollector(String... countries) {
         this();
-        this.visits.addAll(List.of(countries));
+        for (String string : countries) {
+            this.setVisited(string);
+        }
     }
 
     /**
