@@ -23,11 +23,10 @@ public class CountryCollectorDeserializer extends JsonDeserializer<CountryCollec
         CountryCollector c = new CountryCollector();
         
         for (int i = 0; i < arr.size(); i++) {
-            System.out.println(arr.get(i));
-            c.setVisited(arr.get(i).toString());
+            c.setVisited(arr.get(i).asText());
         }
         
         return c;
     }
-    
+
 }
