@@ -16,9 +16,9 @@ import globingular.core.CountryCollector;
 
 public class PersistenceHandler {
 
-    final private Path FILE_COLLECTOR = Paths.get(System.getProperty("user.home"), "temp", "globingular", "countryCollector.json");
-    final private Path DATA_FOLDER = FILE_COLLECTOR.getParent();
-    final private String SAMPLE_COLLECTOR = "/json/sampleCollector.json";
+    static final private Path FILE_COLLECTOR = Paths.get(System.getProperty("user.home"), "temp", "globingular", "countryCollector.json");
+    static final private Path DATA_FOLDER = FILE_COLLECTOR.getParent();
+    static final private String SAMPLE_COLLECTOR = "/json/sampleCollector.json";
 
     private ObjectMapper objectMapper;
 
