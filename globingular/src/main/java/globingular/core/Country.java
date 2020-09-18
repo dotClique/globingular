@@ -3,6 +3,8 @@ package globingular.core;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import globingular.json.CountriesSerializer;
 
+import java.util.Arrays;
+
 public class Country {
     private String countryCode;
     private String name;
@@ -38,6 +40,14 @@ public class Country {
 
     @Override
     public String toString() {
-        return CountriesSerializer.serializeCountry(this);
+        return "Country{" +
+               "countryCode='" + countryCode + '\'' +
+               ", name='" + name + '\'' +
+               ", longname='" + longname + '\'' +
+               ", sovereignty='" + sovereignty + '\'' +
+               ", region='" + region + '\'' +
+               ", population=" + population +
+               ", provinces=" + Arrays.toString(provinces) +
+               '}';
     }
 }

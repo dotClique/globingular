@@ -57,6 +57,15 @@ public class CountryCollector {
     }
 
     /**
+     * Get a list with all the countryCodes of the countries that has been visited
+     * 
+     * @return List of countryCodes visited
+     */
+    public String[] getVisitedCountries() {
+        return visits.toArray(new String[this.numberVisited()]);
+    }
+
+    /**
      * Get the amount of countries visited
      * 
      * @return Returns number of countries visited

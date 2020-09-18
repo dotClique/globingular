@@ -5,12 +5,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import globingular.core.Country;
 
 public class CountriesSerializer {
-    public static String serializeCountry(Country c) {
+    public static String serializeCountry(Country c) throws JsonProcessingException {
         ObjectMapper om = new ObjectMapper();
-        try {
-            return om.writeValueAsString(c);
-        } catch (JsonProcessingException e) {
-            return e.getMessage();
-        }
+        return om.writeValueAsString(c);
     }
 }

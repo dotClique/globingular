@@ -8,6 +8,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.scene.control.Button;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
 
 public class AppTest extends ApplicationTest {
 
@@ -25,9 +27,23 @@ public class AppTest extends ApplicationTest {
 
     @Test
     public void testController() {
-        final Button clickMeButton = (Button) parent.lookup("#clickMeButton");
-        String oldText = clickMeButton.getText();
-        clickOn(clickMeButton);
-        Assertions.assertFalse(clickMeButton.getText().equals(oldText));
+        final ListView<String> countriesList = (ListView<String>) parent.lookup("#countriesList");
+        final TextField countryInput = (TextField) parent.lookup("#countryInput");
+        final Button countryAdd = (Button) parent.lookup("#countryAdd");
+        final Button countryDel = (Button) parent.lookup("#countryDel");
+
+        if (countriesList.getItems().contains("AU")) {
+            countryInput.setText("AU");
+            clickOn(countryDel);
+            Assertions.assertFalse(countriesList.getItems().contains("AU"));
+        }
+        Assertions.assertFalse(countriesList.getItems().contains("AU"));
+        countryInput.setText("AU");
+        clickOn(countryAdd);
+        Assertions.assertEquals("", countryInput.getText());
+        Assertions.assertTrue(countriesList.getItems().contains("AU"));
+        countryInput.setText("AU");
+        clickOn(countryDel);
+        Assertions.assertFalse(countriesList.getItems().contains("AU"));
     }
 }
