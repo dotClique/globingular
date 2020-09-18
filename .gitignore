@@ -6,6 +6,7 @@ target/
 *.iml
 
 # VSCode
+.vscode/
 .settings/
 .classpath
 .project
