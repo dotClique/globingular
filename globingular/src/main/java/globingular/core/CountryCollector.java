@@ -3,6 +3,7 @@ package globingular.core;
 import javafx.beans.property.SetProperty;
 import javafx.beans.property.SimpleSetProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableSet;
 
 public class CountryCollector {
 
@@ -61,6 +62,14 @@ public class CountryCollector {
      */
     public String[] getVisitedCountries() {
         return visits.toArray(new String[this.numberVisited()]);
+    }
+
+    public ObservableSet<String> getVisits() {
+        return visits.get();
+    }
+
+    public SetProperty<String> visitsProperty() {
+        return visits;
     }
 
     /**
