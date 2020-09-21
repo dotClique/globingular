@@ -32,7 +32,7 @@ public class AppTest extends ApplicationTest {
         final TextField countryInput = (TextField) parent.lookup("#countryInput");
         final Button countryAdd = (Button) parent.lookup("#countryAdd");
         final Button countryDel = (Button) parent.lookup("#countryDel");
-        final Country au = new Country("AU","Australia","","",0L);
+        final Country au = new Country("BXY","Barx","","",0L);
 
         if (countriesList.getItems().contains(au)) {
             countryInput.setText(au.getCountryCode());
