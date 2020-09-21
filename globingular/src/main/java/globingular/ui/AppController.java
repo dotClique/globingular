@@ -1,25 +1,19 @@
 package globingular.ui;
 
 import java.net.URL;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
-import javafx.beans.Observable;
-import javafx.beans.binding.Binding;
-import javafx.beans.binding.Bindings;
-import javafx.beans.binding.ListBinding;
-import javafx.beans.property.Property;
 import javafx.collections.*;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.embed.swing.SwingFXUtils;
 
-import javafx.util.Callback;
 import org.apache.batik.transcoder.TranscoderException;
 import org.apache.batik.transcoder.TranscoderInput;
 
@@ -33,8 +27,7 @@ public class AppController implements Initializable {
 
     private PersistenceHandler persistence;
     private CountryCollector countryCollector;
-    private Document document = new CreateDocument().createDocument();
-
+    private final Document document = new CreateDocument().createDocument();
 
     @FXML
     ListView<String> countriesList;
@@ -55,58 +48,21 @@ public class AppController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         persistence = new PersistenceHandler();
         countryCollector = persistence.loadState();
+        setColorAll(countryCollector.getVisitedCountries(), Colors.COUNTRY_VISITED);
 
-        // TODO: list doesn't refresh on add/remove.
-        // TODO: newly added items unselectable.
-        // TODO: removing doesn't exactly work.
-        countriesList.itemsProperty().set(
-                new ModifiableObservableListBase<>() {
-                    @Override
-                    public String get(int index) {
-                        return countryCollector.getVisitedCountries()[index];
-                    }
-
-                    @Override
-                    public int size() {
-                        return countryCollector.getVisitedCountries().length;
-                    }
-
-                    @Override
-                    protected void doAdd(int index, String element) {
-                        countryCollector.setVisited(element);
-                    }
-
-                    @Override
-                    protected String doSet(int index, String element) {
-                        doAdd(0, element);
-                        return null;
-                    }
-
-                    @Override
-                    protected String doRemove(int index) {
-                        countryCollector.removeVisited(get(index));
-                        return null;
-                    }
-                });
-
-        updateMap();
-
-        document.getElementById("NO").setAttribute("style","fill: #ff00ff");
-
-        countryCollector.visitsProperty().addListener((SetChangeListener<? super String>) e -> {
+        countryCollector.visitedCountriesProperty().addListener((SetChangeListener<? super String>) e -> {
             if (e.wasAdded()) {
                 setColor(e.getElementAdded(), Colors.COUNTRY_VISITED);
             } else {
-                removeColor(e.getElementRemoved());
+                setColor(e.getElementRemoved(), Colors.COUNTRY_NOT_VISITED);
             }
         });
 
-    }
+        countriesList.itemsProperty().set(countryCollector.getVisitedCountriesSorted());
+        countriesList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
-//    private void updateView() {
-//        countriesList.getItems().clear();
-//        countriesList.getItems().addAll(List.of(countryCollector.getVisitedCountries()));
-//    }
+        updateMap();
+    }
 
     @FXML
     void onCountryAdd() {
@@ -124,7 +80,13 @@ public class AppController implements Initializable {
         if (!input.isBlank()) {
             countryCollector.removeVisited(input);
             countryInput.clear();
+        } else {
+            // Array conversion necessary to prevent the removal of items from foreach-target
+            for (Object countryCode : countriesList.getSelectionModel().getSelectedItems().toArray()) {
+                countryCollector.removeVisited((String) countryCode);
+            }
         }
+        countriesList.getSelectionModel().clearSelection();
         persistence.saveState(countryCollector);
     }
 
@@ -132,22 +94,17 @@ public class AppController implements Initializable {
         Element c = document.getElementById(countryCode);
 
         if (c == null) {
-            throw new RuntimeException("Country not on map: " + countryCode);
+            return;
         }
 
         c.setAttribute("style", "fill: " + color.hex);
         updateMap();
     }
 
-    private void removeColor(String countryCode) {
-        Element c = document.getElementById(countryCode);
-
-        if (c == null) {
-            throw new RuntimeException("Country not on map: " + countryCode);
+    private void setColorAll(Collection<String> countryCodes, Colors color) {
+        for (String countryCode : countryCodes) {
+            setColor(countryCode, color);
         }
-
-        c.setAttribute("style", "");
-        updateMap();
     }
 
     private void updateMap() {

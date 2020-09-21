@@ -15,7 +15,7 @@ public class CountryCollectorSerializer extends JsonSerializer<CountryCollector>
             throws IOException {
                 gen.writeStartObject();
                 gen.writeFieldName("VisitedCountries");
-                String[] arr = collector.getVisitedCountries();
+                String[] arr = collector.getVisitedCountries().toArray(String[]::new);
                 gen.writeArray(arr, 0, arr.length);
                 gen.writeEndObject();
     }

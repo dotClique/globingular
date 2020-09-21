@@ -2,87 +2,91 @@ package globingular.core;
 
 import javafx.beans.property.SetProperty;
 import javafx.beans.property.SimpleSetProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableSet;
+import javafx.collections.*;
+
+import static java.util.Arrays.binarySearch;
 
 public class CountryCollector {
 
-    final private SetProperty<String> visits;
-
-    /**
-     * Defines a new CountryCollector-object without any visits
-     */
-    public CountryCollector() {
-        this.visits = new SimpleSetProperty<>(FXCollections.observableSet());
-    }
+    private final SetProperty<String> visitedCountries;
+    private final ObservableList<String> visitedCountriesSorted;
 
     /**
      * Defines a new CountryCollector-object with the given countries set as visited
-     * 
+     *
      * @param countries Array of countries that has been visited
      */
     public CountryCollector(String... countries) {
-        this();
-        this.visits.set(FXCollections.observableSet(countries));
+        this.visitedCountries = new SimpleSetProperty<>(FXCollections.observableSet(countries));
+        this.visitedCountriesSorted = CustomBindings.createSortedListView(visitedCountries);
     }
 
     /**
      * Set visitation status of the given country
-     * 
+     *
      * @param countryCode The two-letter country code to log
      */
     public void setVisited(String countryCode) {
-        this.visits.add(countryCode);
+        this.visitedCountries.add(countryCode);
     }
 
     /**
      * Remove visitation status of the given country
-     * 
+     *
      * @param countryCode The two-letter country code to log
      */
     public void removeVisited(String countryCode) {
-        this.visits.remove(countryCode);
+        this.visitedCountries.remove(countryCode);
     }
 
     /**
      * Check if the given country has been visited
-     * 
+     *
      * @param countryCode The two-letter country code to check
      * @return Returns true if the country has been visited. Returns false for all
-     *         non-logged, including invalid names.
+     * non-logged, including invalid names.
      */
     public boolean hasVisited(String countryCode) {
-        return this.visits.contains(countryCode);
+        return this.visitedCountries.contains(countryCode);
     }
 
     /**
-     * Get a list with all the countryCodes of the countries that has been visited
-     * 
-     * @return List of countryCodes visited
+     * Get an observable set of all visits
+     *
+     * @return Observable set of all visits
      */
-    public String[] getVisitedCountries() {
-        return visits.toArray(new String[this.numberVisited()]);
+    public ObservableSet<String> getVisitedCountries() {
+        return visitedCountries.get();
     }
 
-    public ObservableSet<String> getVisits() {
-        return visits.get();
+    /**
+     * Get the property responsible for keeping track of visited countries
+     * @return Property responsible for keeping track of visited countries
+     */
+    public SetProperty<String> visitedCountriesProperty() {
+        return visitedCountries;
     }
 
-    public SetProperty<String> visitsProperty() {
-        return visits;
+    /**
+     * Get a sorted-list view of the visitedCountries-property
+     *
+     * @return Sorted-list view of the visitedCountries-property
+     */
+    public final ObservableList<String> getVisitedCountriesSorted() {
+        return visitedCountriesSorted;
     }
 
     /**
      * Get the amount of countries visited
-     * 
+     *
      * @return Returns number of countries visited
      */
     public int numberVisited() {
-        return this.visits.size();
+        return this.visitedCountries.size();
     }
 
     @Override
     public String toString() {
-        return this.visits.getValue().toString();
+        return this.visitedCountries.getValue().toString();
     }
 }
