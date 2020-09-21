@@ -15,6 +15,7 @@ public class CountriesDeserializer {
         List<Country> countries;
         try {
             ObjectMapper mapper = new ObjectMapper(); // create once, reuse
+            mapper.registerModule(new CountryCollectorModule());
             mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
             InputStream is = CountriesDeserializer.class.getResourceAsStream("/json/countryData.json");
             countries = mapper.readValue(is, mapper.getTypeFactory().constructCollectionType(List.class, Country.class));

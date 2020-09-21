@@ -9,34 +9,31 @@ import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import globingular.core.Country;
 import globingular.core.CountryCollector;
 
 public class PersistenceHandler {
 
-    static final private Path FILE_COLLECTOR = Paths.get(System.getProperty("user.home"), "temp", "globingular", "countryCollector.json");
+    static final private Path FILE_COLLECTOR =
+            Paths.get(System.getProperty("user.home"), "temp", "globingular", "countryCollector.json");
     static final private Path DATA_FOLDER = FILE_COLLECTOR.getParent();
+    private static final Path FILE_COUNTRIES = DATA_FOLDER.resolve("countryData.json");
     static final private String SAMPLE_COLLECTOR = "/json/sampleCollector.json";
 
-    private ObjectMapper objectMapper;
-
-    private ObjectMapper getObjectMapper() {
-        if (objectMapper == null) {
-            objectMapper = new ObjectMapper();
-            objectMapper.registerModule(new CountryCollectorModule());
-        }
-        return objectMapper;
-    }
+    private final ObjectMapper objectMapper = new ObjectMapper().registerModule(new CountryCollectorModule());
 
     public CountryCollector loadState() {
+        List<Country> countries = new CountriesDeserializer().importAll();
         CountryCollector countryCollector = null;
         try (InputStream in = new BufferedInputStream(new FileInputStream(FILE_COLLECTOR.toFile()))) {
-            countryCollector = this.getObjectMapper().readValue(in, CountryCollector.class);
+            countryCollector = objectMapper.readValue(in, CountryCollector.class);
         } catch (FileNotFoundException e) {
             try (InputStream in = getClass().getResourceAsStream(SAMPLE_COLLECTOR)) {
-                countryCollector = this.getObjectMapper().readValue(in, CountryCollector.class);
+                countryCollector = objectMapper.readValue(in, CountryCollector.class);
             } catch (IOException err) {
                 err.printStackTrace();
             }
@@ -47,18 +44,16 @@ public class PersistenceHandler {
         return countryCollector;
     }
 
-    public CountryCollector saveState(CountryCollector countryCollector) {
+    public void saveState(CountryCollector countryCollector) {
         try {
             Files.createDirectories(DATA_FOLDER);
         } catch (IOException e) {
             e.printStackTrace();
         }
         try (Writer out = Files.newBufferedWriter(FILE_COLLECTOR)) {
-            this.getObjectMapper().writerWithDefaultPrettyPrinter().writeValue(out, countryCollector);
+            objectMapper.writerWithDefaultPrettyPrinter().writeValue(out, countryCollector);
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        return countryCollector;
     }
 }

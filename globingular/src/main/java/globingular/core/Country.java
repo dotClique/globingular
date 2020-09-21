@@ -1,15 +1,50 @@
 package globingular.core;
 
-import java.util.Arrays;
+import java.util.*;
 
 public class Country {
-    private String countryCode;
-    private String name;
-    private String longname;
-    private String sovereignty;
-    private String region;
-    private long population;
-    private Province[] provinces;
+    private static final HashMap<String, Country> registeredCountriesByCode = new HashMap<>();
+    private static final HashMap<String, Country> registeredCountriesByName = new HashMap<>();
+
+    private final String countryCode;
+    private final String name;
+    private final String longname;
+    private final String sovereignty;
+    private final String region;
+    private final long population;
+    private final Province[] provinces;
+
+    public Country(String countryCode, String name, String longname, String sovereignty, String region, long population,
+                   Province[] provinces) {
+        if (registeredCountriesByCode.containsKey(countryCode)) {
+            throw new UnsupportedOperationException("NUHUHH! #code");
+        }
+        if (registeredCountriesByName.containsKey(name)) {
+            throw new UnsupportedOperationException("NUHUHH! #name");
+        }
+        registeredCountriesByCode.put(countryCode, this);
+        registeredCountriesByName.put(name, this);
+        this.countryCode = countryCode;
+        this.name = name;
+        this.longname = longname;
+        this.sovereignty = sovereignty;
+        this.region = region;
+        this.population = population;
+        this.provinces = provinces;
+
+    }
+
+    public Country(String countryCode, String name, String longname, String region, long population) {
+        this(countryCode, name, longname, "UN", region, population, new Province[]{});
+    }
+
+    public static Country getCountryFromCode(String countryCode) {
+        return registeredCountriesByCode.get(countryCode);
+    }
+
+    public static Country getCountryFromName(String countryName) {
+        return registeredCountriesByName.get(countryName);
+    }
 
     public String getCountryCode() {
         return countryCode;

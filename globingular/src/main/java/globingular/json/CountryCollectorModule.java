@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.databind.module.SimpleDeserializers;
 import com.fasterxml.jackson.databind.module.SimpleSerializers;
 
+import globingular.core.Country;
 import globingular.core.CountryCollector;
 
 public class CountryCollectorModule extends Module {
@@ -15,6 +16,7 @@ public class CountryCollectorModule extends Module {
     public CountryCollectorModule() {
         serializers.addSerializer(CountryCollector.class, new CountryCollectorSerializer());
         deserializers.addDeserializer(CountryCollector.class, new CountryCollectorDeserializer());
+        deserializers.addDeserializer(Country.class, new CountryDeserializer());
     }
 
     @Override

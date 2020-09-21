@@ -1,13 +1,18 @@
 package globingular.json;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 
+import com.fasterxml.jackson.databind.type.TypeFactory;
+import globingular.core.Country;
 import globingular.core.CountryCollector;
 
 public class CountryCollectorDeserializer extends JsonDeserializer<CountryCollector> {
@@ -19,13 +24,15 @@ public class CountryCollectorDeserializer extends JsonDeserializer<CountryCollec
         JsonNode node = p.getCodec().readTree(p);
 
         ArrayNode arr = ((ArrayNode) node.get("VisitedCountries"));
-        CountryCollector c = new CountryCollector();
-        
-        for (int i = 0; i < arr.size(); i++) {
-            c.setVisited(arr.get(i).asText());
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new CountryCollectorModule());
+        List<Country> visitedCountries = new ArrayList<>();
+
+        for (JsonNode country : arr) {
+            visitedCountries.add(mapper.convertValue(country, Country.class));
         }
-        
-        return c;
+
+        return new CountryCollector(visitedCountries.toArray(new Country[]{}));
     }
 
 }
