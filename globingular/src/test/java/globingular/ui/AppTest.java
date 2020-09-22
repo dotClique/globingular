@@ -1,6 +1,6 @@
 package globingular.ui;
 
-import globingular.core.Country;
+import globingular.core.CountryCollector;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.testfx.framework.junit5.ApplicationTest;
@@ -28,11 +28,13 @@ public class AppTest extends ApplicationTest {
 
     @Test
     public void testController() {
-        final ListView<Country> countriesList = (ListView<Country>) parent.lookup("#countriesList");
+        final ListView<CountryCollector.Country> countriesList = (ListView<CountryCollector.Country>) parent.lookup(
+                "#countriesList");
+        final CountryCollector cc = controller.countryCollector;
         final TextField countryInput = (TextField) parent.lookup("#countryInput");
         final Button countryAdd = (Button) parent.lookup("#countryAdd");
         final Button countryDel = (Button) parent.lookup("#countryDel");
-        final Country au = new Country("BXY","Barx","","",0L);
+        final CountryCollector.Country au = cc.new Country("BXY","Barx","","",0L);
 
         if (countriesList.getItems().contains(au)) {
             countryInput.setText(au.getCountryCode());

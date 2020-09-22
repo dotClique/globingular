@@ -9,11 +9,9 @@ import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import globingular.core.Country;
 import globingular.core.CountryCollector;
 
 public class PersistenceHandler {
@@ -21,13 +19,11 @@ public class PersistenceHandler {
     static final private Path FILE_COLLECTOR =
             Paths.get(System.getProperty("user.home"), "temp", "globingular", "countryCollector.json");
     static final private Path DATA_FOLDER = FILE_COLLECTOR.getParent();
-    private static final Path FILE_COUNTRIES = DATA_FOLDER.resolve("countryData.json");
     static final private String SAMPLE_COLLECTOR = "/json/sampleCollector.json";
 
     private final ObjectMapper objectMapper = new ObjectMapper().registerModule(new CountryCollectorModule());
 
     public CountryCollector loadState() {
-        List<Country> countries = new CountriesDeserializer().importAll();
         CountryCollector countryCollector = null;
         try (InputStream in = new BufferedInputStream(new FileInputStream(FILE_COLLECTOR.toFile()))) {
             countryCollector = objectMapper.readValue(in, CountryCollector.class);

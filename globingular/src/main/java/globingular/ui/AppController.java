@@ -1,36 +1,31 @@
 package globingular.ui;
 
-import java.net.URL;
-import java.util.*;
-
-import globingular.core.Country;
-import javafx.collections.*;
+import globingular.core.CountryCollector;
+import globingular.json.PersistenceHandler;
+import javafx.collections.SetChangeListener;
 import javafx.css.PseudoClass;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.embed.swing.SwingFXUtils;
-
-import javafx.util.Callback;
 import org.apache.batik.transcoder.TranscoderException;
 import org.apache.batik.transcoder.TranscoderInput;
-
 import org.w3c.dom.Document;
-
-import globingular.core.CountryCollector;
-import globingular.json.PersistenceHandler;
 import org.w3c.dom.Element;
+
+import java.net.URL;
+import java.util.Collection;
+import java.util.ResourceBundle;
 
 public class AppController implements Initializable {
 
     private PersistenceHandler persistence;
-    private CountryCollector countryCollector;
+    public CountryCollector countryCollector;
     private final Document document = new CreateDocument().createDocument();
-    private Country inputCountry = null;
+    private CountryCollector.Country inputCountry = null;
 
     public static PseudoClass INVALID = new PseudoClass() {
         @Override
@@ -50,7 +45,7 @@ public class AppController implements Initializable {
     Parent root;
 
     @FXML
-    ListView<Country> countriesList;
+    ListView<CountryCollector.Country> countriesList;
 
     @FXML
     TextField countryInput;
@@ -70,7 +65,7 @@ public class AppController implements Initializable {
         countryCollector = persistence.loadState();
         setColorAll(countryCollector.getVisitedCountries(), Colors.COUNTRY_VISITED);
 
-        countryCollector.visitedCountriesProperty().addListener((SetChangeListener<? super Country>) e -> {
+        countryCollector.visitedCountriesProperty().addListener((SetChangeListener<? super CountryCollector.Country>) e -> {
             if (e.wasAdded()) {
                 setColor(e.getElementAdded(), Colors.COUNTRY_VISITED);
             } else {
@@ -82,7 +77,7 @@ public class AppController implements Initializable {
         countriesList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         countriesList.setCellFactory(countryListView -> new ListCell<>() {
             @Override
-            protected void updateItem(Country item, boolean empty) {
+            protected void updateItem(CountryCollector.Country item, boolean empty) {
                 super.updateItem(item, empty);
                 setText(item == null ? "" : item.getName());
             }
@@ -98,8 +93,8 @@ public class AppController implements Initializable {
     void onCountryAdd() {
         String input = countryInput.getText();
         if (!input.isBlank()) {
-            Country countryByCode = Country.getCountryFromCode(input);
-            Country countryByName = Country.getCountryFromName(input);
+            CountryCollector.Country countryByCode = countryCollector.getCountryFromCode(input);
+            CountryCollector.Country countryByName = countryCollector.getCountryFromName(input);
             if (countryByCode != null) {
                 countryCollector.setVisited(countryByCode);
                 countryInput.clear();
@@ -120,8 +115,8 @@ public class AppController implements Initializable {
             countryInput.pseudoClassStateChanged(BLANK, true);
             countryInput.pseudoClassStateChanged(INVALID, false);
         } else {
-            Country countryByCode = Country.getCountryFromCode(input);
-            Country countryByName = Country.getCountryFromName(input);
+            CountryCollector.Country countryByCode = countryCollector.getCountryFromCode(input);
+            CountryCollector.Country countryByName = countryCollector.getCountryFromName(input);
 
             if (countryByCode != null) {
                 inputCountry = countryByCode;
@@ -146,7 +141,8 @@ public class AppController implements Initializable {
             countryCollector.removeVisited(inputCountry);
         } else {
             // Array conversion necessary to prevent the removal of items from foreach-target
-            for (Country country : countriesList.getSelectionModel().getSelectedItems().toArray(Country[]::new)) {
+            for (CountryCollector.Country country :
+                    countriesList.getSelectionModel().getSelectedItems().toArray(CountryCollector.Country[]::new)) {
                 countryCollector.removeVisited(country);
             }
         }
@@ -154,7 +150,7 @@ public class AppController implements Initializable {
         persistence.saveState(countryCollector);
     }
 
-    private void setColor(Country country, Colors color) {
+    private void setColor(CountryCollector.Country country, Colors color) {
         Element c = document.getElementById(country.getCountryCode());
 
         if (c == null) {
@@ -165,8 +161,8 @@ public class AppController implements Initializable {
         updateMap();
     }
 
-    private void setColorAll(Collection<Country> countries, Colors color) {
-        for (Country country : countries) {
+    private void setColorAll(Collection<CountryCollector.Country> countries, Colors color) {
+        for (CountryCollector.Country country : countries) {
             setColor(country, color);
         }
     }

@@ -1,5 +1,6 @@
 package globingular.core;
 
+import javafx.beans.property.ReadOnlySetWrapper;
 import javafx.beans.property.SetProperty;
 import javafx.beans.property.SimpleSetProperty;
 import javafx.collections.*;
@@ -10,18 +11,13 @@ import static java.util.Arrays.binarySearch;
 
 public class CountryCollector {
 
-    private final SetProperty<Country> visitedCountries;
-    private final ObservableList<Country> visitedCountriesSorted;
+    private final SetProperty<Country> visitedCountries = new SimpleSetProperty<>(FXCollections.observableSet());
+    private final SetProperty<Country> existingCountries = new SimpleSetProperty<>(FXCollections.observableSet());
+    private final HashMap<String, Country> existingCountriesByCode = new HashMap<>();
+    private final HashMap<String, Country> existingCountriesByName = new HashMap<>();
 
-    /**
-     * Defines a new CountryCollector-object with the given countries set as visited
-     *
-     * @param countries Array of countries that has been visited
-     */
-    public CountryCollector(Country... countries) {
-        this.visitedCountries = new SimpleSetProperty<>(FXCollections.observableSet(countries));
-        this.visitedCountriesSorted = CustomBindings.createSortedListView(visitedCountries);
-    }
+    private final SetProperty<Country> existingCountriesReadOnly = new ReadOnlySetWrapper<>(existingCountries);
+    private final ObservableList<Country> visitedCountriesSorted = CustomBindings.createSortedListView(this.visitedCountries);;
 
     /**
      * Set visitation status of the given country
@@ -29,6 +25,7 @@ public class CountryCollector {
      * @param country The Country to log
      */
     public void setVisited(Country country) {
+        if (!existingCountries.contains(country)) throw new IllegalArgumentException("Unknown country");
         this.visitedCountries.add(country);
     }
 
@@ -38,6 +35,7 @@ public class CountryCollector {
      * @param country The Country to log
      */
     public void removeVisited(Country country) {
+        if (!existingCountries.contains(country)) throw new IllegalArgumentException("Unknown country");
         this.visitedCountries.remove(country);
     }
 
@@ -49,6 +47,7 @@ public class CountryCollector {
      * non-logged countries
      */
     public boolean hasVisited(Country country) {
+        if (!existingCountries.contains(country)) throw new IllegalArgumentException("Unknown country");
         return this.visitedCountries.contains(country);
     }
 
@@ -63,15 +62,8 @@ public class CountryCollector {
     }
 
     /**
-     * Get a copy of the set of visited countries
-     * @return A new set containing the same elements as the visitedCountries-set
-     */
-    public Set<Country> getVisitedCountriesCopy() {
-        return new HashSet<>(Arrays.asList(getVisitedCountries().toArray(Country[]::new)));
-    }
-
-    /**
      * Get the property responsible for keeping track of visited countries
+     *
      * @return Property responsible for keeping track of visited countries
      */
     public SetProperty<Country> visitedCountriesProperty() {
@@ -96,8 +88,109 @@ public class CountryCollector {
         return this.visitedCountries.size();
     }
 
+    /**
+     * Get a readonly-wrapper around the property responsible for keeping track of existing countries
+     *
+     * @return Readonly-wrapper around property responsible for keeping track of existing countries
+     */
+    public SetProperty<Country> existingCountriesProperty() {
+        return existingCountriesReadOnly;
+    }
+
     @Override
     public String toString() {
         return this.visitedCountries.getValue().toString();
+    }
+
+    /**
+     * Get an existing Country (registered to this instance) by its countryCode
+     * @param countryCode ISO two-letter country-code of the target Country
+     * @return The target Country if existing, otherwise null
+     */
+    public Country getCountryFromCode(String countryCode) {
+        return existingCountriesByCode.get(countryCode);
+    }
+
+    /**
+     * Get an existing Country (registered to this instance) by its name
+     * @param countryName Short-name of the target Country
+     * @return The target Country if existing, otherwise null
+     */
+    public Country getCountryFromName(String countryName) {
+        return existingCountriesByName.get(countryName);
+    }
+
+    public class Country {
+        private final String countryCode;
+        private final String name;
+        private final String longname;
+        private final String sovereignty;
+        private final String region;
+        private final long population;
+        private final Province[] provinces;
+
+        public Country(String countryCode, String name, String longname, String sovereignty, String region,
+                       long population,
+                       Province[] provinces) {
+            if (existingCountriesByCode.containsKey(countryCode)) {
+                throw new UnsupportedOperationException("NUHUHH! #code");
+            }
+            if (existingCountriesByName.containsKey(name)) {
+                throw new UnsupportedOperationException("NUHUHH! #name");
+            }
+
+            existingCountriesByCode.put(countryCode, this);
+            existingCountriesByName.put(name, this);
+            existingCountries.add(this);
+
+            this.countryCode = countryCode;
+            this.name = name;
+            this.longname = longname;
+            this.sovereignty = sovereignty;
+            this.region = region;
+            this.population = population;
+            this.provinces = provinces;
+        }
+
+        public Country(String countryCode, String name, String longname, String region, long population) {
+            this(countryCode, name, longname, "UN", region, population, new Province[]{});
+        }
+
+        public String getCountryCode() {
+            return countryCode;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public String getLongname() {
+            return longname;
+        }
+
+        public String getSovereignty() {
+            return sovereignty;
+        }
+
+        public String getRegion() {
+            return region;
+        }
+
+        public long getPopulation() {
+            return population;
+        }
+
+        @Override
+        public String toString() {
+            return "Country{" +
+                   "countryCode='" + countryCode + '\'' +
+                   ", name='" + name + '\'' +
+                   ", longname='" + longname + '\'' +
+                   ", sovereignty='" + sovereignty + '\'' +
+                   ", region='" + region + '\'' +
+                   ", population=" + population +
+                   ", provinces=" + Arrays.toString(provinces) +
+                   '}';
+        }
     }
 }
