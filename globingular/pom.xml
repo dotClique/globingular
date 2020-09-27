@@ -212,11 +212,24 @@
             <plugin>
 	            <groupId>org.apache.maven.plugins</groupId>
 	            <artifactId>maven-checkstyle-plugin</artifactId>
-	            <version>3.0.0</version>
+	            <version>3.1.1</version>
 	            <configuration>
-	                <configLocation>checkstyle.xml</configLocation>
+	                <configLocation>sun_checks.xml</configLocation>
 	            </configuration>
 	        </plugin>
         </plugins>
     </build>
+
+    <reporting>
+	        <plugins>
+	            <plugin>
+	                <groupId>org.apache.maven.plugins</groupId>
+	                <artifactId>maven-checkstyle-plugin</artifactId>
+	                <version>3.1.1</version>
+	                <configuration>
+	                    <configLocation>sun_checks.xml</configLocation>
+	                </configuration>
+	            </plugin>
+	        </plugins>
+	    </reporting>
 </project>
