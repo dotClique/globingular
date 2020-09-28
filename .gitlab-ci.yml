@@ -31,17 +31,12 @@ cache:
   paths:
     - .m2/repository
 
-# For merge requests do not `deploy` but only run `verify`.
 # See https://maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html
-.verify: &verify
+test:
   stage: test
   script:
     - 'cd globingular'
-    - 'mvn $MAVEN_CLI_OPTS verify'
-
-# Verify merge requests using JDK14
-verify:jdk14:
-  <<: *verify
+    - 'mvn $MAVEN_CLI_OPTS test'
 
 checkstyle:
   stage: test
@@ -53,4 +48,4 @@ spotbugs:
   stage: test
   script:
     - 'cd globingular'
-    - 'mvn $MAVEN_CLI_OPTS spotbugs:check'
+    - 'mvn $MAVEN_CLI_OPTS compile spotbugs:check'
