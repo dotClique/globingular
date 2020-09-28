@@ -24,6 +24,21 @@ public class Province {
     private long population;
 
     /**
+     * Create a new Province instance with the given arguments.
+     * 
+     * @param provinceCode ISO 3166-2 code for the Province
+     * @param capital Name of the Province's capital
+     * @param name Full name of the Province
+     * @param population Population of the Province
+     */
+    public Province(final String provinceCode, final String capital, final String name, final long population) {
+        this.provinceCode = provinceCode;
+        this.capital = capital;
+        this.name = name;
+        this.population = population;
+    }
+
+    /**
      * Get the Province's short-code.
      * 
      * @return The province code, following the ISO 3166-2 standard

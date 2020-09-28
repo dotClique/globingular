@@ -18,10 +18,9 @@ public class CountriesDeserializer {
      */
     public List<Country> importAll() {
         List<Country> countries;
-        try {
+        try (InputStream is = CountriesDeserializer.class.getResourceAsStream("/json/countryData.json")) {
             ObjectMapper mapper = new ObjectMapper(); // create once, reuse TODO; Create once?
             mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-            InputStream is = CountriesDeserializer.class.getResourceAsStream("/json/countryData.json");
             countries = mapper.readValue(is,
                     mapper.getTypeFactory().constructCollectionType(List.class, Country.class));
 

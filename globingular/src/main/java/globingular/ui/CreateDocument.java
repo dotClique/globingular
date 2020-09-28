@@ -29,11 +29,10 @@ public class CreateDocument {
      * @return The created document
      */
     public Document createDocument() {
-        try {
+        try (InputStream stream = getClass().getResourceAsStream("/svg/world-states.svg")) {
             String parser = XMLResourceDescriptor.getXMLParserClassName();
             SAXSVGDocumentFactory file =  new SAXSVGDocumentFactory(parser);
             String uri = "/svg/world-states.svg";
-            InputStream stream = getClass().getResourceAsStream("/svg/world-states.svg");
             Document doc = file.createDocument(uri, stream);
 
             for (String country : countryList()) {
