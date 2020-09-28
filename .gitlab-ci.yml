@@ -18,7 +18,7 @@ variables:
   # `installAtEnd` and `deployAtEnd` are only effective with recent version of the corresponding plugins.
   MAVEN_CLI_OPTS: "--batch-mode --errors --fail-at-end --show-version -DinstallAtEnd=true -DdeployAtEnd=true"
 
-# This template uses jdk8 for verifying and deploying images
+# This template uses jdk14 for verifying and deploying images
 image: maven:3.6.3-adoptopenjdk-14-openj9
 
 before_script:
@@ -39,6 +39,18 @@ cache:
     - 'cd globingular'
     - 'mvn $MAVEN_CLI_OPTS verify'
 
-# Verify merge requests using JDK8
+# Verify merge requests using JDK14
 verify:jdk14:
   <<: *verify
+
+checkstyle:
+  stage: test
+  script:
+    - 'cd globingular'
+    - 'mvn $MAVEN_CLI_OPTS checkstyle:check'
+
+spotbugs:
+  stage: test
+  script:
+    - 'cd globingular'
+    - 'mvn $MAVEN_CLI_OPTS spotbugs:check'
