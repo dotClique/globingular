@@ -12,7 +12,7 @@ import java.util.ArrayList;
 public class CreateDocument {
 
     //placeholder
-    public ArrayList<String> countryList() {
+    private ArrayList<String> countryList() {
         ArrayList<String> countries = new ArrayList<>();
         countries.add("NP");
         countries.add("US");
@@ -24,6 +24,10 @@ public class CreateDocument {
         return countries;
     }
 
+    /**
+     * Create a new XML/SVG-Document with the world-map of countries.
+     * @return The created document
+     */
     public Document createDocument() {
         try {
             String parser = XMLResourceDescriptor.getXMLParserClassName();
@@ -41,8 +45,8 @@ public class CreateDocument {
 
         } catch (IOException io) {
             io.printStackTrace();
-
-        } return null;
+        }
+        return null;
 }
 
 }
