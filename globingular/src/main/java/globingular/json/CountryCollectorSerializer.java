@@ -10,12 +10,16 @@ import globingular.core.CountryCollector;
 
 public class CountryCollectorSerializer extends JsonSerializer<CountryCollector> {
 
+    /**
+     * Serialize a CountryCollector object into Json format.
+     */
     @Override
-    public void serialize(CountryCollector collector, JsonGenerator gen, SerializerProvider serializers)
+    public void serialize(final CountryCollector collector, final JsonGenerator gen,
+            final SerializerProvider serializers)
             throws IOException {
                 gen.writeStartObject();
                 gen.writeFieldName("VisitedCountries");
-                String[] arr = collector.getVisitedCountries();
+                final String[] arr = collector.getVisitedCountries();
                 gen.writeArray(arr, 0, arr.length);
                 gen.writeEndObject();
     }

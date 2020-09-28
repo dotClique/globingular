@@ -16,12 +16,33 @@ import globingular.core.CountryCollector;
 
 public class PersistenceHandler {
 
-    static final private Path FILE_COLLECTOR = Paths.get(System.getProperty("user.home"), "temp", "globingular", "countryCollector.json");
-    static final private Path DATA_FOLDER = FILE_COLLECTOR.getParent();
-    static final private String SAMPLE_COLLECTOR = "/json/sampleCollector.json";
+    /**
+     * Define Path to Json-file used for saving CountryCollector-state.
+     */
+    private static final Path FILE_COLLECTOR = Paths.get(System.getProperty("user.home"), "temp", "globingular",
+            "countryCollector.json");
 
+    /**
+     * Define Path to the apps datafolder, used for saving app-state.
+     */
+    private static final Path DATA_FOLDER = FILE_COLLECTOR.getParent();
+
+    /**
+     * Define which sample-file to use for CountryCollector.
+     */
+    private static final String SAMPLE_COLLECTOR = "/json/sampleCollector.json";
+
+    /**
+     * ObjectMapper used for serialization and deserialization. Contains registered
+     * modules for correct (de)serialization.
+     */
     private ObjectMapper objectMapper;
 
+    /**
+     * Get a valid instance of objectmapper.
+     * 
+     * @return an objectmapper instance
+     */
     private ObjectMapper getObjectMapper() {
         if (objectMapper == null) {
             objectMapper = new ObjectMapper();
@@ -30,6 +51,11 @@ public class PersistenceHandler {
         return objectMapper;
     }
 
+    /**
+     * Load a CountryCollector-state from file.
+     * 
+     * @return A CountryCollector instance containing data loaded from file
+     */
     public CountryCollector loadState() {
         CountryCollector countryCollector = null;
         try (InputStream in = new BufferedInputStream(new FileInputStream(FILE_COLLECTOR.toFile()))) {
@@ -47,7 +73,13 @@ public class PersistenceHandler {
         return countryCollector;
     }
 
-    public CountryCollector saveState(CountryCollector countryCollector) {
+    /**
+     * Save a CountryCollector instance to file.
+     * 
+     * @param countryCollector The CountryCollector instance to save
+     * @return The inserted CountryCollector
+     */
+    public CountryCollector saveState(final CountryCollector countryCollector) {
         try {
             Files.createDirectories(DATA_FOLDER);
         } catch (IOException e) {
