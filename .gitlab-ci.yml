@@ -23,7 +23,7 @@ image: maven:3.6.3-adoptopenjdk-14-openj9
 
 before_script:
   - apt-get update
-  - apt-get install -y ttf-dejavu fontconfig emacs
+  - apt-get install -y emacs
 
 # Cache downloaded dependencies and plugins between builds.
 # To keep cache across branches add 'key: "$CI_JOB_NAME"'
