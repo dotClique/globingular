@@ -37,6 +37,7 @@ test:
   script:
     - 'cd globingular'
     - 'mvn $MAVEN_CLI_OPTS test'
+    - "cat target/site/jacoco/index.html | grep -o 'Total[^%]*%' | sed -e 's/Total/Jacoco-Test-Coverage:/g'"
 
 checkstyle:
   stage: test
