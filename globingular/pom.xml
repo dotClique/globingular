@@ -155,7 +155,7 @@
                 </executions>
             </plugin>
 
-            <!-- Removing old Java service from dependency -->
+            <!-- Removing old Java services from dependencies -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>truezip-maven-plugin</artifactId>
@@ -199,29 +199,73 @@
                 <groupId>com.github.spotbugs</groupId>
                 <artifactId>spotbugs-maven-plugin</artifactId>
                 <version>4.0.4</version>
-                <dependencies>
-                    <dependency>
-                        <groupId>com.github.spotbugs</groupId>
-                        <artifactId>spotbugs</artifactId>
-                        <version>4.1.3</version>
-                    </dependency>
-                </dependencies>
+                <executions>
+                    <execution>
+                        <id>check</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
 
             <!-- Maven Checkstyle for code quality check-->
             <plugin>
-	            <groupId>org.apache.maven.plugins</groupId>
-	            <artifactId>maven-checkstyle-plugin</artifactId>
-	            <version>3.1.1</version>
-	            <configuration>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>3.1.1</version>
+                <configuration>
                     <configLocation>../checkstyle.xml</configLocation>
-	            </configuration>
-	        </plugin>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>check</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Using latest maven-site-plugin for report generation -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+                <version>3.9.1</version>
+            </plugin>
         </plugins>
     </build>
 
     <reporting>
         <plugins>
+            <!-- Project report plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+                <version>3.1.1</version>
+            </plugin>
+
+            <!-- Computing test coverage -->
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.5</version>
+                <configuration>
+                    <destFile>${basedir}/target/coverage-reports/jacoco-unit.exec</destFile>
+                    <dataFile>${basedir}/target/coverage-reports/jacoco-unit.exec</dataFile>
+                </configuration>
+            </plugin>
+
+            <!-- SpotBugs for checking code quality and bugs-->
+            <plugin>
+                <groupId>com.github.spotbugs</groupId>
+                <artifactId>spotbugs-maven-plugin</artifactId>
+                <version>4.0.4</version>
+            </plugin>
+
+            <!-- Maven Checkstyle for code quality check-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
