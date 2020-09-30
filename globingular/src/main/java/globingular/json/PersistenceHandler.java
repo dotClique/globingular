@@ -59,10 +59,10 @@ public class PersistenceHandler {
     public CountryCollector loadState() {
         CountryCollector countryCollector = null;
         try (InputStream in = new BufferedInputStream(new FileInputStream(FILE_COLLECTOR.toFile()))) {
-            countryCollector = this.getObjectMapper().readValue(in, CountryCollector.class);
+            countryCollector = getObjectMapper().readValue(in, CountryCollector.class);
         } catch (FileNotFoundException e) {
             try (InputStream in = getClass().getResourceAsStream(SAMPLE_COLLECTOR)) {
-                countryCollector = this.getObjectMapper().readValue(in, CountryCollector.class);
+                countryCollector = getObjectMapper().readValue(in, CountryCollector.class);
             } catch (IOException err) {
                 err.printStackTrace();
             }
@@ -77,20 +77,17 @@ public class PersistenceHandler {
      * Save a CountryCollector instance to file.
      * 
      * @param countryCollector The CountryCollector instance to save
-     * @return The inserted CountryCollector
      */
-    public CountryCollector saveState(final CountryCollector countryCollector) {
+    public void saveState(final CountryCollector countryCollector) {
         try {
             Files.createDirectories(DATA_FOLDER);
         } catch (IOException e) {
             e.printStackTrace();
         }
         try (Writer out = Files.newBufferedWriter(FILE_COLLECTOR)) {
-            this.getObjectMapper().writerWithDefaultPrettyPrinter().writeValue(out, countryCollector);
+            getObjectMapper().writerWithDefaultPrettyPrinter().writeValue(out, countryCollector);
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        return countryCollector;
     }
 }

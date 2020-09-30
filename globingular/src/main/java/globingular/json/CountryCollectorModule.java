@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.databind.module.SimpleDeserializers;
 import com.fasterxml.jackson.databind.module.SimpleSerializers;
-
 import globingular.core.CountryCollector;
 
 public class CountryCollectorModule extends Module {

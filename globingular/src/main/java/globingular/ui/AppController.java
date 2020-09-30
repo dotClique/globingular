@@ -1,25 +1,24 @@
 package globingular.ui;
 
-import java.net.URL;
-import java.util.List;
-import java.util.ResourceBundle;
-
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.embed.swing.SwingFXUtils;
-
-import org.apache.batik.transcoder.TranscoderException;
-import org.apache.batik.transcoder.TranscoderInput;
-
-import org.w3c.dom.Document;
-
 import globingular.core.CountryCollector;
 import globingular.json.PersistenceHandler;
+import javafx.collections.SetChangeListener;
+import javafx.css.PseudoClass;
+import javafx.embed.swing.SwingFXUtils;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import org.apache.batik.transcoder.TranscoderException;
+import org.apache.batik.transcoder.TranscoderInput;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
+import java.net.URL;
+import java.util.Collection;
+import java.util.ResourceBundle;
 
 public class AppController implements Initializable {
 
@@ -31,13 +30,32 @@ public class AppController implements Initializable {
      * Manager of which countries exist and have been visited;
      * core component storing all state.
      */
-    private CountryCollector countryCollector;
+    public CountryCollector countryCollector;
+    private final Document document = new CreateDocument().createDocument();
+    private CountryCollector.Country inputCountry = null;
+
+    public static PseudoClass INVALID = new PseudoClass() {
+        @Override
+        public String getPseudoClassName() {
+            return "invalid";
+        }
+    };
+
+    public static PseudoClass BLANK = new PseudoClass() {
+        @Override
+        public String getPseudoClassName() {
+            return "blank";
+        }
+    };
+
+    @FXML
+    Parent root;
 
     /**
      * The list of countries visible in the interface.
      */
     @FXML
-    private ListView<String> countriesList;
+    private ListView<CountryCollector.Country> countriesList;
 
     /**
      * The input for country-shortnames or -codes visible in the interface.
@@ -71,27 +89,31 @@ public class AppController implements Initializable {
         persistence = new PersistenceHandler();
         countryCollector = persistence.loadState();
 
-        BufferedImageTranscoder transcoder = new BufferedImageTranscoder();
-        Document document = new CreateDocument().createDocument();
-        TranscoderInput transcoderIn = new TranscoderInput(document);
-        try {
-            transcoder.transcode(transcoderIn, null);
-            Image img = SwingFXUtils.toFXImage(transcoder.getBufferedImage(), null);
-            imgView.setImage(img);
+        setColorAll(countryCollector.getVisitedCountries(), Colors.COUNTRY_VISITED);
 
-        } catch (TranscoderException e) {
-            e.printStackTrace();
-        }
+        countryCollector.visitedCountriesProperty()
+                        .addListener((SetChangeListener<? super CountryCollector.Country>) e -> {
+                            if (e.wasAdded()) {
+                                setColor(e.getElementAdded(), Colors.COUNTRY_VISITED);
+                            } else {
+                                setColor(e.getElementRemoved(), Colors.COUNTRY_NOT_VISITED);
+                            }
+                        });
 
-        updateView();
-    }
+        countriesList.itemsProperty().set(countryCollector.getVisitedCountriesSorted());
+        countriesList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        countriesList.setCellFactory(countryListView -> new ListCell<>() {
+            @Override
+            protected void updateItem(CountryCollector.Country item, boolean empty) {
+                super.updateItem(item, empty);
+                setText(item == null ? "" : item.getName());
+            }
+        });
 
-    /**
-     * Update the list of countries on addition of visited Country.
-     */
-    private void updateView() {
-        countriesList.getItems().clear();
-        countriesList.getItems().addAll(List.of(countryCollector.getVisitedCountries()));
+        countryInput.textProperty().addListener(e -> onInputChange());
+        root.getStylesheets().add(getClass().getResource("/css/App.css").toExternalForm());
+
+        updateMap();
     }
 
     /**
@@ -101,11 +123,43 @@ public class AppController implements Initializable {
     void onCountryAdd() {
         String input = countryInput.getText();
         if (!input.isBlank()) {
-            countryCollector.setVisited(input);
-            countryInput.clear();
+            CountryCollector.Country countryByCode = countryCollector.getCountryFromCode(input);
+            CountryCollector.Country countryByName = countryCollector.getCountryFromName(input);
+            if (countryByCode != null) {
+                countryCollector.setVisited(countryByCode);
+                countryInput.clear();
+            } else if (countryByName != null) {
+                countryCollector.setVisited(countryByName);
+                countryInput.clear();
+            } else {
+                countryInput.pseudoClassStateChanged(INVALID, true);
+            }
+
         }
-        updateView();
         persistence.saveState(countryCollector);
+    }
+
+    private void onInputChange() {
+        String input = countryInput.getText();
+        if (input.isBlank()) {
+            countryInput.pseudoClassStateChanged(BLANK, true);
+            countryInput.pseudoClassStateChanged(INVALID, false);
+        } else {
+            CountryCollector.Country countryByCode = countryCollector.getCountryFromCode(input);
+            CountryCollector.Country countryByName = countryCollector.getCountryFromName(input);
+
+            if (countryByCode != null) {
+                inputCountry = countryByCode;
+                countryInput.pseudoClassStateChanged(INVALID, false);
+            } else if (countryByName != null) {
+                inputCountry = countryByName;
+                countryInput.pseudoClassStateChanged(INVALID, false);
+            } else {
+                inputCountry = null;
+                countryInput.pseudoClassStateChanged(INVALID, true);
+            }
+            countryInput.pseudoClassStateChanged(BLANK, false);
+        }
     }
 
     /**
@@ -115,10 +169,48 @@ public class AppController implements Initializable {
     void onCountryDel() {
         String input = countryInput.getText();
         if (!input.isBlank()) {
-            countryCollector.removeVisited(input);
-            countryInput.clear();
+            if (!countryInput.getPseudoClassStates().contains(INVALID)) {
+                countryInput.clear();
+            }
+            countryCollector.removeVisited(inputCountry);
+        } else {
+            // Array conversion necessary to prevent the removal of items from foreach-target
+            for (CountryCollector.Country country
+                    : countriesList.getSelectionModel().getSelectedItems().toArray(CountryCollector.Country[]::new)) {
+                countryCollector.removeVisited(country);
+            }
         }
-        updateView();
+        countriesList.getSelectionModel().clearSelection();
         persistence.saveState(countryCollector);
+    }
+
+    private void setColor(final CountryCollector.Country country, final Colors color) {
+        Element c = document.getElementById(country.getCountryCode());
+
+        if (c == null) {
+            return;
+        }
+
+        c.setAttribute("style", "fill: " + color.hex);
+        updateMap();
+    }
+
+    private void setColorAll(final Collection<CountryCollector.Country> countries, final Colors color) {
+        for (CountryCollector.Country country : countries) {
+            setColor(country, color);
+        }
+    }
+
+    private void updateMap() {
+        BufferedImageTranscoder transcoder = new BufferedImageTranscoder();
+        TranscoderInput transcoderIn = new TranscoderInput(document);
+        try {
+            transcoder.transcode(transcoderIn, null);
+            Image img = SwingFXUtils.toFXImage(transcoder.getBufferedImage(), null);
+            imgView.setImage(img);
+
+        } catch (TranscoderException e) {
+            e.printStackTrace();
+        }
     }
 }

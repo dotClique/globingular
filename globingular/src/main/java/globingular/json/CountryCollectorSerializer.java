@@ -18,8 +18,17 @@ public class CountryCollectorSerializer extends JsonSerializer<CountryCollector>
             final SerializerProvider serializers)
             throws IOException {
                 gen.writeStartObject();
+
+                gen.writeFieldName("ExistingCountries");
+                gen.writeStartArray();
+                for (var c : collector.existingCountriesProperty().get()) {
+                    gen.writeObject(c);
+                }
+                gen.writeEndArray();
+
                 gen.writeFieldName("VisitedCountries");
-                final String[] arr = collector.getVisitedCountries();
+                String[] arr =
+                        collector.getVisitedCountries().stream().map(CountryCollector.Country::getCountryCode).toArray(String[]::new);
                 gen.writeArray(arr, 0, arr.length);
                 gen.writeEndObject();
     }
