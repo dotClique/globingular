@@ -16,5 +16,5 @@ module globingular {
 	requires batik.dom;
 
 	opens globingular.ui to javafx.fxml, javafx.graphics;
-	exports globingular.core to com.fasterxml.jackson.databind;
+	opens globingular.core to com.fasterxml.jackson.databind;
 }
