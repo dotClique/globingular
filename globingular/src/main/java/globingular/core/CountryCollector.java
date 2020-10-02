@@ -10,7 +10,7 @@ public class CountryCollector {
     /**
      * Responsible for persisting state across runs.
      */
-    private final PersistenceHandler persistence;
+    private PersistenceHandler persistence;
 
     /**
      * Set of visited countries, using countryCodes according to the ISO 3166-1
@@ -19,42 +19,20 @@ public class CountryCollector {
     private final SetProperty<String> visits;
 
     /**
-     * Defines a new CountryCollector-object with given persistence-handler.
-     * 
-     * @param persistence The PersistenceHandler to use for this instance.
-     */
-    public CountryCollector(final PersistenceHandler persistence) {
-        this.visits = new SimpleSetProperty<>(FXCollections.observableSet());
-        this.persistence = persistence;
-    }
-
-    /**
-     * Defines a new CountryCollector-object without any visits and with a new PersistenceHandler.
+     * Defines a new CountryCollector-object without any visits.
      */
     public CountryCollector() {
-        this(new PersistenceHandler());
+        this.visits = new SimpleSetProperty<>(FXCollections.observableSet());
     }
 
     /**
      * Defines a new CountryCollector-object with the given countries set as
-     * visited and with a new PersistenceHandler.
+     * visited.
      * 
      * @param countries Array of countries that has been visited
      */
     public CountryCollector(final String... countries) {
         this();
-        this.visits.set(FXCollections.observableSet(countries));
-    }
-
-    /**
-     * Defines a new CountryCollector-object with the given countries set as
-     * visited and using the given PersistenceHandler.
-     * 
-     * @param persistence The PersistenceHandler to use
-     * @param countries Array of countries that has been visited
-     */
-    public CountryCollector(final PersistenceHandler persistence, final String... countries) {
-        this(persistence);
         this.visits.set(FXCollections.observableSet(countries));
     }
 
@@ -66,7 +44,7 @@ public class CountryCollector {
      */
     public void setVisited(final String countryCode) {
         this.visits.add(countryCode);
-        this.persistence.saveState(this);
+        this.saveState();
     }
 
     /**
@@ -77,7 +55,7 @@ public class CountryCollector {
      */
     public void removeVisited(final String countryCode) {
         this.visits.remove(countryCode);
-        this.persistence.saveState(this);
+        this.saveState();
     }
 
     /**
@@ -111,6 +89,15 @@ public class CountryCollector {
     }
 
     /**
+     * Save this CountryCollector-state to file if a PersistenceHandler is set.
+     */
+    private void saveState() {
+        if (persistence != null) {
+            persistence.saveState(this);
+        }
+    }
+
+    /**
      * Load CountryCollector-state from file.
      * 
      * @return Returns a new countryCollector-object from file
@@ -118,6 +105,7 @@ public class CountryCollector {
     public static CountryCollector loadState() {
         PersistenceHandler persistence = new PersistenceHandler();
         CountryCollector cc = persistence.loadState();
+        cc.persistence = persistence;
         return cc;
     }
 
