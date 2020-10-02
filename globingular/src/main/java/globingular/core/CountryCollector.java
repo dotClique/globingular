@@ -1,10 +1,16 @@
 package globingular.core;
 
+import globingular.json.PersistenceHandler;
 import javafx.beans.property.SetProperty;
 import javafx.beans.property.SimpleSetProperty;
 import javafx.collections.FXCollections;
 
 public class CountryCollector {
+
+    /**
+     * Responsible for persisting state across runs.
+     */
+    private final PersistenceHandler persistence;
 
     /**
      * Set of visited countries, using countryCodes according to the ISO 3166-1
@@ -13,20 +19,42 @@ public class CountryCollector {
     private final SetProperty<String> visits;
 
     /**
-     * Defines a new CountryCollector-object without any visits.
+     * Defines a new CountryCollector-object with given persistence-handler.
+     * 
+     * @param persistence The PersistenceHandler to use for this instance.
+     */
+    public CountryCollector(final PersistenceHandler persistence) {
+        this.visits = new SimpleSetProperty<>(FXCollections.observableSet());
+        this.persistence = persistence;
+    }
+
+    /**
+     * Defines a new CountryCollector-object without any visits and with a new PersistenceHandler.
      */
     public CountryCollector() {
-        this.visits = new SimpleSetProperty<>(FXCollections.observableSet());
+        this(new PersistenceHandler());
     }
 
     /**
      * Defines a new CountryCollector-object with the given countries set as
-     * visited.
+     * visited and with a new PersistenceHandler.
      * 
      * @param countries Array of countries that has been visited
      */
     public CountryCollector(final String... countries) {
         this();
+        this.visits.set(FXCollections.observableSet(countries));
+    }
+
+    /**
+     * Defines a new CountryCollector-object with the given countries set as
+     * visited and using the given PersistenceHandler.
+     * 
+     * @param persistence The PersistenceHandler to use
+     * @param countries Array of countries that has been visited
+     */
+    public CountryCollector(final PersistenceHandler persistence, final String... countries) {
+        this(persistence);
         this.visits.set(FXCollections.observableSet(countries));
     }
 
@@ -38,6 +66,7 @@ public class CountryCollector {
      */
     public void setVisited(final String countryCode) {
         this.visits.add(countryCode);
+        this.persistence.saveState(this);
     }
 
     /**
@@ -48,6 +77,7 @@ public class CountryCollector {
      */
     public void removeVisited(final String countryCode) {
         this.visits.remove(countryCode);
+        this.persistence.saveState(this);
     }
 
     /**
@@ -78,6 +108,17 @@ public class CountryCollector {
      */
     public int numberVisited() {
         return this.visits.size();
+    }
+
+    /**
+     * Load CountryCollector-state from file.
+     * 
+     * @return Returns a new countryCollector-object from file
+     */
+    public static CountryCollector loadState() {
+        PersistenceHandler persistence = new PersistenceHandler();
+        CountryCollector cc = persistence.loadState();
+        return cc;
     }
 
     /**

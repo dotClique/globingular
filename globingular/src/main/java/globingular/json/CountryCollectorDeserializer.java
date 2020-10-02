@@ -22,13 +22,13 @@ public class CountryCollectorDeserializer extends JsonDeserializer<CountryCollec
         JsonNode node = p.getCodec().readTree(p);
 
         ArrayNode arr = ((ArrayNode) node.get("VisitedCountries"));
-        CountryCollector c = new CountryCollector();
+        String[] countries = new String[arr.size()];
 
         for (int i = 0; i < arr.size(); i++) {
-            c.setVisited(arr.get(i).asText());
+            countries[i] = arr.get(i).asText();
         }
 
-        return c;
+        return new CountryCollector(countries);
     }
 
 }

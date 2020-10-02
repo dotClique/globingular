@@ -19,14 +19,9 @@ import org.apache.batik.transcoder.TranscoderInput;
 import org.w3c.dom.Document;
 
 import globingular.core.CountryCollector;
-import globingular.json.PersistenceHandler;
 
 public class AppController implements Initializable {
 
-    /**
-     * Responsible for persisting state across runs.
-     */
-    private PersistenceHandler persistence;
     /**
      * Manager of which countries exist and have been visited;
      * core component storing all state.
@@ -68,8 +63,7 @@ public class AppController implements Initializable {
      */
     @Override
     public void initialize(final URL location, final ResourceBundle resources) {
-        persistence = new PersistenceHandler();
-        countryCollector = persistence.loadState();
+        countryCollector = CountryCollector.loadState();
 
         BufferedImageTranscoder transcoder = new BufferedImageTranscoder();
         Document document = new CreateDocument().createDocument();
@@ -105,7 +99,6 @@ public class AppController implements Initializable {
             countryInput.clear();
         }
         updateView();
-        persistence.saveState(countryCollector);
     }
 
     /**
@@ -119,6 +112,5 @@ public class AppController implements Initializable {
             countryInput.clear();
         }
         updateView();
-        persistence.saveState(countryCollector);
     }
 }
