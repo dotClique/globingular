@@ -10,10 +10,10 @@
     <artifactId>core</artifactId>
 
     <dependencies>
-        <!-- Globingular UI module -->
+        <!-- Globingular persistance module -->
         <dependency>
             <groupId>it1901_gr2002.globingular</groupId>
-            <artifactId>ui</artifactId>
+            <artifactId>persistance</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
