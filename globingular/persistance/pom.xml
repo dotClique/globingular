@@ -10,6 +10,13 @@
     <artifactId>persistance</artifactId>
 
     <dependencies>
+        <!-- Globingular core module -->
+        <dependency>
+            <groupId>it1901_gr2002.globingular</groupId>
+            <artifactId>core</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
         <!-- JavaFX -->
         <dependency>
             <groupId>org.openjfx</groupId>
