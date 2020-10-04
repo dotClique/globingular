@@ -19,7 +19,7 @@ import org.apache.batik.transcoder.TranscoderInput;
 import org.w3c.dom.Document;
 
 import globingular.core.CountryCollector;
-import globingular.json.PersistenceHandler;
+import globingular.persistence.PersistenceHandler;
 
 public class AppController implements Initializable {
 

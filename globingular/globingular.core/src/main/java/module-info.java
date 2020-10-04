@@ -1,4 +1,4 @@
-module globingular {
+module globingular.core {
 	requires javafx.fxml;
 	requires transitive javafx.graphics;
 	requires javafx.controls;
@@ -15,5 +15,5 @@ module globingular {
 	requires batik.util;
 	requires batik.dom;
 
-	opens globingular.ui to javafx.fxml, javafx.graphics;
+	exports globingular.core;
 }

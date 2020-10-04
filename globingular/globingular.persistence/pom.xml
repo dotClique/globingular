@@ -2,18 +2,18 @@
     <modelVersion>4.0.0</modelVersion>
     
     <parent>
-        <groupId>it1901_gr2002.globingular</groupId>
+        <groupId>it1901_gr2002</groupId>
         <artifactId>parent</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>core</artifactId>
+    <artifactId>globingular.persistence</artifactId>
 
     <dependencies>
-        <!-- Globingular persistance module -->
+        <!-- Globingular core module -->
         <dependency>
-            <groupId>it1901_gr2002.globingular</groupId>
-            <artifactId>persistance</artifactId>
+            <groupId>it1901_gr2002</groupId>
+            <artifactId>globingular.core</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
@@ -121,6 +121,12 @@
                 <artifactId>jacoco-maven-plugin</artifactId>
             </plugin>
 
+            <!-- Using latest maven-site-plugin for report generation -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+            </plugin>
+
             <!-- SpotBugs for checking code quality and bugs-->
             <plugin>
                 <groupId>com.github.spotbugs</groupId>
@@ -131,12 +137,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
-            </plugin>
-
-            <!-- Using latest maven-site-plugin for report generation -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-site-plugin</artifactId>
             </plugin>
         </plugins>
     </build>

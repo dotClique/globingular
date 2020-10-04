@@ -1,4 +1,4 @@
-package globingular.json;
+package globingular.persistence;
 
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
