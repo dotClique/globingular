@@ -5,12 +5,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import globingular.core.CountryCollector;
 import globingular.core.World;
 
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.Writer;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.Map;
 
 public class PersistenceHandler {
 
@@ -25,6 +28,9 @@ public class PersistenceHandler {
      */
     private static final Path DATA_FOLDER = FILE_COLLECTOR.getParent();
 
+    /**
+     * Define which file to get standard world map {@link World} from.
+     */
     private static final String FILE_MAP_WORLD = "/json/sampleWorld.json";
 
     /**
@@ -47,8 +53,6 @@ public class PersistenceHandler {
         if (objectMapper == null) {
             objectMapper = new ObjectMapper();
             objectMapper.registerModule(new CountryCollectorModule());
-            final Map<String, Object> injections = new HashMap<>();
-            injections.put("currentWorld", new World());
         }
         return objectMapper;
     }

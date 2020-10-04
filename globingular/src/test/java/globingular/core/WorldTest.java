@@ -3,6 +3,8 @@ package globingular.core;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.util.Set;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class WorldTest {
@@ -26,7 +28,7 @@ public class WorldTest {
     @Test
     public void testGetCountryFromCountryName() {
         World world = new World(country0, country1, country2, country3);
-        assertEquals(country2, world.getCountryFromName(country2.getName()));
+        assertEquals(country2, world.getCountryFromName(country2.getShortName()));
     }
 
     @Test
@@ -38,7 +40,7 @@ public class WorldTest {
     @Test
     public void testGetCountryFromCountryNameFail() {
         World world = new World(country0, country1, country2, country3);
-        assertNull(world.getCountryFromName(country4.getName()));
+        assertNull(world.getCountryFromName(country4.getShortName()));
     }
 
     @Test
@@ -51,5 +53,39 @@ public class WorldTest {
     public void testCountryExistsTrue() {
         World world = new World(country0, country1, country3);
         assertTrue(world.countryExists(country1));
+    }
+
+    @Test
+    public void testExceptionOnDuplicateCountryCode() {
+        try {
+            new World(country0, country1, country3, new Country("_C0", "__testname"));
+            fail("No exception thrown for attempted construction of World with two countries duplicating a countryCode");
+        } catch (DuplicateIdentifierException ignored) {
+        }
+    }
+
+    @Test
+    public void testExceptionOnDuplicateCountryShortName() {
+        try {
+            new World(country0, country1, country3, new Country("__testcountrycode", "_country0"));
+            fail("No exception thrown for attempted construction of World with two countries duplicating a short name");
+        } catch (DuplicateIdentifierException ignored) {
+        }
+    }
+
+    @Test
+    public void testExceptionOnDuplicateCountry() {
+        try {
+            new World(country0, country1, country3, country0);
+            fail("No exception thrown for attempted construction of World with duplicate countries");
+        } catch (DuplicateIdentifierException ignored) {
+        }
+    }
+
+    @Test
+    public void testGetCountries() {
+        World world = new World(country0, country1, country3);
+        Set<Country> countries = world.getCountries();
+        assertEquals(Set.of(country0, country1, country3), countries);
     }
 }

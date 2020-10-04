@@ -6,7 +6,7 @@ import java.util.Set;
 public class World {
 
     /**
-     * SetProperty containing every Country that exists in this World. Assumed to be append-only.
+     * Immutable set containing every Country that exists in this World.
      */
     private final Set<Country> countries;
     /**
@@ -59,23 +59,23 @@ public class World {
     public World(final Country... countries) {
         for (final Country country : countries) {
             final Country duplicateCode = getCountryFromCode(country.getCountryCode());
-            final Country duplicateName = getCountryFromName(country.getName());
+            final Country duplicateName = getCountryFromName(country.getShortName());
 
             if (duplicateCode != null) {
                 throw new DuplicateIdentifierException(
                         "Country cannot be added because it duplicates existing code \""
-                                + duplicateCode.getCountryCode() + "\" from Country \"" + duplicateCode.getName()
+                                + duplicateCode.getCountryCode() + "\" from Country \"" + duplicateCode.getShortName()
                                 + "\"");
             }
             if (duplicateName != null) {
                 throw new DuplicateIdentifierException(
                         "Country cannot be added because it duplicates existing name \""
-                                + duplicateName.getName() + "\" from Country with code \"" + duplicateName
+                                + duplicateName.getShortName() + "\" from Country with code \"" + duplicateName
                                 .getCountryCode()
                                 + "\"");
             }
             countriesByCode.put(country.getCountryCode(), country);
-            countriesByName.put(country.getName(), country);
+            countriesByName.put(country.getShortName(), country);
         }
         this.countries = Set.of(countries);
     }

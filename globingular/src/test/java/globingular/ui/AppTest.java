@@ -33,7 +33,7 @@ public class AppTest extends ApplicationTest {
     public void testController() {
         final ListView<Country> countriesList = (ListView<Country>) parent.lookup(
                 "#countriesList");
-        final CountryCollector cc = controller.countryCollector;
+        final CountryCollector cc = controller.getCountryCollector();
         assertNotNull(cc);
         assertNotNull(cc.getWorld());
         final TextField countryInput = (TextField) parent.lookup("#countryInput");

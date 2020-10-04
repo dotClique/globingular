@@ -10,7 +10,11 @@ import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
+import javafx.scene.control.SelectionMode;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import org.apache.batik.transcoder.TranscoderException;
@@ -31,32 +35,43 @@ public class AppController implements Initializable {
     /**
      * Manager of which countries have been visited.
      */
-    public final CountryCollector countryCollector;
+    private final CountryCollector countryCollector;
     /**
      * Manager of which countries exist.
      */
     private final World world;
-
+    /**
+     * The SVG document containing the world map.
+     */
     private final Document document = new CreateDocument().createDocument();
-
+    /**
+     * Helper field containing whichever Country the input field currently resolves to, if any.
+     */
     private Country inputCountry = null;
 
+    /**
+     * Pseudoclass designating that an form element has invalid input.
+     */
     public static final PseudoClass INVALID = new PseudoClass() {
         @Override
         public String getPseudoClassName() {
             return "invalid";
         }
     };
-
+    /**
+     * Pseudoclass designating that an form element has blank input.
+     */
     public static final PseudoClass BLANK = new PseudoClass() {
         @Override
         public String getPseudoClassName() {
             return "blank";
         }
     };
-
+    /**
+     * The root of the FXML document.
+     */
     @FXML
-    Parent root;
+    private Parent root;
 
     /**
      * The list of countries visible in the interface.
@@ -117,9 +132,9 @@ public class AppController implements Initializable {
         countriesList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         countriesList.setCellFactory(countryListView -> new ListCell<>() {
             @Override
-            protected void updateItem(Country item, boolean empty) {
+            protected void updateItem(final Country item, final boolean empty) {
                 super.updateItem(item, empty);
-                setText(item == null ? "" : item.getName());
+                setText(item == null ? "" : item.getShortName());
             }
         });
 
@@ -127,6 +142,15 @@ public class AppController implements Initializable {
         root.getStylesheets().add(getClass().getResource("/css/App.css").toExternalForm());
 
         updateMap();
+    }
+
+    /**
+     * Get the active CountryCollector for the world map.
+     *
+     * @return The active CountryCollector for the world map
+     */
+    public CountryCollector getCountryCollector() {
+        return countryCollector;
     }
 
     /**
@@ -152,6 +176,9 @@ public class AppController implements Initializable {
         persistence.saveState(countryCollector);
     }
 
+    /**
+     * Evaluate new state after a change in the country input element.
+     */
     private void onInputChange() {
         String input = countryInput.getText();
         if (input.isBlank()) {
@@ -197,6 +224,12 @@ public class AppController implements Initializable {
         persistence.saveState(countryCollector);
     }
 
+    /**
+     * Change displayed color on the world map for the given country.
+     *
+     * @param country Target country
+     * @param color   Target color
+     */
     private void setColor(final Country country, final Colors color) {
         Element c = document.getElementById(country.getCountryCode());
 
@@ -204,16 +237,25 @@ public class AppController implements Initializable {
             return;
         }
 
-        c.setAttribute("style", "fill: " + color.hex);
+        c.setAttribute("style", "fill: " + color.getHex());
         updateMap();
     }
 
+    /**
+     * Change displayed color on the world map for the given countries.
+     *
+     * @param countries Target countries
+     * @param color     Target color
+     */
     private void setColorAll(final Collection<Country> countries, final Colors color) {
         for (Country country : countries) {
             setColor(country, color);
         }
     }
 
+    /**
+     * Change the world map to reflect updated state, e.g. country colors.
+     */
     private void updateMap() {
         BufferedImageTranscoder transcoder = new BufferedImageTranscoder();
         TranscoderInput transcoderIn = new TranscoderInput(document);

@@ -11,6 +11,14 @@ import java.io.IOException;
 
 public class CountryDeserializer extends JsonDeserializer<Country> {
 
+    /**
+     * Deserilize a Country from JSON.
+     * @param p The relevant JsonParser
+     * @param ctxt The current parsing context
+     * @return The deserialized Country
+     * @throws IOException on general parsing error
+     * @throws NullPointerException on missing fields
+     */
     @Override
     public Country deserialize(final JsonParser p, final DeserializationContext ctxt)
             throws IOException {

@@ -11,6 +11,15 @@ import java.io.IOException;
 
 public class WorldDeserializer extends JsonDeserializer<World> {
 
+    /**
+     * Deserialize a {@link World} from JSON.
+     *
+     * @param p The current JsonParser
+     * @param ctxt The current deserialization context
+     * @return The deserialized World
+     * @throws IOException On general parsing error
+     * @throws NullPointerException on missing field
+     */
     public World deserialize(final JsonParser p, final DeserializationContext ctxt)
             throws IOException {
         ObjectNode o = p.readValueAsTree();

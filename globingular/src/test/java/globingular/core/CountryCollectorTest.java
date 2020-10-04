@@ -1,11 +1,12 @@
 package globingular.core;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
+import javafx.beans.property.ReadOnlySetProperty;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableSet;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class CountryCollectorTest {
     static Country country0, country1, country2, country3, country4;
@@ -40,9 +41,9 @@ public class CountryCollectorTest {
         cc.setVisited(country1);
         cc.setVisited(country2);
         assertEquals(2, cc.numberVisited());
-        assertTrue(cc.hasVisited(country2));
-        assertTrue(cc.hasVisited(country1));
-        assertFalse(cc.hasVisited(country3));
+        assertTrue(cc.isVisited(country2));
+        assertTrue(cc.isVisited(country1));
+        assertFalse(cc.isVisited(country3));
     }
 
     @Test
@@ -55,18 +56,101 @@ public class CountryCollectorTest {
     @Test
     public void testSetVisited() {
         CountryCollector cc = new CountryCollector(world3);
-        assertFalse(cc.hasVisited(country3));
+        assertFalse(cc.isVisited(country3));
         cc.setVisited(country3);
-        assertTrue(cc.hasVisited(country3));
+        assertTrue(cc.isVisited(country3));
     }
 
     @Test
     public void testRemoveVisited() {
         CountryCollector cc = new CountryCollector(world4);
         cc.setVisited(country2);
-        assertTrue(cc.hasVisited(country2));
+        assertTrue(cc.isVisited(country2));
         cc.removeVisited(country2);
-        assertFalse(cc.hasVisited(country2));
+        assertFalse(cc.isVisited(country2));
     }
 
+    @Test
+    public void testExceptionOnSetUnknownCountryVisited() {
+        CountryCollector cc = new CountryCollector(world1);
+        try {
+            cc.setVisited(country1);
+            fail("No exception thrown for attempted marking of country as visited even though country "
+                         + "is not part of this collector's World");
+        } catch (IllegalArgumentException ignored) {
+        }
+    }
+
+    @Test
+    public void testExceptionOnRemoveUnknownCountryVisited() {
+        CountryCollector cc = new CountryCollector(world1);
+        try {
+            cc.setVisited(country1);
+            fail("No exception thrown for attempted removal of marking of country as visited even though country "
+                         + "is not part of this collector's World");
+        } catch (IllegalArgumentException ignored) {
+        }
+    }
+
+    @Test
+    public void testExceptionOnCheckUnknownCountryIsVisited() {
+        CountryCollector cc = new CountryCollector(world1);
+        try {
+            cc.setVisited(country1);
+            fail("No exception thrown for attempted checking of country's visited-status even though country "
+                         + "is not part of this collector's World");
+        } catch (IllegalArgumentException ignored) {
+        }
+    }
+
+    @Test
+    public void testVisitedCountriesPropertyIsReadOnly() {
+        CountryCollector cc = new CountryCollector(world1);
+        try {
+            cc.visitedCountriesProperty().add(country0);
+            fail("Returned set is writable");
+        } catch (UnsupportedOperationException ignored) {}
+    }
+
+    @Test
+    public void testGetVisitedCountriesIsReadOnly() {
+        CountryCollector cc = new CountryCollector(world1);
+        try {
+            cc.getVisitedCountries().add(country0);
+            fail("Returned set is writable");
+        } catch (UnsupportedOperationException ignored) {}
+    }
+
+    @Test
+    public void testGetVisitedCountriesSortedIsReadOnly() {
+        CountryCollector cc = new CountryCollector(world1);
+        try {
+            cc.getVisitedCountriesSorted().add(country0);
+            fail("Returned list is writable");
+        } catch (UnsupportedOperationException ignored) {}
+    }
+
+    @Test
+    public void testVisitedCountriesPropertyIsSynchronized() {
+        CountryCollector cc = new CountryCollector(world1);
+        ReadOnlySetProperty<Country> testSync = cc.visitedCountriesProperty();
+        cc.setVisited(country0);
+        assertEquals(1, testSync.size());
+    }
+
+    @Test
+    public void testGetVisitedCountriesSortedIsSynchronized() {
+        CountryCollector cc = new CountryCollector(world1);
+        ObservableList<Country> testSync = cc.getVisitedCountriesSorted();
+        cc.setVisited(country0);
+        assertEquals(1, testSync.size());
+    }
+
+    @Test
+    public void testGetVisitedCountriesIsSynchronized() {
+        CountryCollector cc = new CountryCollector(world1);
+        ObservableSet<Country> testSync = cc.getVisitedCountries();
+        cc.setVisited(country0);
+        assertEquals(1, testSync.size());
+    }
 }

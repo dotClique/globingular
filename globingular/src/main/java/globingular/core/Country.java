@@ -11,7 +11,7 @@ public class Country {
     /**
      * Shortname of the Country. I.e. 'Australia'
      */
-    private final String name;
+    private final String shortName;
 
     /**
      * Full longname of the Country. I.e. 'The Commonwealth of Australia'
@@ -40,26 +40,27 @@ public class Country {
     private final Province[] provinces;
 
     /**
-     * Constructor for Country.
+     * Constructor for Country, an immutable store of data representing one country.
      *
      * @param countryCode Two-letter representation of the Country. Following the ISO 3166-1 Alpha-2 code. I.e. 'AU'
-     * @param name        Shortname of the Country. I.e. 'Australia'
+     * @param shortName   Shortname of the Country. I.e. 'Australia'
      * @param longname    Full longname of the Country. I.e. 'The Commonwealth of Australia'
      * @param sovereignty The sovereignty of the Country. I.e. 'UN' for a UN member state
      * @param region      The region the Country is part of. I.e. 'OC' for Oceania
      * @param population  Population of the Country. I.e. 25646823
      * @param provinces   List of Provinces part of the Country
      */
-    public Country(final String countryCode, final String name, final String longname, final String sovereignty,
+    public Country(final String countryCode, final String shortName, final String longname, final String sovereignty,
                    final String region, final long population,
                    final Province[] provinces) {
         this.countryCode = countryCode;
-        this.name = name;
+        this.shortName = shortName;
         this.longname = longname;
         this.sovereignty = sovereignty;
         this.region = region;
         this.population = population;
-        this.provinces = provinces;
+        // Cloning to avoid outside editing.
+        this.provinces = provinces.clone();
     }
 
     /**
@@ -71,10 +72,10 @@ public class Country {
      * provinces: new Province[0]
      *
      * @param countryCode Two-letter representation of the Country. Following the ISO 3166-1 Alpha-2 code. I.e. 'AU'
-     * @param name        Shortname of the Country. I.e. 'Australia'
+     * @param shortName   Shortname of the Country. I.e. 'Australia'
      */
-    public Country(final String countryCode, final String name) {
-        this(countryCode, name, name, "UN", "", 0L, new Province[0]);
+    public Country(final String countryCode, final String shortName) {
+        this(countryCode, shortName, shortName, "UN", "", 0L, new Province[0]);
     }
 
     /**
@@ -91,8 +92,8 @@ public class Country {
      *
      * @return Short name for the Country
      */
-    public String getName() {
-        return name;
+    public String getShortName() {
+        return shortName;
     }
 
     /**
@@ -100,7 +101,7 @@ public class Country {
      *
      * @return Long name for the Country
      */
-    public String getLongname() {
+    public String getLongName() {
         return longname;
     }
 
@@ -139,8 +140,8 @@ public class Country {
     public String toString() {
         return "Country{"
                 + "countryCode='" + countryCode + '\''
-                + ", name='" + name + '\''
-                + ", longname='" + longname + '\''
+                + ", shortName='" + shortName + '\''
+                + ", longName='" + longname + '\''
                 + ", sovereignty='" + sovereignty + '\''
                 + ", region='" + region + '\''
                 + ", population=" + population

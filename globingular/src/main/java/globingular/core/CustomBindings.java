@@ -1,27 +1,43 @@
 package globingular.core;
 
-import javafx.beans.property.SetProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.ObservableSet;
 import javafx.collections.SetChangeListener;
+import javafx.collections.transformation.SortedList;
 
-public class CustomBindings {
+import java.util.Comparator;
+
+public final class CustomBindings {
+
     /**
-     * Create a readonly sorted-list view of the target property
+     * Remove default public constructor.
+     */
+    private CustomBindings() {
+    }
+
+    /**
+     * Create a readonly sorted-list view of the target property.
      *
+     * @param <T>        The type of values in the target set and result list
+     * @param targetSet  The set to synchronize with
+     * @param comparator The Comparator used to sort the list
      * @return A new sorted-list view of the target property
      */
-    public static <T> ObservableList<T> createSortedListView(SetProperty<T> targetProperty) {
+    public static <T> SortedList<T> createSortedListView(final ObservableSet<T> targetSet,
+                                                         final Comparator<T> comparator) {
         ObservableList<T> backing = FXCollections.observableArrayList();
-        backing.addAll(targetProperty);
+        SortedList<T> sorted = new SortedList<>(backing, comparator);
+        backing.addAll(targetSet);
 
-        targetProperty.addListener((SetChangeListener<? super T>) e -> {
+        targetSet.addListener((SetChangeListener<? super T>) e -> {
             if (e.wasAdded()) {
                 backing.add(e.getElementAdded());
             } else {
                 backing.remove(e.getElementRemoved());
             }
         });
-        return backing.sorted();
+
+        return sorted;
     }
 }

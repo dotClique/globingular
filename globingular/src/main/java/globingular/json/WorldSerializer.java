@@ -10,6 +10,14 @@ import java.io.IOException;
 
 public class WorldSerializer extends JsonSerializer<World> {
 
+    /**
+     * Serialize a given {@link World} to JSON.
+     *
+     * @param value The World to serialize
+     * @param gen The current JSON generator
+     * @param serializers The active serializers
+     * @throws IOException On general generation error
+     */
     @Override
     public void serialize(final World value, final JsonGenerator gen, final SerializerProvider serializers)
             throws IOException {

@@ -22,8 +22,8 @@ public class CountryTest {
     public void testConstructor() {
         Country c = new Country("_C0", "_country0", "Kingdom of Country0", "UN", "Asia", 123L, new Province[0]);
         assertEquals("_C0", c.getCountryCode());
-        assertEquals("_country0", c.getName());
-        assertEquals("Kingdom of Country0", c.getLongname());
+        assertEquals("_country0", c.getShortName());
+        assertEquals("Kingdom of Country0", c.getLongName());
         assertEquals("UN", c.getSovereignty());
         assertEquals("Asia", c.getRegion());
         assertEquals(123L, c.getPopulation());
@@ -33,8 +33,8 @@ public class CountryTest {
     @Test
     public void testShortConstructor() {
         assertEquals(country1.getCountryCode(), country5.getCountryCode());
-        assertEquals(country1.getLongname(), country5.getLongname());
-        assertEquals(country1.getName(), country5.getName());
+        assertEquals(country1.getLongName(), country5.getLongName());
+        assertEquals(country1.getShortName(), country5.getShortName());
         assertEquals(country1.getSovereignty(), country5.getSovereignty());
         assertEquals(country1.getRegion(), country5.getRegion());
         assertEquals(country1.getPopulation(), country5.getPopulation());
