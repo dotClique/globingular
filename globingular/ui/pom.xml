@@ -6,11 +6,17 @@
         <artifactId>parent</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
-    
-    <groupId>it1901_gr2002.globingular</groupId>
+
     <artifactId>ui</artifactId>
 
     <dependencies>
+        <!-- Globingular core module -->
+        <dependency>
+            <groupId>it1901_gr2002.globingular</groupId>
+            <artifactId>core</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
         <!-- JavaFX -->
         <dependency>
             <groupId>org.openjfx</groupId>
@@ -60,6 +66,18 @@
             <artifactId>openjfx-monocle</artifactId>
             <version>jdk-12.0.1+2</version>
             <scope>test</scope>
+        </dependency>
+
+        <!-- JSON with Jackson -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>2.11.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.11.2</version>
         </dependency>
 
         <!-- Apache batik -->
@@ -189,6 +207,23 @@
                 <configuration>
                     <destFile>${basedir}/target/coverage-reports/jacoco-unit.exec</destFile>
                     <dataFile>${basedir}/target/coverage-reports/jacoco-unit.exec</dataFile>
+                </configuration>
+            </plugin>
+            
+            <!-- SpotBugs for checking code quality and bugs-->
+            <plugin>
+                <groupId>com.github.spotbugs</groupId>
+                <artifactId>spotbugs-maven-plugin</artifactId>
+                <version>4.0.4</version>
+            </plugin>
+
+            <!-- Maven Checkstyle for code quality check-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>3.1.1</version>
+                <configuration>
+                    <configLocation>../checkstyle.xml</configLocation>
                 </configuration>
             </plugin>
         </plugins>

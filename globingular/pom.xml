@@ -111,7 +111,7 @@
         <module>ui</module>
         <module>persistance</module>
     </modules>
-    
+
     <reporting>
         <plugins>
             <!-- Project report plugin -->
