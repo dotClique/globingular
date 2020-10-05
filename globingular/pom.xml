@@ -14,6 +14,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <package>${project.groupId}.${project.artifactId}</package>
+        <fast>false</fast>
     </properties>
 
     <build>
@@ -37,6 +38,7 @@
                     <configuration>
                         <redirectTestOutputToFile>true</redirectTestOutputToFile>
                         <argLine>@{argLine} --add-exports javafx.graphics/com.sun.javafx.application=ALL-UNNAMED --add-exports javafx.graphics/com.sun.glass.ui=ALL-UNNAMED --add-opens javafx.graphics/com.sun.glass.ui=ALL-UNNAMED -Djava.awt.headless=true -Dtestfx.robot=glass -Dtestfx.headless=true -Dprism.order=sw</argLine>
+                        <skip>${fast}</skip>
                     </configuration>
                 </plugin>
 
@@ -54,6 +56,9 @@
                             </goals>
                         </execution>
                     </executions>
+                    <configuration>
+                        <skip>${fast}</skip>
+                    </configuration>
                 </plugin>
 
                 <!-- Maven Checkstyle for code quality check-->
@@ -63,6 +68,7 @@
                     <version>3.1.1</version>
                     <configuration>
                         <configLocation>../checkstyle.xml</configLocation>
+                        <skip>${fast}</skip>
                     </configuration>
                     <executions>
                         <execution>
@@ -73,6 +79,7 @@
                             </goals>
                         </execution>
                     </executions>
+
                 </plugin>
 
                 <!-- Computing test coverage -->
@@ -83,6 +90,7 @@
                     <configuration>
                         <destFile>${basedir}/target/coverage-reports/jacoco-unit.exec</destFile>
                         <dataFile>${basedir}/target/coverage-reports/jacoco-unit.exec</dataFile>
+                        <skip>${fast}</skip>
                     </configuration>
                     <executions>
                         <execution>
