@@ -241,7 +241,7 @@
                 <configuration>
                     <filesets>
                         <fileset>
-                            <directory>${env.USERPROFILE}/temp</directory>
+                            <directory>${user.home}/temp/globingular</directory>
                             <followSymlinks>false</followSymlinks>
                         </fileset>
                     </filesets>
