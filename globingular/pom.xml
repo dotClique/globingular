@@ -104,6 +104,9 @@
                 <configuration>
                     <encoding>UTF-8</encoding>
                     <release>14</release>
+                    <showDeprecation>true</showDeprecation>
+                    <showWarnings>true</showWarnings>
+                    <failOnWarning>true</failOnWarning>
                 </configuration>
             </plugin>
 
