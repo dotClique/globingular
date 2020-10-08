@@ -1,5 +1,5 @@
-module it1901.gr2002.globingular.persistence {
-    requires it1901.gr2002.globingular.core;
+module globingular.persistence {
+    requires globingular.core;
 
 	requires javafx.fxml;
 	requires transitive javafx.graphics;
@@ -17,5 +17,5 @@ module it1901.gr2002.globingular.persistence {
 	requires batik.util;
 	requires batik.dom;
 
-	exports it1901.gr2002.globingular.persistence;
+	exports globingular.persistence;
 }

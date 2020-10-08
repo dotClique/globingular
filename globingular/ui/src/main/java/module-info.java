@@ -1,6 +1,6 @@
-module it1901.gr2002.globingular.ui {
-    requires it1901.gr2002.globingular.core;
-    requires it1901.gr2002.globingular.persistence;
+module globingular.ui {
+    requires globingular.core;
+    requires globingular.persistence;
 
 	requires javafx.fxml;
 	requires transitive javafx.graphics;
@@ -18,5 +18,5 @@ module it1901.gr2002.globingular.ui {
 	requires batik.util;
 	requires batik.dom;
 
-	opens it1901.gr2002.globingular.ui to javafx.fxml, javafx.graphics;
+	opens globingular.ui to javafx.fxml, javafx.graphics;
 }

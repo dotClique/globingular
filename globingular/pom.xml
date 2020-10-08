@@ -14,7 +14,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <package>${project.groupId}.${project.artifactId}</package>
+        <package>globingular.ui</package>
         <fast>false</fast>
     </properties>
 

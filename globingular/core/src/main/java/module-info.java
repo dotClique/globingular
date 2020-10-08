@@ -1,4 +1,4 @@
-module it1901.gr2002.globingular.core {
+module globingular.core {
 	requires javafx.fxml;
 	requires transitive javafx.graphics;
 	requires javafx.controls;
@@ -15,5 +15,5 @@ module it1901.gr2002.globingular.core {
 	requires batik.util;
 	requires batik.dom;
 
-	exports it1901.gr2002.globingular.core;
+	exports globingular.core;
 }
