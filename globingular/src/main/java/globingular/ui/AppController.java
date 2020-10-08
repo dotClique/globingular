@@ -121,4 +121,11 @@ public class AppController implements Initializable {
         updateView();
         persistence.saveState(countryCollector);
     }
+
+    @FXML
+    public void normalizeInput() {
+
+    }
+
+
 }
