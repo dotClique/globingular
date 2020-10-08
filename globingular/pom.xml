@@ -9,6 +9,7 @@
         <module>ui</module>
         <module>persistence</module>
         <module>core</module>
+        <module>aggregator</module>
     </modules>
 
     <properties>
@@ -16,6 +17,16 @@
         <package>${project.groupId}.${project.artifactId}</package>
         <fast>false</fast>
     </properties>
+
+    <!-- Required for site:stage -->
+    <distributionManagement>
+        <site>
+            <id>site</id>
+            <name>site</name>
+            <!-- Hypothetical location for GitLab Pages instance, currently required dummy -->
+            <url>https://it1901.gitlab.stud.idi.ntnu.no/groups-2020/gr2002/gr2002</url>
+        </site>
+    </distributionManagement>
 
     <build>
         <pluginManagement>
@@ -88,18 +99,16 @@
                     <artifactId>jacoco-maven-plugin</artifactId>
                     <version>0.8.5</version>
                     <configuration>
-                        <destFile>${basedir}/target/coverage-reports/jacoco-unit.exec</destFile>
-                        <dataFile>${basedir}/target/coverage-reports/jacoco-unit.exec</dataFile>
                         <skip>${fast}</skip>
                     </configuration>
                     <executions>
                         <execution>
                             <id>jacoco-prepare-agent</id>
-                            <phase>process-test-classes</phase>
                             <goals>
                                 <goal>prepare-agent</goal>
                             </goals>
                         </execution>
+                        <!-- Generate individual reports for test -->
                         <execution>
                             <id>jacoco-report</id>
                             <phase>test</phase>
@@ -115,6 +124,23 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-site-plugin</artifactId>
                     <version>3.9.1</version>
+                    <configuration>
+                        <port>9000</port>
+                        <!-- Make site:run load the directory created by site:stage -->
+                        <!-- Warning: creates the staging directory when running site:run, so if links aren't working, double-check-->
+                        <!-- that site:stage is actually staging the entire site in the same directory by just running site -->
+                        <tempWebappDirectory>${project.basedir}/target/staging</tempWebappDirectory>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <!-- Fix inter-module links when using site:run -->
+                            <id>prepare-server</id>
+                            <phase>site</phase>
+                            <goals>
+                                <goal>stage</goal>
+                            </goals>
+                        </execution>
+                    </executions>
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -169,6 +195,7 @@
                 <reportSets>
                     <reportSet>
                         <id>report-subs</id>
+                        <!-- Create individual reports for site -->
                         <reports>
                             <report>report</report>
                         </reports>
