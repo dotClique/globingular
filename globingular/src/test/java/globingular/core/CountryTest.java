@@ -26,56 +26,42 @@ public class CountryTest extends ApplicationTest {
 
     @Test
     public void testGetCountryCode() {
-
         String result = country.getCountryCode();
-
         Assertions.assertEquals("NO", result);
-        Assertions.assertNotNull(country.getCountryCode());
 
     }
 
     @Test
     public void testName() {
-
         String result = country.getName();
-
         assertThat(result).isEqualTo("Norway");
-        Assertions.assertNotNull(country.getName());
 
     }
 
     @Test
     public void testLongName() {
-
         String result = country.getLongname();
-
         Assertions.assertEquals("The Kingdom of Norway", result);
-        Assertions.assertNotNull(country.getLongname());
+
     }
 
     @Test
     public void testSovereignty() {
-
         String result = country.getSovereignty();
-
         Assertions.assertEquals("UN", result);
-        Assertions.assertNotNull(country.getSovereignty());
+
     }
 
     @Test
     public void testGetRegion() {
-
         String result = country.getRegion();
-
         Assertions.assertEquals("EU", result);
-        Assertions.assertNotNull(country.getRegion());
+
     }
 
     @Test
     public void testGetPopulation() {
-
         Long result = country.getPopulation();
-
         Assertions.assertEquals( 5367580, result);
 
     }
