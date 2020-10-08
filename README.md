@@ -17,8 +17,10 @@ The UI module handles the graphical part of the desktop application. It is depen
 
 ## Testing and coverage reports
 The project uses Checkstyle to enforce styling guidelines, Spotbugs to check for overlooked bugs and Jacoco to check test coverage. Auto-generated reports can be viewed by running `mvn site` in the project directory, and viewing `target/staging/project-reports.html`. A more complete report can be viewed by running `mvn site` and viewing `target/staging`. It can be run as a local web server by executing `mvn site:run` afterwards.
-WARNING: Spotbugs cannot be aggregated, so any errors are only visible on the page for each individual module, for example `target/staging/core/project-reports.html`.
-WARNING: Jacoco aggregated coverage reports only be viewed in `target/staging/aggregator/project-reports.html`.
+
+**WARNING**: Spotbugs cannot be aggregated, so any errors are only visible on the page for each individual module, for example `target/staging/core/project-reports.html`.
+
+**WARNING**: Jacoco aggregated coverage reports only be viewed in `target/staging/aggregator/project-reports.html`.
 
 ## Build and launch
 In order to build and install the project run `mvn install` in the project folder. This must be done before launching the application, by using `mvn javafx:run -pl ui`. You will need to recompile and install for every code change, as the code is being run from the local Maven repository. To speed up this process you can use our handy shortcut: `mvn install -Dfast`, which effectively just runs `mvn install -DskipTests '-Djacoco.skip' '-Dcheckstyle.skip' '-spotbugs.skip'`. If omitted, `-Dfast` will be set to `false`, overwriting any of these values passed through the command line.
