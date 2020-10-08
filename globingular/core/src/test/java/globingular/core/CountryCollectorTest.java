@@ -4,17 +4,15 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.testfx.framework.junit5.ApplicationTest;
 
-import javafx.stage.Stage;
-
-public class CountryCollectorTest extends ApplicationTest {
+public class CountryCollectorTest {
 
     private CountryCollector cc;
 
-    @Override
-    public void start(final Stage stage) {
+    @BeforeEach
+    public void start() {
         cc = new CountryCollector("SE", "DK");
     }
 

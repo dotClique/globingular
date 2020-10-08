@@ -7,8 +7,6 @@ module globingular.ui {
 	requires javafx.controls;
 	requires javafx.base;
 	
-	requires transitive com.fasterxml.jackson.core;
-    requires transitive com.fasterxml.jackson.databind;
 	requires java.desktop;
 	requires javafx.swing;
 
