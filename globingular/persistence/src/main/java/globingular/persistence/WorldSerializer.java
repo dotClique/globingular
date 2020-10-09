@@ -1,4 +1,4 @@
-package globingular.json;
+package globingular.persistence;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;

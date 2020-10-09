@@ -3,7 +3,7 @@ package globingular.ui;
 import globingular.core.Country;
 import globingular.core.CountryCollector;
 import globingular.core.World;
-import globingular.json.PersistenceHandler;
+import globingular.persistence.PersistenceHandler;
 import javafx.collections.SetChangeListener;
 import javafx.css.PseudoClass;
 import javafx.embed.swing.SwingFXUtils;
