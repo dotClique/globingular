@@ -1,11 +1,12 @@
-module globingular {
+module globingular.ui {
+    requires globingular.core;
+    requires globingular.persistence;
+
 	requires javafx.fxml;
 	requires transitive javafx.graphics;
 	requires javafx.controls;
 	requires javafx.base;
 	
-	requires transitive com.fasterxml.jackson.core;
-    requires transitive com.fasterxml.jackson.databind;
 	requires java.desktop;
 	requires javafx.swing;
 

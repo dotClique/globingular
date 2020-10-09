@@ -1,4 +1,4 @@
-package globingular.json;
+package globingular.persistence;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
