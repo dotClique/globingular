@@ -9,14 +9,16 @@ import globingular.core.CountryCollector;
 import globingular.core.World;
 
 /**
- * <p>CountryoCollectorModule class holds:
+ * <p>CountryCollectorModule has a Container-object for serialization and deserialization,
+ * and has methods to get module name and version, and a method to add serializers and
+ * deserializers to the SetupContext.
+ * 
+ * CountryoCollectorModule class holds:
  * <ul>
  * <li>Serializers</li>
  * <li>Deserializers</li>
  * </ul>
- * CountryCollectorModule has a Container-object for serialization and deserialization,
- * and has methods to get module name and version, and a method to add serializers and
- * deserializers to the SetupContext</p>
+ * </p>
  */
 
 public class CountryCollectorModule extends Module {
