@@ -17,6 +17,20 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+/**
+ * <p>PersistenceHandler handles file reading and writing from JSON
+ * and defines paths for saving CountryCollector-state, app-state,
+ * in addition to defining a sample-file to use for the CountryCollector.
+ * 
+ * A PersistenceHandler class has methods for:
+ * <ul>
+ * <li>getting an object mapper</li>
+ * <li>loading the state in a file to a CountryCollector</li>
+ * <li>saving the instance of a CountryCollector to file</li>
+ * </ul>
+ * </p>
+ */
+
 public class PersistenceHandler {
 
     /**
