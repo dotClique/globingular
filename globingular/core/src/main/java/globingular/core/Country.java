@@ -22,32 +22,33 @@ import java.util.Arrays;
 
 public class Country {
     /**
-     * Two-letter representation of the Country. Following the ISO 3166-1 Alpha-2 code. I.e. 'AU'.
+     * Unique two-letter representation of the Country. Following the ISO 3166-1
+     * Alpha-2 code. E.g. 'AU'
      */
     private final String countryCode;
 
     /**
-     * Shortname of the Country. I.e. 'Australia'
+     * Shortname of the Country. E.g. 'Australia'
      */
     private final String shortName;
 
     /**
-     * Full longname of the Country. I.e. 'The Commonwealth of Australia'
+     * Full longname of the Country. E.g. 'The Commonwealth of Australia'
      */
     private final String longname;
 
     /**
-     * The sovereignty of the Country. I.e. 'UN' for a UN member state
+     * The sovereignty of the Country. E.g. 'UN' for a UN member state
      */
     private final String sovereignty;
 
     /**
-     * The region the Country is part of. I.e. 'OC' for Oceania
+     * The region the Country is part of. E.g. 'OC' for Oceania
      */
     private final String region;
 
     /**
-     * Population of the Country. I.e. 25646823
+     * Population of the Country. E.g. 25646823
      */
     private final long population;
 
