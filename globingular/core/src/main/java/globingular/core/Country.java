@@ -2,6 +2,24 @@ package globingular.core;
 
 import java.util.Arrays;
 
+/**
+ * <p>Country class that contains information about a single country. The Country class is
+ * used as a template for creating objects out of the countries listed in the data file
+ * of the project.</p>
+ * 
+ * <p>An instance of the Country class contains a:
+ * <ul>
+ * <li>Country code</li>
+ * <li>Name</li>
+ * <li>Long name</li>
+ * <li>Sovereignty</li>
+ * <li>Region</li>
+ * <li>Population</li>
+ * <li>List of provinces</li>
+ * </ul>
+ * </p>
+ */
+
 public class Country {
     /**
      * Two-letter representation of the Country. Following the ISO 3166-1 Alpha-2 code. I.e. 'AU'.

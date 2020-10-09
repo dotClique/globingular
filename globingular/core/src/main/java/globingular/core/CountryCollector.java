@@ -10,6 +10,18 @@ import javafx.collections.transformation.SortedList;
 
 import java.util.Comparator;
 
+/**
+ * <p>CountryCollector class aggregates visited countries in a list.</p>
+ * 
+ * <p>An instance of the CountryCollector class contains:
+ * <ul>
+ * <li>Methods for getting, setting and removing a country's visited status</li>
+ * <li>Getting visited countries</li>
+ * <li>Getting number of visited countries</li>
+ * </ul>
+ * </p>
+ */
+
 public class CountryCollector {
 
     /**

@@ -1,5 +1,19 @@
 package globingular.core;
 
+/**
+ * <p>Province class represents a province within a country.</p>
+ * 
+ * <p>An instance of the province class contains a:
+ * <ul>
+ * <li>Province code</li>
+ * <li>Capital</li>
+ * <li>Name</li>
+ * <li>Population</li>
+ * <li>Get-methods for the parameters stated above</li>
+ * </ul>
+ * </p>
+ */
+
 public class Province {
 
     /**
