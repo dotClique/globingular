@@ -1,12 +1,12 @@
 module globingular.ui {
-    requires globingular.core;
-    requires globingular.persistence;
+	requires globingular.core;
+	requires globingular.persistence;
 
 	requires javafx.fxml;
 	requires transitive javafx.graphics;
 	requires javafx.controls;
 	requires javafx.base;
-	
+
 	requires java.desktop;
 	requires javafx.swing;
 
