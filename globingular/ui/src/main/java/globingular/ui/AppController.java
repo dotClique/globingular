@@ -4,6 +4,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import globingular.persistence.PersistenceHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -19,7 +20,6 @@ import org.apache.batik.transcoder.TranscoderInput;
 import org.w3c.dom.Document;
 
 import globingular.core.CountryCollector;
-import globingular.json.PersistenceHandler;
 
 public class AppController implements Initializable {
 
