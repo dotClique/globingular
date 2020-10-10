@@ -27,7 +27,6 @@ public class CountryTest {
         assertEquals("UN", c.getSovereignty());
         assertEquals("Asia", c.getRegion());
         assertEquals(123L, c.getPopulation());
-        // TODO: Provinces
     }
 
     @Test
@@ -38,6 +37,5 @@ public class CountryTest {
         assertEquals(country1.getSovereignty(), country5.getSovereignty());
         assertEquals(country1.getRegion(), country5.getRegion());
         assertEquals(country1.getPopulation(), country5.getPopulation());
-        // TODO: Provinces
     }
 }
