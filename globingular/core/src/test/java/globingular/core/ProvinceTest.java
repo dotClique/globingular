@@ -1,16 +1,15 @@
 package globingular.core;
 
-import javafx.stage.Stage;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.testfx.framework.junit5.ApplicationTest;
 
-public class ProvinceTest extends ApplicationTest {
+public class ProvinceTest  {
 
     private Province province;
 
-    @Override
-    public void start(final Stage stage) {
+    @BeforeEach
+    public void start() {
         province = new Province("AU-ACT", "Canberra", "Australian Capital Territory", 426709);
 
     }

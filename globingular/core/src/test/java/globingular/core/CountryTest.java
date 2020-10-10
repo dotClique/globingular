@@ -1,20 +1,18 @@
 package globingular.core;
 
-import javafx.stage.Stage;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.testfx.framework.junit5.ApplicationTest;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class CountryTest extends ApplicationTest {
+public class CountryTest {
 
     private Country country;
 
-    @Override
-    public void start(final Stage stage) {
+    @BeforeEach
+    public void start() {
        country = mock(Country.class);
        when(country.getCountryCode()).thenReturn("NO");
        when(country.getName()).thenReturn("Norway");
@@ -34,7 +32,7 @@ public class CountryTest extends ApplicationTest {
     @Test
     public void testName() {
         String result = country.getName();
-        assertThat(result).isEqualTo("Norway");
+        Assertions.assertEquals("Norway", result);
 
     }
 
