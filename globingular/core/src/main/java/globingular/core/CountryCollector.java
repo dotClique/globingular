@@ -10,14 +10,7 @@ import javafx.collections.transformation.SortedList;
 
 import java.util.Comparator;
 
-import globingular.persistence.PersistenceHandler;
-
 public class CountryCollector {
-
-    /**
-     * Responsible for persisting state across runs.
-     */
-    private PersistenceHandler persistence;
 
     /**
      * Main set of visited countries. Don't pass directly to users, rather use visitedCountriesReadOnly.
@@ -70,7 +63,6 @@ public class CountryCollector {
             throw new IllegalArgumentException("Unknown country " + country.getShortName() + " for this World");
         }
         this.visitedCountries.add(country);
-        this.saveState();
     }
 
     /**
@@ -84,7 +76,6 @@ public class CountryCollector {
             throw new IllegalArgumentException("Unknown country " + country.getShortName() + " for this World");
         }
         this.visitedCountries.remove(country);
-        this.saveState();
     }
 
     /**
@@ -138,27 +129,6 @@ public class CountryCollector {
      */
     public int numberVisited() {
         return this.visitedCountries.size();
-    }
-
-    /**
-     * Save this CountryCollector-state to file if a PersistenceHandler is set.
-     */
-    private void saveState() {
-        if (persistence != null) {
-            persistence.saveState(this);
-        }
-    }
-
-    /**
-     * Load CountryCollector-state from file.
-     * 
-     * @return Returns a new countryCollector-object from file
-     */
-    public static CountryCollector loadState() {
-        PersistenceHandler persistence = new PersistenceHandler();
-        CountryCollector cc = persistence.loadMapCountryCollector();
-        cc.persistence = persistence;
-        return cc;
     }
 
     /**

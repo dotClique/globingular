@@ -7,13 +7,13 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>core</artifactId>
+    <artifactId>persistence</artifactId>
 
     <dependencies>
-        <!-- JavaFX -->
+        <!-- Globingular core module -->
         <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-base</artifactId>
+            <groupId>it1901.gr2002.globingular</groupId>
+            <artifactId>core</artifactId>
         </dependency>
 
         <!-- Test with JUnit5 -->
@@ -25,12 +25,23 @@
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
         </dependency>
+
+        <!-- JSON with Jackson -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
         <plugins>
             <!-- Compiling code -->
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
             </plugin>
 
@@ -46,6 +57,12 @@
                 <artifactId>jacoco-maven-plugin</artifactId>
             </plugin>
 
+            <!-- Using latest maven-site-plugin for report generation -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+            </plugin>
+
             <!-- SpotBugs for checking code quality and bugs-->
             <plugin>
                 <groupId>com.github.spotbugs</groupId>
@@ -56,12 +73,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
-            </plugin>
-
-            <!-- Using latest maven-site-plugin for report generation -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-site-plugin</artifactId>
             </plugin>
         </plugins>
     </build>

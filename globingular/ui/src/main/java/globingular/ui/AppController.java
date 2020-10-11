@@ -3,6 +3,7 @@ package globingular.ui;
 import globingular.core.Country;
 import globingular.core.CountryCollector;
 import globingular.core.World;
+import globingular.persistence.PersistenceHandler;
 import javafx.collections.SetChangeListener;
 import javafx.css.PseudoClass;
 import javafx.embed.swing.SwingFXUtils;
@@ -102,7 +103,14 @@ public class AppController implements Initializable {
      * Initialize field which do not require FXML to be loaded.
      */
     public AppController() {
-        countryCollector = CountryCollector.loadState();
+        // Create a persistenceHandler
+        PersistenceHandler p = new PersistenceHandler();
+        // Use it to retrieve CountryCollector from file
+        countryCollector = p.loadMapCountryCollector();
+        // And register it for autosaving
+        p.setAutosave(countryCollector);
+
+        // Get world-instance
         world = countryCollector.getWorld();
     }
 

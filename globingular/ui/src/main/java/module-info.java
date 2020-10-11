@@ -1,5 +1,6 @@
 module globingular.ui {
-    requires transitive globingular.core;
+	requires globingular.core;
+	requires globingular.persistence;
 
 	requires javafx.fxml;
 	requires transitive javafx.graphics;

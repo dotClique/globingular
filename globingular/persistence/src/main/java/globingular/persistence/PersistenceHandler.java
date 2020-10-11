@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.InjectableValues;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import globingular.core.CountryCollector;
 import globingular.core.World;
+import globingular.core.Country;
+import javafx.collections.SetChangeListener;
 
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
@@ -81,7 +83,20 @@ public class PersistenceHandler {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         return countryCollector;
+    }
+
+    /**
+     * Set PersistenceHandler to autosave changes in a CountryCollector.
+     * 
+     * @param countryCollector The CountryCollector to autosave
+     */
+    public void setAutosave(final CountryCollector countryCollector) {
+        countryCollector.visitedCountriesProperty()
+                        .addListener((SetChangeListener<? super Country>) e -> {
+                            this.saveState(countryCollector);
+                        });
     }
 
     private World loadMapWorld() {
@@ -100,7 +115,7 @@ public class PersistenceHandler {
      *
      * @param countryCollector The CountryCollector instance to save
      */
-    public void saveState(final CountryCollector countryCollector) {
+    private void saveState(final CountryCollector countryCollector) {
         try {
             Files.createDirectories(DATA_FOLDER);
         } catch (IOException e) {
