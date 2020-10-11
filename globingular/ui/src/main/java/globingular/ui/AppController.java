@@ -122,10 +122,5 @@ public class AppController implements Initializable {
         persistence.saveState(countryCollector);
     }
 
-    @FXML
-    public void normalizeInput() {
-
-    }
-
 
 }
