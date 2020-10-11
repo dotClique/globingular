@@ -1,6 +1,6 @@
 package globingular.core;
 
-import globingular.json.PersistenceHandler;
+import globingular.persistence.PersistenceHandler;
 import javafx.beans.property.SetProperty;
 import javafx.beans.property.SimpleSetProperty;
 import javafx.collections.FXCollections;

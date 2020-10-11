@@ -7,7 +7,6 @@
 
     <modules>
         <module>ui</module>
-        <module>persistence</module>
         <module>core</module>
         <module>aggregator</module>
     </modules>
