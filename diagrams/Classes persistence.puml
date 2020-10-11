@@ -1,0 +1,73 @@
+@startuml
+class CountryCollectorDeserializer [[java:CountryCollectorDeserializer]] {
+	+CountryCollector deserialize(JsonParser p, DeserializationContext ctxt)
+}
+class "JsonDeserializer<CountryCollector>" as JsonDeserializer_CountryCollector_ {
+}
+JsonDeserializer_CountryCollector_ <|-- CountryCollectorDeserializer
+
+@enduml
+
+@startuml
+class CountryCollectorModule [[java:CountryCollectorModule]] {
+}
+class Module [[java:com.sun.tools.sjavac.Module]] {
+}
+Module <|-- CountryCollectorModule
+
+@enduml
+
+@startuml
+class CountryCollectorSerializer [[java:CountryCollectorSerializer]] {
+	+void serialize(CountryCollector collector, JsonGenerator gen, SerializerProvider serializers)
+}
+class "JsonSerializer<CountryCollector>" as JsonSerializer_CountryCollector_ {
+}
+JsonSerializer_CountryCollector_ <|-- CountryCollectorSerializer
+
+@enduml
+
+@startuml
+class CountryDeserializer [[java:CountryDeserializer]] {
+	+Country deserialize(JsonParser p, DeserializationContext ctxt)
+}
+class "JsonDeserializer<Country>" as JsonDeserializer_Country_ {
+}
+JsonDeserializer_Country_ <|-- CountryDeserializer
+
+@enduml
+
+@startuml
+class PersistenceHandler [[java:globingular.persistence.PersistenceHandler]] {
+	-{static}Path FILE_COLLECTOR
+	-{static}Path DATA_FOLDER
+	-{static}String FILE_MAP_WORLD
+	-{static}String SAMPLE_COLLECTOR
+	-ObjectMapper objectMapper
+	-ObjectMapper getObjectMapper()
+	+CountryCollector loadMapCountryCollector()
+	-World loadMapWorld()
+	+void saveState(CountryCollector countryCollector)
+}
+
+@enduml
+
+@startuml
+class WorldDeserializer [[java:WorldDeserializer]] {
+	+World deserialize(JsonParser p, DeserializationContext ctxt)
+}
+class "JsonDeserializer<World>" as JsonDeserializer_World_ {
+}
+JsonDeserializer_World_ <|-- WorldDeserializer
+
+@enduml
+
+@startuml
+class WorldSerializer [[java:WorldSerializer]] {
+	+void serialize(World value, JsonGenerator gen, SerializerProvider serializers)
+}
+class "JsonSerializer<World>" as JsonSerializer_World_ {
+}
+JsonSerializer_World_ <|-- WorldSerializer
+
+@enduml
