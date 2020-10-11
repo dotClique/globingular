@@ -5,6 +5,11 @@ import java.awt.image.BufferedImage;
 import org.apache.batik.transcoder.TranscoderOutput;
 import org.apache.batik.transcoder.image.ImageTranscoder;
 
+/**
+ * <p>An instance of the BufferedImageTranscoder class creates a usable, buffered image,
+ * and is used on the SVG-file contained in the project.</p>
+ */
+
 public class BufferedImageTranscoder extends ImageTranscoder {
 
     /**

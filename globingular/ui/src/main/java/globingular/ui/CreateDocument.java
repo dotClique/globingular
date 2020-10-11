@@ -7,6 +7,11 @@ import org.w3c.dom.Document;
 import java.io.IOException;
 import java.io.InputStream;
 
+/**
+ * <p>The CreateDocument class is used in creating a new XML/SVG-document with the world-map of countries,
+ * through its primary method createDocument().</p>
+ */
+
 public class CreateDocument {
 
     /**
