@@ -3,20 +3,20 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
-
-<Pane prefHeight="600" prefWidth="1040.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="globingular.ui.AppController" fx:id="root">
-    <HBox layoutX="32.0" layoutY="46.0" prefHeight="304.0" prefWidth="318.0">
-        <ImageView fx:id="imgView" fitHeight="776.0" fitWidth="721.0" pickOnBounds="true" preserveRatio="true"/>
+<?import javafx.scene.web.WebView ?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<Pane fx:id="root" prefHeight="720" prefWidth="1280.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="globingular.ui.AppController">
+    <HBox spacing="15">
+        <WebView fx:id="webView" prefWidth="1000" prefHeight="540"/>
+        <VBox spacing="15">
+            <ListView fx:id="countriesList" prefHeight="200.0" prefWidth="200.0"/>
+            <HBox spacing="5">
+                <TextField fx:id="countryInput" onAction="#onCountryAdd" prefHeight="27.0" prefWidth="134.0"/>
+                <Button layoutX="5" fx:id="countryDel" mnemonicParsing="false" onAction="#onCountryDel" prefHeight="27.0" prefWidth="28.0" text="-"/>
+                <Button layoutX="5" fx:id="countryAdd" mnemonicParsing="false" onAction="#onCountryAdd" prefHeight="27.0" prefWidth="28.0" text="+"/>
+            </HBox>
+        </VBox>
     </HBox>
-    <ListView fx:id="countriesList" layoutX="804.0" layoutY="32.0" prefHeight="200.0" prefWidth="200.0"/>
-    <TextField fx:id="countryInput" layoutX="804.0" layoutY="241.0" onAction="#onCountryAdd" prefHeight="27.0"
-               prefWidth="134.0"/>
-    <Button fx:id="countryAdd" layoutX="941.0" layoutY="241.0" mnemonicParsing="false" onAction="#onCountryAdd"
-            prefHeight="27.0" prefWidth="28.0" text="+"/>
-    <Button fx:id="countryDel" layoutX="973.0" layoutY="241.0" mnemonicParsing="false" onAction="#onCountryDel"
-            prefHeight="27.0" prefWidth="28.0" text="-"/>
 </Pane>
