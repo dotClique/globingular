@@ -128,6 +128,20 @@
     <build>
         <pluginManagement>
             <plugins>
+                <!-- Cleaning user data -->
+                <plugin>
+                    <artifactId>maven-clean-plugin</artifactId>
+                    <version>2.5</version>
+                    <configuration>
+                        <filesets>
+                            <fileset>
+                                <directory>${user.home}/temp/globingular</directory>
+                                <followSymlinks>false</followSymlinks>
+                            </fileset>
+                        </filesets>
+                    </configuration>
+                </plugin>
+
                 <!-- Compiling code -->
                 <plugin>
                     <artifactId>maven-compiler-plugin</artifactId>
@@ -142,6 +156,8 @@
                 </plugin>
 
                 <!-- Running tests -->
+                <!-- WARNING: crashes if two resource directories in different modules have the same name, -->
+                <!-- e.g. if both persistence/src/main/resources/json and ui/src/main/resources/json exist -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
@@ -283,7 +299,6 @@
                 <version>3.0.0-M5</version>
                 <configuration>
                     <redirectTestOutputToFile>true</redirectTestOutputToFile>
-                    <testFailureIgnore>true</testFailureIgnore>
                 </configuration>
             </plugin>
 

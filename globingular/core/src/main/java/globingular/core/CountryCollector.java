@@ -1,9 +1,16 @@
 package globingular.core;
 
-import globingular.persistence.PersistenceHandler;
+import javafx.beans.property.ReadOnlySetProperty;
+import javafx.beans.property.ReadOnlySetWrapper;
 import javafx.beans.property.SetProperty;
 import javafx.beans.property.SimpleSetProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableSet;
+import javafx.collections.transformation.SortedList;
+
+import java.util.Comparator;
+
+import globingular.persistence.PersistenceHandler;
 
 public class CountryCollector {
 
@@ -13,79 +20,124 @@ public class CountryCollector {
     private PersistenceHandler persistence;
 
     /**
-     * Set of visited countries, using countryCodes according to the ISO 3166-1
-     * alpha-2 standard. Using SetProperty for observability and binding.
+     * Main set of visited countries. Don't pass directly to users, rather use visitedCountriesReadOnly.
      */
-    private final SetProperty<String> visits;
+    private final SetProperty<Country> visitedCountries = new SimpleSetProperty<>(FXCollections.observableSet());
+    /**
+     * Synchronized read-only set of visited countries.
+     * Using ReadOnlySetWrapper::getReadOnlyProperty to prevent reassignment,
+     * FXCollections::unmodifiableObservableSet to prevent modification by users.
+     */
+    private final ReadOnlySetProperty<Country> visitedCountriesReadOnly =
+            new ReadOnlySetWrapper<>(FXCollections.unmodifiableObservableSet(visitedCountries)).getReadOnlyProperty();
+    /**
+     * Get a readonly sorted list-view of this instance's set of visited countries.
+     */
+    private final SortedList<Country> visitedCountriesSorted =
+            CustomBindings.createSortedListView(this.visitedCountries,
+                                                Comparator.comparing(Country::getShortName));
+    /**
+     * The World this instance collects countries from.
+     */
+    private final World world;
 
     /**
-     * Defines a new CountryCollector-object without any visits.
+     * Create a new CountryCollector using the provided World as its source of existing countries.
+     *
+     * @param world Source of existing countries
      */
-    public CountryCollector() {
-        this.visits = new SimpleSetProperty<>(FXCollections.observableSet());
+    public CountryCollector(final World world) {
+        this.world = world;
     }
 
     /**
-     * Defines a new CountryCollector-object with the given countries set as
-     * visited.
-     * 
-     * @param countries Array of countries that has been visited
+     * Get the World providing this CountryCollector's list of existing coutries.
+     *
+     * @return The World providing this CountryCollector's list of existing coutries
      */
-    public CountryCollector(final String... countries) {
-        this();
-        this.visits.set(FXCollections.observableSet(countries));
+    public World getWorld() {
+        return world;
     }
 
     /**
      * Set visitation status of the given country.
-     * 
-     * @param countryCode The two-letter country code to set as visited. Using ISO
-     *                    3166-1 alpha-2 codes
+     *
+     * @param country The Country to log
+     * @throws IllegalArgumentException If Country does not exist in this instances's world
      */
-    public void setVisited(final String countryCode) {
-        this.visits.add(countryCode);
+    public void setVisited(final Country country) {
+        if (!world.countryExists(country)) {
+            throw new IllegalArgumentException("Unknown country " + country.getShortName() + " for this World");
+        }
+        this.visitedCountries.add(country);
         this.saveState();
     }
 
     /**
      * Remove visitation status of the given country.
-     * 
-     * @param countryCode The two-letter country code to remove from visited
-     *                    countries. Using ISO 3166-1 alpha-2 codes
+     *
+     * @param country The Country to mark as not visited
+     * @throws IllegalArgumentException If Country does not exist in this instances's world
      */
-    public void removeVisited(final String countryCode) {
-        this.visits.remove(countryCode);
+    public void removeVisited(final Country country) {
+        if (!world.countryExists(country)) {
+            throw new IllegalArgumentException("Unknown country " + country.getShortName() + " for this World");
+        }
+        this.visitedCountries.remove(country);
         this.saveState();
     }
 
     /**
      * Check if the given country has been visited.
-     * 
-     * @param countryCode The two-letter country code to check. Using ISO 3166-1
-     *                    alpha-2 codes
-     * @return Returns true if the country has been visited. Returns false for all
-     *         non-logged, including invalid names.
+     *
+     * @param country The Country to check
+     * @return Returns true if the country has been visited
+     * @throws IllegalArgumentException If Country does not exist in this instances's world
      */
-    public boolean hasVisited(final String countryCode) {
-        return this.visits.contains(countryCode);
+    public boolean isVisited(final Country country) {
+        if (!world.countryExists(country)) {
+            throw new IllegalArgumentException("Unknown country " + country.getShortName() + " for this World");
+        }
+        return this.visitedCountries.contains(country);
     }
 
     /**
-     * Get a list with all the countryCodes of the countries that has been visited.
-     * 
-     * @return List of countryCodes visited. Using ISO 3166-1 alpha-2 codes
+     * Get a readonly synchronized set-property containing the visited countries.
+     * Synchronized with this instance's main set.
+     *
+     * @return Readonly synchronized set-property of all visits
      */
-    public String[] getVisitedCountries() {
-        return visits.toArray(new String[this.numberVisited()]);
+    public ReadOnlySetProperty<Country> visitedCountriesProperty() {
+        return visitedCountriesReadOnly;
     }
 
     /**
-     * Get the amount of countries visited.
-     * 
+     * Get a readonly observable synchronized set containing the visited countries.
+     * Synchronized with this instances's main set.
+     *
+     * @return Readonly observable set containing the visited countries
+     */
+    public ObservableSet<Country> getVisitedCountries() {
+        return visitedCountriesReadOnly.get();
+    }
+
+    /**
+     * Get a readonly synchronized sorted-list view of the visitedCountries-property.
+     * Synchronized with this instances's main set.
+     *
+     * @return Readonly synchronized sorted-list view of the visitedCountries-property
+     */
+    public SortedList<Country> getVisitedCountriesSorted() {
+        return visitedCountriesSorted;
+    }
+
+    /**
+     * Get the number of countries visited.
+     *
      * @return Returns number of countries visited
      */
     public int numberVisited() {
-        return this.visits.size();
+        return this.visitedCountries.size();
     }
 
     /**
@@ -104,7 +156,7 @@ public class CountryCollector {
      */
     public static CountryCollector loadState() {
         PersistenceHandler persistence = new PersistenceHandler();
-        CountryCollector cc = persistence.loadState();
+        CountryCollector cc = persistence.loadMapCountryCollector();
         cc.persistence = persistence;
         return cc;
     }
@@ -115,6 +167,6 @@ public class CountryCollector {
      */
     @Override
     public String toString() {
-        return this.visits.getValue().toString();
+        return this.visitedCountries.getValue().toString();
     }
 }
