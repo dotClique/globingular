@@ -17,6 +17,7 @@ The UI module handles the graphical part of the desktop application. It is depen
 
 ## Testing and coverage reports
 The project uses Checkstyle to enforce styling guidelines, Spotbugs to check for overlooked bugs and Jacoco to check test coverage. Auto-generated reports can be viewed by running `mvn site` in the project directory, and viewing `target/staging/index.html`. From there you can browse into the individual modules' subfolder and reports. It can be run as a local web server by executing `mvn site:run` afterwards.
+For the master branch, the latest reports site is automatically deployed [here](http://it1901.pages.stud.idi.ntnu.no/groups-2020/gr2002/gr2002/).
 
 ### Aggregated reports
 Certain reports are automatically aggregated and put into `target/staging/project-reports.html`.

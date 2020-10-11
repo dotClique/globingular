@@ -18,13 +18,16 @@
         <fast>false</fast>
     </properties>
 
+    <!-- Actual location for GitLab Pages instance, relativizes any absolute site links -->
+    <url>http://it1901.pages.stud.idi.ntnu.no/groups-2020/gr2002/gr2002 </url>
+
     <!-- Required for site:stage -->
     <distributionManagement>
         <site>
             <id>site</id>
             <name>site</name>
-            <!-- Hypothetical location for GitLab Pages instance, currently required dummy -->
-            <url>https://it1901.gitlab.stud.idi.ntnu.no/groups-2020/gr2002/gr2002</url>
+            <!-- Actual location for GitLab Pages instance -->
+            <url>http://it1901.pages.stud.idi.ntnu.no/groups-2020/gr2002/gr2002 </url>
         </site>
     </distributionManagement>
 
