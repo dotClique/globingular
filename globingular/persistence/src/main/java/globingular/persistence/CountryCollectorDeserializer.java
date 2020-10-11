@@ -22,7 +22,7 @@ public class CountryCollectorDeserializer extends JsonDeserializer<CountryCollec
      * Deserialize a CountryCollector-object from JSON using JsonParser.
      * Requires the target World as an injectable value "_globingular_map_world" in the context.
      * 
-     * @param c a JsonParser
+     * @param p a JsonParser
      * @param ctxt a context for the deserialization
      * @return a CountryCollector object
      * @throws IOException
