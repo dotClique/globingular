@@ -7,12 +7,16 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 
-<Pane prefHeight="600" prefWidth="1040.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="globingular.ui.AppController">
-   <HBox layoutX="32.0" layoutY="46.0" prefHeight="304.0" prefWidth="318.0">
-      <ImageView fx:id="imgView" fitHeight="776.0" fitWidth="721.0" pickOnBounds="true" preserveRatio="true" />
-   </HBox>
-   <ListView fx:id="countriesList" layoutX="804.0" layoutY="32.0" prefHeight="200.0" prefWidth="200.0" />
-   <TextField fx:id="countryInput" layoutX="804.0" layoutY="241.0" onAction="#onCountryAdd" prefHeight="27.0" prefWidth="134.0" />
-   <Button fx:id="countryDel" layoutX="973.0" layoutY="241.0" mnemonicParsing="false" onAction="#onCountryDel" prefHeight="27.0" prefWidth="28.0" text="-" />
-   <Button fx:id="countryAdd" layoutX="941.0" layoutY="241.0" mnemonicParsing="false" onAction="#onCountryAdd" prefHeight="27.0" prefWidth="28.0" text="+" />
+<Pane prefHeight="600" prefWidth="1040.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="globingular.ui.AppController" fx:id="root">
+    <HBox layoutX="32.0" layoutY="46.0" prefHeight="304.0" prefWidth="318.0">
+        <ImageView fx:id="imgView" fitHeight="776.0" fitWidth="721.0" pickOnBounds="true" preserveRatio="true"/>
+    </HBox>
+    <ListView fx:id="countriesList" layoutX="804.0" layoutY="32.0" prefHeight="200.0" prefWidth="200.0"/>
+    <TextField fx:id="countryInput" layoutX="804.0" layoutY="241.0" onAction="#onCountryAdd" prefHeight="27.0"
+               prefWidth="134.0"/>
+    <Button fx:id="countryAdd" layoutX="941.0" layoutY="241.0" mnemonicParsing="false" onAction="#onCountryAdd"
+            prefHeight="27.0" prefWidth="28.0" text="+"/>
+    <Button fx:id="countryDel" layoutX="973.0" layoutY="241.0" mnemonicParsing="false" onAction="#onCountryDel"
+            prefHeight="27.0" prefWidth="28.0" text="-"/>
 </Pane>

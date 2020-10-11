@@ -8,6 +8,12 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+/**
+ * <p>The App class handles the starting of the Globingular app.
+ * A stage is set here, using a preexisting FXML-file.
+ * The main method launches a new instance of the application.</p>
+ */
+
 public final class App extends Application {
 
     /**

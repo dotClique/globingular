@@ -50,3 +50,14 @@ spotbugs:
   script:
     - 'cd globingular'
     - 'mvn $MAVEN_CLI_OPTS compile spotbugs:check'
+
+pages:
+  only:
+    - master
+  script:
+    - 'cd globingular'
+    - 'mvn $MAVEN_CLI_OPTS site'
+    - 'mv target/staging ../public'
+  artifacts:
+    paths:
+      - public

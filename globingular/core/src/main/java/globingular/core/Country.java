@@ -2,46 +2,104 @@ package globingular.core;
 
 import java.util.Arrays;
 
+/**
+ * <p>Country class that contains information about a single country. The Country class is
+ * used as a template for creating objects out of the countries listed in the data file
+ * of the project.</p>
+ * 
+ * <p>An instance of the Country class contains a:
+ * <ul>
+ * <li>Country code</li>
+ * <li>Name</li>
+ * <li>Long name</li>
+ * <li>Sovereignty</li>
+ * <li>Region</li>
+ * <li>Population</li>
+ * <li>List of provinces</li>
+ * </ul>
+ * </p>
+ */
+
 public class Country {
     /**
      * Unique two-letter representation of the Country. Following the ISO 3166-1
-     * Alpha-2 code. I.e. 'AU'
+     * Alpha-2 code. E.g. 'AU'
      */
-    private String countryCode;
+    private final String countryCode;
 
     /**
-     * Shortname of the Country. I.e. 'Australia'
+     * Shortname of the Country. E.g. 'Australia'
      */
-    private String name;
+    private final String shortName;
 
     /**
-     * Full longname of the Country. I.e. 'The Commonwealth of Australia'
+     * Full longname of the Country. E.g. 'The Commonwealth of Australia'
      */
-    private String longname;
+    private final String longname;
 
     /**
-     * The sovereignty of the Country. I.e. 'UN' for a UN member state
+     * The sovereignty of the Country. E.g. 'UN' for a UN member state
      */
-    private String sovereignty;
+    private final String sovereignty;
 
     /**
-     * The region the Country is part of. I.e. 'OC' for Oceania
+     * The region the Country is part of. E.g. 'OC' for Oceania
      */
-    private String region;
+    private final String region;
 
     /**
-     * Population of the Country. I.e. 25646823
+     * Population of the Country. E.g. 25646823
      */
-    private long population;
+    private final long population;
 
     /**
      * List of Provinces part of the Country.
+     * Currently placeholder for future functionality.
      */
-    private Province[] provinces;
+    private final Province[] provinces;
+
+    /**
+     * Constructor for Country, an immutable store of data representing one country.
+     *
+     * @param countryCode Two-letter representation of the Country. Following the ISO 3166-1 Alpha-2 code. I.e. 'AU'
+     * @param shortName   Shortname of the Country. I.e. 'Australia'
+     * @param longname    Full longname of the Country. I.e. 'The Commonwealth of Australia'
+     * @param sovereignty The sovereignty of the Country. I.e. 'UN' for a UN member state
+     * @param region      The region the Country is part of. I.e. 'OC' for Oceania
+     * @param population  Population of the Country. I.e. 25646823
+     * @param provinces   List of Provinces part of the Country
+     */
+    public Country(final String countryCode, final String shortName, final String longname, final String sovereignty,
+                   final String region, final long population,
+                   final Province[] provinces) {
+        this.countryCode = countryCode;
+        this.shortName = shortName;
+        this.longname = longname;
+        this.sovereignty = sovereignty;
+        this.region = region;
+        this.population = population;
+        // Cloning to avoid outside editing.
+        this.provinces = provinces.clone();
+    }
+
+    /**
+     * Shorthand constructor for Country. Defaults are the following:
+     * longname: name
+     * sovereignty: 'UN'
+     * region: ''
+     * population: 0L
+     * provinces: new Province[0]
+     *
+     * @param countryCode Two-letter representation of the Country. Following the ISO 3166-1 Alpha-2 code. I.e. 'AU'
+     * @param shortName   Shortname of the Country. I.e. 'Australia'
+     */
+    public Country(final String countryCode, final String shortName) {
+        this(countryCode, shortName, shortName, "UN", "", 0L, new Province[0]);
+    }
 
     /**
      * Get the Country's ISO 3166-1 Alpha-2 code.
-     * 
+     *
      * @return A two-letter representation, following the ISO 3166-standard
      */
     public String getCountryCode() {
@@ -50,25 +108,25 @@ public class Country {
 
     /**
      * Get the Country's short name.
-     * 
+     *
      * @return Short name for the Country
      */
-    public String getName() {
-        return name;
+    public String getShortName() {
+        return shortName;
     }
 
     /**
      * Get the Country's long name.
-     * 
+     *
      * @return Long name for the Country
      */
-    public String getLongname() {
+    public String getLongName() {
         return longname;
     }
 
     /**
      * Get the Country's sovereignty.
-     * 
+     *
      * @return Sovereignty of the Country
      */
     public String getSovereignty() {
@@ -77,7 +135,7 @@ public class Country {
 
     /**
      * Get the Country's region.
-     * 
+     *
      * @return Region of the Country
      */
     public String getRegion() {
@@ -86,7 +144,7 @@ public class Country {
 
     /**
      * Get the Country's population.
-     * 
+     *
      * @return Population of the Country
      */
     public long getPopulation() {
@@ -101,8 +159,8 @@ public class Country {
     public String toString() {
         return "Country{"
                 + "countryCode='" + countryCode + '\''
-                + ", name='" + name + '\''
-                + ", longname='" + longname + '\''
+                + ", shortName='" + shortName + '\''
+                + ", longName='" + longname + '\''
                 + ", sovereignty='" + sovereignty + '\''
                 + ", region='" + region + '\''
                 + ", population=" + population

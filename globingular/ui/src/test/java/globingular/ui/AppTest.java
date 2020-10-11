@@ -1,5 +1,7 @@
 package globingular.ui;
 
+import globingular.core.Country;
+import globingular.core.CountryCollector;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.testfx.framework.junit5.ApplicationTest;
@@ -11,6 +13,12 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+/**
+ * <p>The AppTest is a test class that allows for testing of the
+ * functionality in AppController.</p>
+ */
 public class AppTest extends ApplicationTest {
 
     private Parent parent;
@@ -27,23 +35,28 @@ public class AppTest extends ApplicationTest {
 
     @Test
     public void testController() {
-        final ListView<String> countriesList = (ListView<String>) parent.lookup("#countriesList");
+        final ListView<Country> countriesList = (ListView<Country>) parent.lookup(
+                "#countriesList");
+        final CountryCollector cc = controller.getCountryCollector();
+        assertNotNull(cc);
+        assertNotNull(cc.getWorld());
         final TextField countryInput = (TextField) parent.lookup("#countryInput");
         final Button countryAdd = (Button) parent.lookup("#countryAdd");
         final Button countryDel = (Button) parent.lookup("#countryDel");
+        Country au = cc.getWorld().getCountryFromCode("AU");
 
-        if (countriesList.getItems().contains("AU")) {
-            countryInput.setText("AU");
+        if (countriesList.getItems().contains(au)) {
+            countryInput.setText(au.getCountryCode());
             clickOn(countryDel);
-            Assertions.assertFalse(countriesList.getItems().contains("AU"));
+            Assertions.assertFalse(countriesList.getItems().contains(au));
         }
-        Assertions.assertFalse(countriesList.getItems().contains("AU"));
-        countryInput.setText("AU");
+        Assertions.assertFalse(countriesList.getItems().contains(au));
+        countryInput.setText(au.getCountryCode());
         clickOn(countryAdd);
         Assertions.assertEquals("", countryInput.getText());
-        Assertions.assertTrue(countriesList.getItems().contains("AU"));
-        countryInput.setText("AU");
+        Assertions.assertTrue(countriesList.getItems().contains(au));
+        countryInput.setText(au.getCountryCode());
         clickOn(countryDel);
-        Assertions.assertFalse(countriesList.getItems().contains("AU"));
+        Assertions.assertFalse(countriesList.getItems().contains(au));
     }
 }

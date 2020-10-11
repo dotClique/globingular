@@ -5,6 +5,11 @@ import java.awt.image.BufferedImage;
 import org.apache.batik.transcoder.TranscoderOutput;
 import org.apache.batik.transcoder.image.ImageTranscoder;
 
+/**
+ * <p>An instance of the BufferedImageTranscoder class creates a usable, buffered image,
+ * and is used on the SVG-file contained in the project.</p>
+ */
+
 public class BufferedImageTranscoder extends ImageTranscoder {
 
     /**
@@ -25,14 +30,13 @@ public class BufferedImageTranscoder extends ImageTranscoder {
     }
 
     /**
-     * Dummy method, required ignoredTO extend ImageTranscoder.
-     * @param ignoredImg Ignored
+     * Called by something or other, actually necessary.
+     * @param image Image to write
      * @param ignoredTO Ignored
-     * @throws UnsupportedOperationException Every time
      */
     @Override
-    public void writeImage(final BufferedImage ignoredImg, final TranscoderOutput ignoredTO) {
-        throw new UnsupportedOperationException("This is a dummy method!");
+    public void writeImage(final BufferedImage image, final TranscoderOutput ignoredTO) {
+        setImg(image);
     }
 
     /**

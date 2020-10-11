@@ -1,5 +1,5 @@
 module globingular.core {
-	requires javafx.base;
+	requires transitive javafx.base;
 	
 	exports globingular.core;
 }

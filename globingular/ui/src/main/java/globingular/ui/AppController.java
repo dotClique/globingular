@@ -1,43 +1,93 @@
 package globingular.ui;
 
-import java.net.URL;
-import java.util.List;
-import java.util.ResourceBundle;
-
+import globingular.core.Country;
+import globingular.core.CountryCollector;
+import globingular.core.World;
 import globingular.persistence.PersistenceHandler;
+import javafx.collections.SetChangeListener;
+import javafx.css.PseudoClass;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.embed.swing.SwingFXUtils;
-
 import org.apache.batik.transcoder.TranscoderException;
 import org.apache.batik.transcoder.TranscoderInput;
-
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
-import globingular.core.CountryCollector;
+import java.net.URL;
+import java.util.Collection;
+import java.util.ResourceBundle;
+
+/**
+ * <p>The AppController class handles the interaction between the FXML-file and
+ * the back-end logic of the app. It makes use of several classes in core,
+ * and thus is able to display the data in the JSON-file in the GUI.</p>
+ * 
+ * <p>The AppController has several methods, e.g.:
+ * <ul>
+ * <li>initializing items in the GUI correctly</li>
+ * <li>updating what's viewed on the screen</li>
+ * <li>adding and deleting countries from the visited countries list</li>
+ * </ul>
+ * </p>
+ */
 
 public class AppController implements Initializable {
 
     /**
-     * Responsible for persisting state across runs.
+     * Manager of which countries have been visited.
      */
-    private PersistenceHandler persistence;
+    private final CountryCollector countryCollector;
     /**
-     * Manager of which countries exist and have been visited;
-     * core component storing all state.
+     * Manager of which countries exist.
      */
-    private CountryCollector countryCollector;
+    private final World world;
+    /**
+     * The SVG document containing the world map.
+     */
+    private final Document document = new CreateDocument().createDocument();
+    /**
+     * Helper field containing whichever Country the input field currently resolves to, if any.
+     */
+    private Country inputCountry = null;
+
+    /**
+     * Pseudoclass designating that an form element has invalid input.
+     */
+    public static final PseudoClass INVALID = new PseudoClass() {
+        @Override
+        public String getPseudoClassName() {
+            return "invalid";
+        }
+    };
+    /**
+     * Pseudoclass designating that an form element has blank input.
+     */
+    public static final PseudoClass BLANK = new PseudoClass() {
+        @Override
+        public String getPseudoClassName() {
+            return "blank";
+        }
+    };
+    /**
+     * The root of the FXML document.
+     */
+    @FXML
+    private Parent root;
 
     /**
      * The list of countries visible in the interface.
      */
     @FXML
-    private ListView<String> countriesList;
+    private ListView<Country> countriesList;
 
     /**
      * The input for country-shortnames or -codes visible in the interface.
@@ -64,34 +114,59 @@ public class AppController implements Initializable {
     private ImageView imgView;
 
     /**
+     * Initialize field which do not require FXML to be loaded.
+     */
+    public AppController() {
+        // Create a persistenceHandler
+        PersistenceHandler p = new PersistenceHandler();
+        // Use it to retrieve CountryCollector from file
+        countryCollector = p.loadMapCountryCollector();
+        // And register it for autosaving
+        p.setAutosave(countryCollector);
+
+        // Get world-instance
+        world = countryCollector.getWorld();
+    }
+
+    /**
      * Initialize the controller on load.
      */
     @Override
     public void initialize(final URL location, final ResourceBundle resources) {
-        persistence = new PersistenceHandler();
-        countryCollector = persistence.loadState();
+        setColorAll(countryCollector.getVisitedCountries(), Colors.COUNTRY_VISITED);
 
-        BufferedImageTranscoder transcoder = new BufferedImageTranscoder();
-        Document document = new CreateDocument().createDocument();
-        TranscoderInput transcoderIn = new TranscoderInput(document);
-        try {
-            transcoder.transcode(transcoderIn, null);
-            Image img = SwingFXUtils.toFXImage(transcoder.getBufferedImage(), null);
-            imgView.setImage(img);
+        countryCollector.visitedCountriesProperty()
+                        .addListener((SetChangeListener<? super Country>) e -> {
+                            if (e.wasAdded()) {
+                                setColor(e.getElementAdded(), Colors.COUNTRY_VISITED);
+                            } else {
+                                setColor(e.getElementRemoved(), Colors.COUNTRY_NOT_VISITED);
+                            }
+                        });
 
-        } catch (TranscoderException e) {
-            e.printStackTrace();
-        }
+        countriesList.itemsProperty().set(countryCollector.getVisitedCountriesSorted());
+        countriesList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        countriesList.setCellFactory(countryListView -> new ListCell<>() {
+            @Override
+            protected void updateItem(final Country item, final boolean empty) {
+                super.updateItem(item, empty);
+                setText(item == null ? "" : item.getShortName());
+            }
+        });
 
-        updateView();
+        countryInput.textProperty().addListener(e -> onInputChange());
+        root.getStylesheets().add(getClass().getResource("/css/App.css").toExternalForm());
+
+        updateMap();
     }
 
     /**
-     * Update the list of countries on addition of visited Country.
+     * Get the active CountryCollector for the world map.
+     *
+     * @return The active CountryCollector for the world map
      */
-    private void updateView() {
-        countriesList.getItems().clear();
-        countriesList.getItems().addAll(List.of(countryCollector.getVisitedCountries()));
+    public CountryCollector getCountryCollector() {
+        return countryCollector;
     }
 
     /**
@@ -101,11 +176,45 @@ public class AppController implements Initializable {
     void onCountryAdd() {
         String input = countryInput.getText();
         if (!input.isBlank()) {
-            countryCollector.setVisited(input);
-            countryInput.clear();
+            Country countryByCode = world.getCountryFromCode(input);
+            Country countryByName = world.getCountryFromName(input);
+            if (countryByCode != null) {
+                countryCollector.setVisited(countryByCode);
+                countryInput.clear();
+            } else if (countryByName != null) {
+                countryCollector.setVisited(countryByName);
+                countryInput.clear();
+            } else {
+                countryInput.pseudoClassStateChanged(INVALID, true);
+            }
+
         }
-        updateView();
-        persistence.saveState(countryCollector);
+    }
+
+    /**
+     * Evaluate new state after a change in the country input element.
+     */
+    private void onInputChange() {
+        String input = countryInput.getText();
+        if (input.isBlank()) {
+            countryInput.pseudoClassStateChanged(BLANK, true);
+            countryInput.pseudoClassStateChanged(INVALID, false);
+        } else {
+            Country countryByCode = world.getCountryFromCode(input);
+            Country countryByName = world.getCountryFromName(input);
+
+            if (countryByCode != null) {
+                inputCountry = countryByCode;
+                countryInput.pseudoClassStateChanged(INVALID, false);
+            } else if (countryByName != null) {
+                inputCountry = countryByName;
+                countryInput.pseudoClassStateChanged(INVALID, false);
+            } else {
+                inputCountry = null;
+                countryInput.pseudoClassStateChanged(INVALID, true);
+            }
+            countryInput.pseudoClassStateChanged(BLANK, false);
+        }
     }
 
     /**
@@ -115,11 +224,63 @@ public class AppController implements Initializable {
     void onCountryDel() {
         String input = countryInput.getText();
         if (!input.isBlank()) {
-            countryCollector.removeVisited(input);
-            countryInput.clear();
+            if (!countryInput.getPseudoClassStates().contains(INVALID)) {
+                countryInput.clear();
+            }
+            countryCollector.removeVisited(inputCountry);
+        } else {
+            // Array conversion necessary to prevent the removal of items from foreach-target
+            for (Country country
+                    : countriesList.getSelectionModel().getSelectedItems().toArray(Country[]::new)) {
+                countryCollector.removeVisited(country);
+            }
         }
-        updateView();
-        persistence.saveState(countryCollector);
+        countriesList.getSelectionModel().clearSelection();
+    }
+
+    /**
+     * Change displayed color on the world map for the given country.
+     *
+     * @param country Target country
+     * @param color   Target color
+     */
+    private void setColor(final Country country, final Colors color) {
+        Element c = document.getElementById(country.getCountryCode());
+
+        if (c == null) {
+            return;
+        }
+
+        c.setAttribute("style", "fill: " + color.getHex());
+        updateMap();
+    }
+
+    /**
+     * Change displayed color on the world map for the given countries.
+     *
+     * @param countries Target countries
+     * @param color     Target color
+     */
+    private void setColorAll(final Collection<Country> countries, final Colors color) {
+        for (Country country : countries) {
+            setColor(country, color);
+        }
+    }
+
+    /**
+     * Change the world map to reflect updated state, e.g. country colors.
+     */
+    private void updateMap() {
+        BufferedImageTranscoder transcoder = new BufferedImageTranscoder();
+        TranscoderInput transcoderIn = new TranscoderInput(document);
+        try {
+            transcoder.transcode(transcoderIn, null);
+            Image img = SwingFXUtils.toFXImage(transcoder.getBufferedImage(), null);
+            imgView.setImage(img);
+
+        } catch (TranscoderException e) {
+            e.printStackTrace();
+        }
     }
 
 

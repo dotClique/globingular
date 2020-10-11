@@ -1,27 +1,41 @@
 package globingular.core;
 
+/**
+ * <p>Province class represents a province within a country.</p>
+ * 
+ * <p>An instance of the province class contains a:
+ * <ul>
+ * <li>Province code</li>
+ * <li>Capital</li>
+ * <li>Name</li>
+ * <li>Population</li>
+ * <li>Get-methods for the parameters stated above</li>
+ * </ul>
+ * </p>
+ */
+
 public class Province {
 
     /**
      * The short-code of the Province, following the ISO 3166-2 standard for states
      * and provinces.
      */
-    private String provinceCode;
+    private final String provinceCode;
 
     /**
      * The capital of the Province.
      */
-    private String capital;
+    private final String capital;
 
     /**
      * The full name of the Province.
      */
-    private String name;
+    private final String name;
 
     /**
      * The population of the Province.
      */
-    private long population;
+    private final long population;
 
     /**
      * Create a new Province instance with the given arguments.
