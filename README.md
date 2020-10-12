@@ -13,7 +13,7 @@ The Core module contains the main logic of the application, and is the central p
 The Persistence module handles all things related to saving and loading of the application-state to and from file and/or database. It's separate from Core in order to interchangeably use different back-ends for storing state. 
 The app uses an app model of persistence, meaning that any changes are implicitly saved in the background and loaded on restart.
 This makes more sense for such a simple record-keeping app, as users are unlikely to make many changes at once.
-It would be useful to also be able to take a snapshot for backup purposes, and this is excpected for future development, however it is currently not a priority.
+It would be useful to also be able to take a snapshot for backup purposes, and this is expected for future development, however it is currently not a priority.
 
 ### UI module
 The UI module handles the graphical part of the desktop application. It is dependent upon Core for all its functionality. This is also the module that launches the desktop application, meaning that the main class is `globingular/ui/src/main/java/globingular/ui/App.java`.
