@@ -10,11 +10,22 @@ import globingular.core.World;
 
 import java.io.IOException;
 
+/**
+ * <p>CountryCollectorDeserializer deserializes a CountryCollector-object, using
+ * the only method in the class, deserialize(p, ctxt),
+ * to do this.</p>
+ */
+
 public class CountryCollectorDeserializer extends JsonDeserializer<CountryCollector> {
 
     /**
      * Deserialize a CountryCollector-object from JSON using JsonParser.
      * Requires the target World as an injectable value "_globingular_map_world" in the context.
+     * 
+     * @param p a JsonParser
+     * @param ctxt a context for the deserialization
+     * @return a CountryCollector object
+     * @throws IOException
      */
     @Override
     public CountryCollector deserialize(final JsonParser p, final DeserializationContext ctxt)

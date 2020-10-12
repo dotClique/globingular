@@ -8,6 +8,18 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * <p>JUnit test class that tests the following:
+ * <ul>
+ * <li>toString</li>
+ * <li>constructor</li>
+ * <li>empty constructor</li>
+ * <li>set country as visited</li>
+ * <li>remove visited from country</li>
+ * <li>has visited country</li>
+ * </ul>
+ * </p>
+ */
 public class CountryCollectorTest {
     static Country country0, country1, country2, country3, country4;
     static World world0, world1, world2, world3, world4;

@@ -25,6 +25,20 @@ import java.net.URL;
 import java.util.Collection;
 import java.util.ResourceBundle;
 
+/**
+ * <p>The AppController class handles the interaction between the FXML-file and
+ * the back-end logic of the app. It makes use of several classes in core,
+ * and thus is able to display the data in the JSON-file in the GUI.</p>
+ * 
+ * <p>The AppController has several methods, e.g.:
+ * <ul>
+ * <li>initializing items in the GUI correctly</li>
+ * <li>updating what's viewed on the screen</li>
+ * <li>adding and deleting countries from the visited countries list</li>
+ * </ul>
+ * </p>
+ */
+
 public class AppController implements Initializable {
 
     /**
@@ -106,8 +120,13 @@ public class AppController implements Initializable {
      * Initialize fields which do not require FXML to be loaded.
      */
     public AppController() {
+        // Create a persistenceHandler
         persistence = new PersistenceHandler();
+        // Use it to retrieve CountryCollector from file
         countryCollector = persistence.loadMapCountryCollector();
+        // And register it for autosaving
+        persistence.setAutosave(countryCollector);
+
         world = countryCollector.getWorld();
     }
 
@@ -173,7 +192,6 @@ public class AppController implements Initializable {
             }
 
         }
-        persistence.saveState(countryCollector);
     }
 
     /**
@@ -193,7 +211,6 @@ public class AppController implements Initializable {
                             } else {
                                 countryCollector.setVisited(country);
                             }
-                            persistence.saveState(countryCollector);
                         },
                         true);
             }
@@ -245,7 +262,6 @@ public class AppController implements Initializable {
             }
         }
         countriesList.getSelectionModel().clearSelection();
-        persistence.saveState(countryCollector);
     }
 
     /**

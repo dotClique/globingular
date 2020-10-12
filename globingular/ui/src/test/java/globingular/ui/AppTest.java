@@ -15,6 +15,10 @@ import javafx.scene.control.TextField;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+/**
+ * <p>The AppTest is a test class that allows for testing of the
+ * functionality in AppController.</p>
+ */
 public class AppTest extends ApplicationTest {
 
     private Parent parent;
