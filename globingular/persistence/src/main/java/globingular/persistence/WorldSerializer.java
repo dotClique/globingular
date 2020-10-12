@@ -8,6 +8,9 @@ import globingular.core.World;
 
 import java.io.IOException;
 
+/**
+ * Serializer for {@link World} objects.
+ */
 public class WorldSerializer extends JsonSerializer<World> {
 
     /**
