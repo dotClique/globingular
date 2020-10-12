@@ -8,6 +8,10 @@ import javafx.collections.transformation.SortedList;
 
 import java.util.Comparator;
 
+/**
+ * Custom bindings between JavaFX-Properties to extend the kinds of
+ * transformations on objects that are possible whilst still being synchronized.
+ */
 public final class CustomBindings {
 
     /**

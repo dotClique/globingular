@@ -9,6 +9,9 @@ import globingular.core.Province;
 
 import java.io.IOException;
 
+/**
+ * Deserializer for {@link Country} objects.
+ */
 public class CountryDeserializer extends JsonDeserializer<Country> {
 
     /**

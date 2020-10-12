@@ -3,6 +3,10 @@ package globingular.core;
 import java.util.HashMap;
 import java.util.Set;
 
+/**
+ * An immutable store of {@link Country} objects, representing a single world, such as Earth,
+ * Middle Earth from Lord of the Rings, or the entire observable universe.
+ */
 public class World {
 
     /**

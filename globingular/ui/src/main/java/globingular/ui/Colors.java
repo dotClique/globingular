@@ -1,5 +1,8 @@
 package globingular.ui;
 
+/**
+ * The set of colors used by the application.
+ */
 public enum Colors {
     /**
      * Color on a map of a country which is not visited.

@@ -9,6 +9,9 @@ import globingular.core.World;
 
 import java.io.IOException;
 
+/**
+ * Deserializer for {@link World} objects.
+ */
 public class WorldDeserializer extends JsonDeserializer<World> {
 
     /**
