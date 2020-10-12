@@ -36,3 +36,6 @@ Certain reports are automatically aggregated and put into `target/staging/projec
 In order to build and install the project run `mvn install` in the project folder. This must be done before launching the application, by using `mvn javafx:run -pl ui`. You will need to recompile and install for every code change, as the code is being run from the local Maven repository. To speed up this process you can use our handy shortcut: `mvn install -Dfast`, which effectively just runs `mvn install -DskipTests '-Djacoco.skip' '-Dcheckstyle.skip' '-spotbugs.skip'`. If omitted, `-Dfast` will be set to `false`, overwriting any of these values passed through the command line.
 
 To launch the project in 'one line', run: `mvn install; mvn javafx:run -pl ui`.
+
+## Data sources
+Country data & SVG World Map: [raphaellepuschitz/SVG-World-Map.](https://github.com/raphaellepuschitz/SVG-World-Map)
