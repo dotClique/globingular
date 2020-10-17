@@ -14,8 +14,8 @@
             <ListView fx:id="countriesList" prefHeight="200.0" prefWidth="200.0"/>
             <HBox spacing="5">
                 <TextField fx:id="countryInput" onAction="#onCountryAdd" prefHeight="27.0" prefWidth="134.0"/>
-                <Button layoutX="5" fx:id="countryDel" mnemonicParsing="false" onAction="#onCountryDel" prefHeight="27.0" prefWidth="28.0" text="-"/>
                 <Button layoutX="5" fx:id="countryAdd" mnemonicParsing="false" onAction="#onCountryAdd" prefHeight="27.0" prefWidth="28.0" text="+"/>
+                <Button layoutX="5" fx:id="countryDel" mnemonicParsing="false" onAction="#onCountryDel" prefHeight="27.0" prefWidth="28.0" text="-"/>
             </HBox>
         </VBox>
     </HBox>
