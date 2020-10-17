@@ -149,7 +149,7 @@ public class AppController implements Initializable {
         initializeCountriesList();
 
         countryInput.textProperty().addListener(e -> onInputChange());
-        root.getStylesheets().add(getClass().getResource("/css/App.css").toExternalForm());
+        root.getStylesheets().add(getClass().getResource("/fxml-css/App.css").toExternalForm());
 
         webEngine.load(getClass().getResource("/html/world.html").toExternalForm());
 
