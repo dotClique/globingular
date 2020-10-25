@@ -26,6 +26,8 @@ public final class App extends Application {
     final Parent parent = FXMLLoader.load(getClass().getResource("/fxml/App.fxml"));
     primaryStage.setScene(new Scene(parent));
     primaryStage.show();
+    primaryStage.setTitle("Globingular");
+    parent.getStylesheets().add("css/App.css");
   }
 
     /**
