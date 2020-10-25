@@ -17,11 +17,11 @@ svg g {
 }
 
 #World {
-    fill: white;
+    fill: var(--javafx-default-bg);
 }
 
 #Ocean {
-    fill: white
+    fill: var(--javafx-default-bg)
 }
 
 [visited] {
