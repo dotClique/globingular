@@ -43,13 +43,13 @@ public class CountryCollectorTest {
         world3 = new World(country4, country3, country2);
         world4 = new World(country0, country1, country2, country3, country4);
 
-        visit0 = new Visit(country0, LocalDateTime.now());
-        visit1 = new Visit(country1, LocalDateTime.now());
-        visit2 = new Visit(country2, LocalDateTime.now());
-        visit3 = new Visit(country3, LocalDateTime.now());
-        visit4 = new Visit(country4, LocalDateTime.now());
+        visit0 = new Visit(country0, LocalDateTime.now(), LocalDateTime.now());
+        visit1 = new Visit(country1, LocalDateTime.now(), LocalDateTime.now());
+        visit2 = new Visit(country2, LocalDateTime.now(), LocalDateTime.now());
+        visit3 = new Visit(country3, LocalDateTime.now(), LocalDateTime.now());
+        visit4 = new Visit(country4, LocalDateTime.now(), LocalDateTime.now());
 
-        visit0_2 = new Visit(country0, LocalDateTime.of(2020, 01, 01, 12, 0, 0));
+        visit0_2 = new Visit(country0, LocalDateTime.of(2020, 01, 01, 12, 0, 0), LocalDateTime.of(2020, 01, 31, 12, 0, 0));
     }
 
     @Test
@@ -64,7 +64,10 @@ public class CountryCollectorTest {
         CountryCollector cc = new CountryCollector(world4);
         cc.registerVisit(visit2);
         cc.registerVisit(visit3);
-        assertEquals("[" + visit2.toString() + ", " + visit3.toString() + "]", cc.toString());
+        String s1 = cc.toString();
+        String s2 = "[" + visit2.toString() + ", " + visit3.toString() + "]";
+        String s3 = "[" + visit3.toString() + ", " + visit2.toString() + "]";
+        assertTrue(s1.equals(s2) || s1.equals(s3));
     }
 
     @Test
@@ -104,10 +107,11 @@ public class CountryCollectorTest {
     @Test
     public void testRegisterVisitWithCountryAndArrival() {
         LocalDateTime dt = LocalDateTime.of(2020, 01, 01, 12, 0, 0);
+        LocalDateTime dt_2 = LocalDateTime.of(2020, 01, 31, 12, 0, 0);
 
         CountryCollector cc = new CountryCollector(world3);
         assertFalse(cc.isVisited(country3));
-        cc.registerVisit(country3, dt);
+        cc.registerVisit(country3, dt, dt_2);
         assertTrue(cc.isVisited(country3));
         
         Collection<Visit> visits = cc.getCountryVisits(country3);
@@ -118,11 +122,9 @@ public class CountryCollectorTest {
     public void testRegisterMultipleVisitsToSameCountry() {
         CountryCollector cc = new CountryCollector(world2);
         cc.registerVisit(visit0);
-        try {
-            cc.registerVisit(visit0_2);
-            fail("No exception thrown for attempted logging multiple visits to same country.");
-        } catch (IllegalArgumentException ignored) {
-        }
+        cc.registerVisit(visit0_2);
+        assertTrue(cc.getVisits().contains(visit0));
+        assertTrue(cc.getVisits().contains(visit0_2));
     }
 
     @Test
@@ -130,7 +132,7 @@ public class CountryCollectorTest {
         CountryCollector cc = new CountryCollector(world4);
         cc.registerVisit(country2);
         assertTrue(cc.isVisited(country2));
-        cc.removeVisit(country2);
+        cc.removeAllVisitsToCountry(country2);
         assertFalse(cc.isVisited(country2));
     }
 

@@ -24,14 +24,21 @@ public class Visit {
     private final LocalDateTime arrival;
 
     /**
+     * The time of departure from the country.
+     */
+    private final LocalDateTime departure;
+
+    /**
      * Initiate a new visit to the given country at the given time.
      * 
      * @param country The country that has been visited
      * @param arrival The arrival time to log in the visit
+     * @param departure The departure time to log in the visit
      */
-    public Visit(final Country country, final LocalDateTime arrival) {
+    public Visit(final Country country, final LocalDateTime arrival, final LocalDateTime departure) {
         this.country = country;
         this.arrival = arrival;
+        this.departure = departure;
     }
 
     /**
@@ -53,6 +60,15 @@ public class Visit {
     }
 
     /**
+     * Retrieve the date and time of departure from the country.
+     * 
+     * @return A LocalDateTime of the departure from the country
+     */
+    public LocalDateTime getDeparture() {
+        return this.departure;
+    }
+
+    /**
      * Retrieve a String representation of the Visit object.
      * This is not a stable interface, and is only to be used for human readable representation.
      * 
@@ -60,6 +76,6 @@ public class Visit {
      */
     @Override
     public String toString() {
-        return String.format("[%s at %s]", this.country.getShortName(), this.arrival);
+        return String.format("[%s at %s - %s]", this.country.getShortName(), this.arrival, this.departure);
     }
 }

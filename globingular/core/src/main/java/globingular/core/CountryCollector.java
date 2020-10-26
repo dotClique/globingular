@@ -97,7 +97,7 @@ public class CountryCollector {
 
 
     /**
-     * Register a country-visit. Assumes the arrival was now as none is given.
+     * Register a country-visit. Assumes the arrival and departure was now as none is given.
      * 
      * @param country The Country to register visit to
      * 
@@ -105,20 +105,21 @@ public class CountryCollector {
      * @throws IllegalArgumentException If Country has already been visited
      */
     public void registerVisit(final Country country) {
-        this.registerVisit(country, LocalDateTime.now());
+        this.registerVisit(country, LocalDateTime.now(), LocalDateTime.now());
     }
 
     /**
      * Register a country-visit.
      * 
      * @param country The Country to register visit to
-     * @param arrival The time of first arrival
+     * @param arrival The time of arrival
+     * @param departure The time of departure
      * 
      * @throws IllegalArgumentException If Country does not exist in this instance's world
      * @throws IllegalArgumentException If Country has already been visited
      */
-    public void registerVisit(final Country country, final LocalDateTime arrival) {
-        final Visit visit = new Visit(country, arrival);
+    public void registerVisit(final Country country, final LocalDateTime arrival, final LocalDateTime departure) {
+        final Visit visit = new Visit(country, arrival, departure);
         this.registerVisit(visit);
     }
 
@@ -128,29 +129,23 @@ public class CountryCollector {
      * @param visit The visit object to register
      * 
      * @throws IllegalArgumentException If the given visited country does not exist in this instance's world
-     * @throws IllegalArgumentException If the given visited country has already been visited
      */
     public void registerVisit(final Visit visit) {
         if (!world.countryExists(visit.getCountry())) {
             throw new IllegalArgumentException("Unknown country "
                 + visit.getCountry().getShortName() + " for this World");
         }
-        if (isVisited(visit.getCountry())) {
-            throw new IllegalArgumentException(visit.getCountry().getShortName()
-                + " has already been visited. Remove first if you wish to change arrival time.");
-        }
         this.visits.add(visit);
     }
 
     /**
-     * Remove the given country from the log.
+     * Remove all visits to the given country from the log.
      * 
-     * @param country The country to remove
+     * @param country The country to remove visits for
      * 
      * @throws IllegalArgumentException If the given country does not exist in this instance's world
      */
-    public void removeVisit(final Country country) {
-        // TODO : rename when multiple visits to same country is implemented
+    public void removeAllVisitsToCountry(final Country country) {
         if (!world.countryExists(country)) {
             throw new IllegalArgumentException("Unknown country " + country.getShortName() + " for this World");
         }

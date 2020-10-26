@@ -31,6 +31,9 @@ public class VisitSerializer extends JsonSerializer<Visit> {
         gen.writeFieldName("arrival");
         gen.writeString(value.getArrival().toString());
 
+        gen.writeFieldName("departure");
+        gen.writeString(value.getDeparture().toString());
+
         gen.writeEndObject();
     }
 }

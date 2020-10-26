@@ -34,10 +34,12 @@ public class VisitDeserializer extends JsonDeserializer<Visit> {
         ObjectNode visitNode = p.readValueAsTree();
         String countryCode = visitNode.get("countryCode").asText();
         String arrivalText = visitNode.get("arrival").asText();
+        String departureText = visitNode.get("departure").asText();
 
         Country country = world.getCountryFromCode(countryCode);
         LocalDateTime arrival = LocalDateTime.parse(arrivalText);
+        LocalDateTime departure = LocalDateTime.parse(departureText);
 
-        return new Visit(country, arrival);
+        return new Visit(country, arrival, departure);
     }
 }

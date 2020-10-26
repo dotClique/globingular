@@ -227,12 +227,12 @@ public class AppController implements Initializable {
             if (!countryInput.getPseudoClassStates().contains(INVALID)) {
                 countryInput.clear();
             }
-            countryCollector.removeVisit(inputCountry);
+            countryCollector.removeAllVisitsToCountry(inputCountry);
         } else {
             // Array conversion necessary to prevent the removal of items from foreach-target
             for (Country country
                     : countriesList.getSelectionModel().getSelectedItems().toArray(Country[]::new)) {
-                countryCollector.removeVisit(country);
+                countryCollector.removeAllVisitsToCountry(country);
             }
         }
         countriesList.getSelectionModel().clearSelection();
