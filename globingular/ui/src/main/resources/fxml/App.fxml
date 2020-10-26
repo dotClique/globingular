@@ -2,21 +2,33 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.web.WebView ?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.AnchorPane?>
 <Pane fx:id="root" prefHeight="720" prefWidth="1280.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="globingular.ui.AppController">
-    <HBox spacing="15">
-        <WebView fx:id="webView" prefWidth="1000" prefHeight="540"/>
-        <VBox spacing="15">
-            <ListView fx:id="countriesList" prefHeight="200.0" prefWidth="200.0"/>
-            <HBox spacing="5">
-                <TextField fx:id="countryInput" onAction="#onCountryAdd" prefHeight="27.0" prefWidth="134.0"/>
-                <Button layoutX="5" fx:id="countryAdd" mnemonicParsing="false" onAction="#onCountryAdd" prefHeight="27.0" prefWidth="28.0" text="+"/>
-                <Button layoutX="5" fx:id="countryDel" mnemonicParsing="false" onAction="#onCountryDel" prefHeight="27.0" prefWidth="28.0" text="-"/>
-            </HBox>
-        </VBox>
-    </HBox>
+    <TabPane prefHeight="720.0" prefWidth="1280.0" tabClosingPolicy="UNAVAILABLE">
+        <Tab text="Map">
+            <AnchorPane minHeight="720" minWidth="1280">
+                <HBox spacing="15">
+                    <WebView fx:id="webView" prefWidth="1000" prefHeight="540"/>
+                    <VBox spacing="15">
+                        <ListView fx:id="countriesList" prefHeight="200.0" prefWidth="200.0"/>
+                        <HBox spacing="5">
+                            <TextField fx:id="countryInput" onAction="#onCountryAdd" prefHeight="27.0" prefWidth="134.0"/>
+                            <Button layoutX="5" fx:id="countryAdd" mnemonicParsing="false" onAction="#onCountryAdd" prefHeight="27.0" prefWidth="28.0" text="+"/>
+                            <Button layoutX="5" fx:id="countryDel" mnemonicParsing="false" onAction="#onCountryDel" prefHeight="27.0" prefWidth="28.0" text="-"/>
+                        </HBox>
+                    </VBox>
+                </HBox>
+            </AnchorPane>
+        </Tab>
+        <Tab text="Badges &amp; statistics">
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0"/>
+        </Tab>
+    </TabPane>
 </Pane>
