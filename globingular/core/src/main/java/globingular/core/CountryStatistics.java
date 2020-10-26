@@ -4,8 +4,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-import globingular.core.CountryCollector;
-
 import javafx.collections.ObservableSet;
 
 public class CountryStatistics {

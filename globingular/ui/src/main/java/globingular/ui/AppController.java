@@ -296,8 +296,14 @@ public class AppController implements Initializable {
 
     @FXML
     private void getCountryStatistics(CountryCollector collector) {
-        nrOfCountriesVisited.setText(cs.getNrOfVisitedCountries(countryCollector));
-        mostPopulatedVisitedCountry.setText(cs.getMostPopulatedVisitedCountry(countryCollector));
+        try {
+            nrOfCountriesVisited.setText(cs.getNrOfVisitedCountries(collector));
+            mostPopulatedVisitedCountry.setText(cs.getMostPopulatedVisitedCountry(collector));
+        }
+        catch (Exception e) {
+            nrOfCountriesVisited.setText("error");
+            mostPopulatedVisitedCountry.setText("error");
+        }
     }
 
 
