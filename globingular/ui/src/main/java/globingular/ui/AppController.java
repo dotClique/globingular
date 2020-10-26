@@ -179,10 +179,10 @@ public class AppController implements Initializable {
             Country countryByCode = world.getCountryFromCode(input);
             Country countryByName = world.getCountryFromName(input);
             if (countryByCode != null) {
-                countryCollector.setVisited(countryByCode);
+                countryCollector.registerVisit(countryByCode);
                 countryInput.clear();
             } else if (countryByName != null) {
-                countryCollector.setVisited(countryByName);
+                countryCollector.registerVisit(countryByName);
                 countryInput.clear();
             } else {
                 countryInput.pseudoClassStateChanged(INVALID, true);
@@ -227,12 +227,12 @@ public class AppController implements Initializable {
             if (!countryInput.getPseudoClassStates().contains(INVALID)) {
                 countryInput.clear();
             }
-            countryCollector.removeVisited(inputCountry);
+            countryCollector.removeVisit(inputCountry);
         } else {
             // Array conversion necessary to prevent the removal of items from foreach-target
             for (Country country
                     : countriesList.getSelectionModel().getSelectedItems().toArray(Country[]::new)) {
-                countryCollector.removeVisited(country);
+                countryCollector.removeVisit(country);
             }
         }
         countriesList.getSelectionModel().clearSelection();
