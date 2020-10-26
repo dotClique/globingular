@@ -61,6 +61,9 @@ public class AppController implements Initializable {
      */
     private Country inputCountry = null;
 
+    /**
+     * Manager of statistics about countries the user has visited.
+     */
     private CountryStatistics cs;
 
     /**
@@ -117,9 +120,15 @@ public class AppController implements Initializable {
     @FXML
     private ImageView imgView;
 
+    /**
+     * A label containing a string with the number of countries visited.
+     */
     @FXML
     private Label nrOfCountriesVisited;
 
+    /**
+     * A label with a string of the most populated country visited.
+     */
     @FXML
     private Label mostPopulatedVisitedCountry;
 
@@ -299,12 +308,11 @@ public class AppController implements Initializable {
     }
 
     @FXML
-    private void getCountryStatistics(CountryCollector collector) {
+    private void getCountryStatistics(final CountryCollector collector) {
         try {
             nrOfCountriesVisited.setText(cs.getNrOfVisitedCountries(collector));
             mostPopulatedVisitedCountry.setText(cs.getMostPopulatedVisitedCountry(collector));
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             nrOfCountriesVisited.setText("error");
             mostPopulatedVisitedCountry.setText("error");
         }
