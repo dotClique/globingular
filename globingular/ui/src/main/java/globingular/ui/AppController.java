@@ -134,6 +134,8 @@ public class AppController implements Initializable {
         // And register it for autosaving
         p.setAutosave(countryCollector);
 
+        cs = new CountryStatistics();
+
         // Get world-instance
         world = countryCollector.getWorld();
     }
@@ -168,6 +170,7 @@ public class AppController implements Initializable {
         root.getStylesheets().add(getClass().getResource("/css/App.css").toExternalForm());
 
         updateMap();
+        getCountryStatistics(countryCollector);
     }
 
     /**
@@ -247,6 +250,7 @@ public class AppController implements Initializable {
             }
         }
         countriesList.getSelectionModel().clearSelection();
+        getCountryStatistics(countryCollector);
     }
 
     /**
