@@ -12,11 +12,8 @@
 
 <Pane fx:id="root" prefHeight="600" prefWidth="1040.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="globingular.ui.AppController">
    <TabPane prefHeight="600.0" prefWidth="1040.0" tabClosingPolicy="UNAVAILABLE">
-     <tabs>
        <Tab text="Map">
-         <content>
            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                  <children>
                       <TextField fx:id="countryInput" layoutX="750.0" layoutY="250.0" onAction="#onCountryAdd" prefHeight="27.0" prefWidth="183.0" />
                       <HBox layoutY="30.0" prefHeight="304.0" prefWidth="318.0">
                           <ImageView fx:id="imgView" fitHeight="776.0" fitWidth="721.0" pickOnBounds="true" preserveRatio="true" />
@@ -24,15 +21,10 @@
                       <ListView fx:id="countriesList" layoutX="750.0" layoutY="30.0" prefHeight="200.0" prefWidth="253.0" />
                       <Button fx:id="countryAdd" layoutX="940.0" layoutY="250.0" mnemonicParsing="false" onAction="#onCountryAdd" prefHeight="27.0" prefWidth="28.0" text="+" />
                       <Button fx:id="countryDel" layoutX="974.0" layoutY="250.0" mnemonicParsing="false" onAction="#onCountryDel" prefHeight="27.0" prefWidth="28.0" text="-" />
-                  </children>
                </AnchorPane>
-         </content>
        </Tab>
        <Tab text="Badges &amp; statistics">
-         <content>
            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-         </content>
        </Tab>
-     </tabs>
    </TabPane>
 </Pane>
