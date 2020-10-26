@@ -2,6 +2,7 @@ package globingular.ui;
 
 import globingular.core.Country;
 import globingular.core.CountryCollector;
+import globingular.core.CountryStatistics;
 import globingular.core.World;
 import globingular.persistence.PersistenceHandler;
 import javafx.collections.SetChangeListener;
@@ -11,6 +12,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
@@ -58,6 +60,8 @@ public class AppController implements Initializable {
      * Helper field containing whichever Country the input field currently resolves to, if any.
      */
     private Country inputCountry = null;
+
+    private CountryStatistics cs;
 
     /**
      * Pseudoclass designating that an form element has invalid input.
@@ -112,6 +116,12 @@ public class AppController implements Initializable {
      */
     @FXML
     private ImageView imgView;
+
+    @FXML
+    private Label nrOfCountriesVisited;
+
+    @FXML
+    private Label mostPopulatedVisitedCountry;
 
     /**
      * Initialize field which do not require FXML to be loaded.
@@ -189,6 +199,7 @@ public class AppController implements Initializable {
             }
 
         }
+        getCountryStatistics(countryCollector);
     }
 
     /**
@@ -281,6 +292,12 @@ public class AppController implements Initializable {
         } catch (TranscoderException e) {
             e.printStackTrace();
         }
+    }
+
+    @FXML
+    private void getCountryStatistics(CountryCollector collector) {
+        nrOfCountriesVisited.setText(cs.getNrOfVisitedCountries(countryCollector));
+        mostPopulatedVisitedCountry.setText(cs.getMostPopulatedVisitedCountry(countryCollector));
     }
 
 
