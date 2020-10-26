@@ -61,6 +61,22 @@ public class AppController implements Initializable {
     };
 
     /**
+     * Name of the Javascript-const in the WebView set to the map SVG-element.
+     */
+    private static final String MAP_ELEMENT_NAME = "countryMap";
+
+    /**
+     * ID of the map SVG element in the WebView.
+     */
+    private static final String MAP_ELEMENT_ID = "Earth";
+
+    /**
+     * The HTML-attribute declaring that this element is a visited country.
+     * Also serves as the value of the attribute, if set.
+     */
+    private static final String MAP_VISITED_COUNTRY_ATTRIBUTE = "visited";
+
+    /**
      * The root of the FXML document.
      */
     @FXML
@@ -157,6 +173,8 @@ public class AppController implements Initializable {
         webEngine.getLoadWorker().stateProperty().addListener(((observableValue, state, t1) -> {
             if (t1 == Worker.State.SUCCEEDED) {
                 this.document = webEngine.getDocument();
+                webEngine.executeScript("const " + MAP_ELEMENT_NAME + " = document.getElementById('" + MAP_ELEMENT_ID
+                        + "').getSVGDocument();");
                 registerClickListenersOnExistingCountries();
                 setVisitedOnMapAll(countryCollector.getVisitedCountries());
             }
@@ -199,20 +217,24 @@ public class AppController implements Initializable {
      */
     private void registerClickListenersOnExistingCountries() {
         for (Country country : world.getCountries()) {
-            final Element countryElement = document.getElementById(country.getCountryCode());
-            if (countryElement == null) {
-                System.out.println(
-                        "Given country does not exist on map as id: " + country.getCountryCode());
-            } else {
-                ((EventTarget) countryElement).addEventListener("click",
-                        e -> {
-                            if (countryCollector.isVisited(country)) {
-                                countryCollector.removeVisited(country);
-                            } else {
-                                countryCollector.setVisited(country);
-                            }
-                        },
-                        true);
+            try {
+                final Element countryElement = getCountryMapElement(country);
+                if (countryElement == null) {
+                    System.out.println(
+                            "Given country does not exist on map as id: " + country.getCountryCode());
+                } else {
+                    ((EventTarget) countryElement).addEventListener("click",
+                            e -> {
+                                if (countryCollector.isVisited(country)) {
+                                    countryCollector.removeVisited(country);
+                                } else {
+                                    countryCollector.setVisited(country);
+                                }
+                            },
+                            true);
+                }
+            } catch (ClassCastException e) {
+                System.out.println("Given country does not exist on map: " + country);
             }
         }
     }
@@ -274,13 +296,8 @@ public class AppController implements Initializable {
         if (document == null) {
             return;
         }
-        Element c = document.getElementById(country.getCountryCode());
 
-        if (c == null) {
-            return;
-        }
-
-        c.setAttribute("visited", "visited");
+        getCountryMapElement(country).setAttribute(MAP_VISITED_COUNTRY_ATTRIBUTE, MAP_VISITED_COUNTRY_ATTRIBUTE);
     }
 
     /**
@@ -293,13 +310,8 @@ public class AppController implements Initializable {
         if (document == null) {
             return;
         }
-        Element c = document.getElementById(country.getCountryCode());
 
-        if (c == null) {
-            return;
-        }
-
-        c.removeAttribute("visited");
+        getCountryMapElement(country).removeAttribute(MAP_VISITED_COUNTRY_ATTRIBUTE);
     }
 
     /**
@@ -337,5 +349,17 @@ public class AppController implements Initializable {
                 setText(item == null ? "" : item.getShortName());
             }
         });
+    }
+
+    /**
+     * Find the element on the map representing the given Country.
+     *
+     * @param country Country to find the map element of
+     * @return Country element in map
+     * @throws ClassCastException If element does not exist
+     */
+    private Element getCountryMapElement(final Country country) {
+        return (Element) webEngine
+                .executeScript(MAP_ELEMENT_NAME + ".getElementById('" + country.getCountryCode() + "')");
     }
 }
