@@ -10,6 +10,7 @@ import javafx.collections.SetChangeListener;
 import javafx.collections.transformation.SortedList;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -173,6 +174,16 @@ public class CountryCollector {
     }
 
     /**
+     * Retrieve all registered visits to the given country.
+     * 
+     * @param country The country to retrieve Visits for
+     * @return A collection containing every visit to the given country
+     */
+    public Collection<Visit> getCountryVisits(final Country country) {
+        return this.visits.stream().filter(v -> v.getCountry() == country).collect(Collectors.toList());
+    }
+
+    /**
      * Check if the given country has been visited.
      *
      * @param country The Country to check
@@ -251,7 +262,6 @@ public class CountryCollector {
      */
     @Override
     public String toString() {
-        // TODO : Should return all visits, not just countries :/
-        return this.visitedCountries.getValue().toString();
+        return this.visits.getValue().toString();
     }
 }
