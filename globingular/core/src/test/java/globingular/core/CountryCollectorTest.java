@@ -105,7 +105,7 @@ public class CountryCollectorTest {
     }
 
     @Test
-    public void testRegisterVisitWithCountryAndArrival() {
+    public void testRegisterVisitWithCountryAndTimeRange() {
         LocalDateTime dt = LocalDateTime.of(2020, 01, 01, 12, 0, 0);
         LocalDateTime dt_2 = LocalDateTime.of(2020, 01, 31, 12, 0, 0);
 
@@ -128,7 +128,16 @@ public class CountryCollectorTest {
     }
 
     @Test
-    public void testRemoveVisited() {
+    public void testRemoveVisit() {
+        CountryCollector cc = new CountryCollector(world3);
+        cc.registerVisit(visit2);
+        assertTrue(cc.isVisited(country2));
+        cc.removeVisit(visit2);
+        assertFalse(cc.isVisited(country2));
+    }
+
+    @Test
+    public void testRemoveAllVisitsToCountry() {
         CountryCollector cc = new CountryCollector(world4);
         cc.registerVisit(country2);
         assertTrue(cc.isVisited(country2));
@@ -137,22 +146,33 @@ public class CountryCollectorTest {
     }
 
     @Test
-    public void testExceptionOnSetUnknownCountryVisited() {
+    public void testExceptionOnRegisterUnknownCountryVisit() {
         CountryCollector cc = new CountryCollector(world1);
         try {
             cc.registerVisit(country1);
             fail("No exception thrown for attempted marking of country as visited even though country "
-                         + "is not part of this collector's World");
+                + "is not part of this collector's World");
         } catch (IllegalArgumentException ignored) {
         }
     }
 
     @Test
-    public void testExceptionOnRemoveUnknownCountryVisited() {
+    public void testExceptionOnRemoveAllVisitsToUnknownCountry() {
         CountryCollector cc = new CountryCollector(world1);
         try {
-            cc.registerVisit(country1);
-            fail("No exception thrown for attempted removal of marking of country as visited even though country "
+            cc.removeAllVisitsToCountry(country1);
+            fail("No exception thrown for attempted removing of visits to country even though country "
+                + "is not part of this collector's World");
+        } catch (IllegalArgumentException ignored) {
+        }
+    }
+
+    @Test
+    public void testExceptionOnRemoveVisitToUnknownCountry() {
+        CountryCollector cc = new CountryCollector(world1);
+        try {
+            cc.removeVisit(visit1);
+            fail("No exception thrown for attempted removal of a visit even though country "
                          + "is not part of this collector's World");
         } catch (IllegalArgumentException ignored) {
         }
@@ -162,7 +182,7 @@ public class CountryCollectorTest {
     public void testExceptionOnCheckUnknownCountryIsVisited() {
         CountryCollector cc = new CountryCollector(world1);
         try {
-            cc.registerVisit(country1);
+            cc.isVisited(country1);
             fail("No exception thrown for attempted checking of country's visited-status even though country "
                          + "is not part of this collector's World");
         } catch (IllegalArgumentException ignored) {
