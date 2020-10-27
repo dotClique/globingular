@@ -3,9 +3,10 @@ package globingular.persistence;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
 import globingular.core.CountryCollector;
+import globingular.core.Visit;
 import globingular.core.World;
 
 import java.io.IOException;
@@ -25,25 +26,27 @@ public class CountryCollectorDeserializer extends JsonDeserializer<CountryCollec
      * @param p a JsonParser
      * @param ctxt a context for the deserialization
      * @return a CountryCollector object
-     * @throws IOException
+     * @throws IOException on general parsing error
+     * @throws NullPointerException on missing fields
      */
     @Override
     public CountryCollector deserialize(final JsonParser p, final DeserializationContext ctxt)
             throws IOException {
 
-        JsonNode node = p.getCodec().readTree(p);
-
         // Get World instance defined higher in the context tree.
         World world = (World) ctxt.findInjectableValue("_globingular_map_world", null, null);
         CountryCollector countryCollector = new CountryCollector(world);
 
-        ArrayNode arr = ((ArrayNode) node.get("VisitedCountries"));
+        //JsonNode node = p.getCodec().readTree(p);
+        ObjectNode node = p.readValueAsTree();
 
-        for (JsonNode country : arr) {
-            countryCollector.setVisited(world.getCountryFromCode(country.asText()));
+        JsonParser visitParser = node.get("Visits").traverse(p.getCodec());
+        Visit[] visits = p.getCodec().readValue(visitParser, Visit[].class);
+
+        for (Visit visit : visits) {
+            countryCollector.registerVisit(visit);
         }
 
         return countryCollector;
     }
-
 }

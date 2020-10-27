@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.module.SimpleDeserializers;
 import com.fasterxml.jackson.databind.module.SimpleSerializers;
 import globingular.core.Country;
 import globingular.core.CountryCollector;
+import globingular.core.Visit;
 import globingular.core.World;
 
 /**
@@ -39,9 +40,11 @@ public class CountryCollectorModule extends Module {
     public CountryCollectorModule() {
         serializers.addSerializer(CountryCollector.class, new CountryCollectorSerializer());
         serializers.addSerializer(World.class, new WorldSerializer());
+        serializers.addSerializer(Visit.class, new VisitSerializer());
         deserializers.addDeserializer(CountryCollector.class, new CountryCollectorDeserializer());
         deserializers.addDeserializer(World.class, new WorldDeserializer());
         deserializers.addDeserializer(Country.class, new CountryDeserializer());
+        deserializers.addDeserializer(Visit.class, new VisitDeserializer());
     }
 
     /**
