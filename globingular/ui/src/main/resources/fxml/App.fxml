@@ -21,7 +21,7 @@
                         <Insets left="20" right="20" top="20" bottom="20"/>
                     </padding>
                     <ScrollPane vbarPolicy="NEVER" minWidth="0" maxWidth="${mapFlow.width-35}" prefViewportWidth="1000">
-                        <WebView fx:id="webView" minWidth="1000" minHeight="450"/>
+                        <WebView fx:id="webView" minWidth="1000" minHeight="507" prefHeight="507" maxHeight="507"/>
                     </ScrollPane>
                     <GridPane vgap="5" hgap="5" minHeight="200">
                         <ListView fx:id="countriesList" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="0" GridPane.columnIndex="0" GridPane.columnSpan="3"/>
