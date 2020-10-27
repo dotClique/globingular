@@ -149,7 +149,7 @@ public class CountryCollectorTest {
     public void testExceptionOnRemoveUnknownCountryVisited() {
         CountryCollector cc = new CountryCollector(world1);
         try {
-            cc.registerVisit(country1);
+            cc.removeVisit(country1);
             fail("No exception thrown for attempted removal of marking of country as visited even though country "
                          + "is not part of this collector's World");
         } catch (IllegalArgumentException ignored) {
@@ -160,7 +160,7 @@ public class CountryCollectorTest {
     public void testExceptionOnCheckUnknownCountryIsVisited() {
         CountryCollector cc = new CountryCollector(world1);
         try {
-            cc.registerVisit(country1);
+            cc.isVisited(country1);
             fail("No exception thrown for attempted checking of country's visited-status even though country "
                          + "is not part of this collector's World");
         } catch (IllegalArgumentException ignored) {

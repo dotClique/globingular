@@ -79,7 +79,7 @@ public class CountryCollector {
                 visitedCountries.add(e.getElementAdded().getCountry());
             } else {
                 Country country = e.getElementRemoved().getCountry();
-                if (!visits.stream().anyMatch(v -> v.getCountry() == country)) {
+                if (visits.stream().noneMatch(v -> v.getCountry() == country)) {
                     visitedCountries.remove(country);
                 }
             }
@@ -150,7 +150,6 @@ public class CountryCollector {
      * @throws IllegalArgumentException If the given country does not exist in this instance's world
      */
     public void removeVisit(final Country country) {
-        // TODO : rename when multiple visits to same country is implemented
         if (!world.countryExists(country)) {
             throw new IllegalArgumentException("Unknown country " + country.getShortName() + " for this World");
         }
