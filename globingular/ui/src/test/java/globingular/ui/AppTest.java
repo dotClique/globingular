@@ -2,6 +2,7 @@ package globingular.ui;
 
 import globingular.core.Country;
 import globingular.core.CountryCollector;
+import javafx.geometry.VerticalDirection;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.testfx.framework.junit5.ApplicationTest;
@@ -47,15 +48,24 @@ public class AppTest extends ApplicationTest {
 
         if (countriesList.getItems().contains(au)) {
             countryInput.setText(au.getCountryCode());
+            if (!countryDel.isVisible()) {
+                scroll(1000, VerticalDirection.DOWN);
+            }
             clickOn(countryDel);
             Assertions.assertFalse(countriesList.getItems().contains(au));
         }
         Assertions.assertFalse(countriesList.getItems().contains(au));
         countryInput.setText(au.getCountryCode());
+        if (!countryAdd.isVisible()) {
+            scroll(1000, VerticalDirection.DOWN);
+        }
         clickOn(countryAdd);
         Assertions.assertEquals("", countryInput.getText());
         Assertions.assertTrue(countriesList.getItems().contains(au));
         countryInput.setText(au.getCountryCode());
+        if (!countryDel.isVisible()) {
+            scroll(1000, VerticalDirection.DOWN);
+        }
         clickOn(countryDel);
         Assertions.assertFalse(countriesList.getItems().contains(au));
     }
