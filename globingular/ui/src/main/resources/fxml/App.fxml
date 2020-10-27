@@ -15,7 +15,7 @@
 <HBox fx:id="root" prefHeight="720" prefWidth="1280.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="globingular.ui.AppController">
     <TabPane tabClosingPolicy="UNAVAILABLE" HBox.hgrow="ALWAYS">
         <Tab text="Map">
-            <ScrollPane hbarPolicy="NEVER" fitToWidth="true">
+            <ScrollPane hbarPolicy="NEVER" fitToWidth="true" fx:id="mapPageScroll">
                 <FlowPane vgap="5" hgap="10" minWidth="0" fx:id="mapFlow">
                     <padding>
                         <Insets left="20" right="20" top="20" bottom="20"/>

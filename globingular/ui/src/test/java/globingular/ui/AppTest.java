@@ -3,6 +3,7 @@ package globingular.ui;
 import globingular.core.Country;
 import globingular.core.CountryCollector;
 import javafx.geometry.VerticalDirection;
+import javafx.scene.control.ScrollPane;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.testfx.framework.junit5.ApplicationTest;
@@ -44,28 +45,23 @@ public class AppTest extends ApplicationTest {
         final TextField countryInput = (TextField) parent.lookup("#countryInput");
         final Button countryAdd = (Button) parent.lookup("#countryAdd");
         final Button countryDel = (Button) parent.lookup("#countryDel");
+        final ScrollPane scrollPane = (ScrollPane) parent.lookup("#mapPageScroll");
         Country au = cc.getWorld().getCountryFromCode("AU");
 
         if (countriesList.getItems().contains(au)) {
             countryInput.setText(au.getCountryCode());
-            if (!countryDel.isVisible()) {
-                scroll(1000, VerticalDirection.DOWN);
-            }
+            scrollPane.setVvalue(scrollPane.getVmax());
             clickOn(countryDel);
             Assertions.assertFalse(countriesList.getItems().contains(au));
         }
         Assertions.assertFalse(countriesList.getItems().contains(au));
         countryInput.setText(au.getCountryCode());
-        if (!countryAdd.isVisible()) {
-            scroll(1000, VerticalDirection.DOWN);
-        }
+        scrollPane.setVvalue(scrollPane.getVmax());
         clickOn(countryAdd);
         Assertions.assertEquals("", countryInput.getText());
         Assertions.assertTrue(countriesList.getItems().contains(au));
         countryInput.setText(au.getCountryCode());
-        if (!countryDel.isVisible()) {
-            scroll(1000, VerticalDirection.DOWN);
-        }
+        scrollPane.setVvalue(scrollPane.getVmax());
         clickOn(countryDel);
         Assertions.assertFalse(countriesList.getItems().contains(au));
     }
