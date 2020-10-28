@@ -61,6 +61,11 @@ public class CountryCollectorTest {
     }
 
     @Test
+    public void fakeTest() {
+        fail();
+    }
+
+    @Test
     public void testToStrings() {
         CountryCollector cc = new CountryCollector(world4);
         cc.registerVisit(visit2);
