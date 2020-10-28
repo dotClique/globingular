@@ -9,20 +9,26 @@ import java.net.URI;
 
 /**
  * Main class.
- *
  */
-public class Main {
-    // Base URI the Grizzly HTTP server will listen on
-    public static final String BASE_URI = "http://localhost:8080/myapp/";
+public final class Main {
+
+    private Main() {
+    }
+
+    /**
+     * Base URI the Grizzly HTTP server will listen on.
+     */
+    public static final String BASE_URI = "http://localhost:8081/globingular/";
 
     /**
      * Starts Grizzly HTTP server exposing JAX-RS resources defined in this application.
+     *
      * @return Grizzly HTTP server.
      */
     public static HttpServer startServer() {
         // create a resource config that scans for JAX-RS resources and providers
-        // in globingular.restserver package
-        final ResourceConfig rc = new ResourceConfig().packages("globingular.restserver");
+        // in REST API package
+        final ResourceConfig rc = new GlobingularConfig();
 
         // create and start a new instance of grizzly http server
         // exposing the Jersey application at BASE_URI
@@ -30,16 +36,18 @@ public class Main {
     }
 
     /**
-     * Main method.
-     * @param args
-     * @throws IOException
+     * Main method. Starts server, and shut downs on Enter-keypress.
+     *
+     * @param args Ignored
+     * @throws IOException On failure to read from System.in
      */
-    public static void main(String[] args) throws IOException {
+    public static void main(final String[] args) throws IOException {
         final HttpServer server = startServer();
-        System.out.println(String.format("Jersey app started with WADL available at "
-                + "%sapplication.wadl\nHit enter to stop it...", BASE_URI));
+        Runtime.getRuntime().addShutdownHook(new Thread(server::shutdown));
+        System.out.printf("Jersey app started with WADL available at "
+                + "%sapplication.wadl%nHit enter to stop it...%n", BASE_URI);
         System.in.read();
-        server.stop();
+        server.shutdownNow();
     }
 }
 

@@ -1,4 +1,4 @@
-package globingular.restserver;
+package globingular.restapi;
 
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
@@ -6,7 +6,7 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 
 /**
- * Root resource (exposed at "myresource" path)
+ * Root resource (exposed at "myresource" path).
  */
 @Path("myresource")
 public class MyResource {

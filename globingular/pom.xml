@@ -11,16 +11,19 @@
         <module>core</module>
         <module>aggregator</module>
         <module>restserver</module>
+        <module>restapi</module>
     </modules>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <package>globingular.ui</package>
         <fast>false</fast>
+        <jersey.version>3.0.0-M6</jersey.version>
+        <restserver.main>globingular.restserver.Main</restserver.main>
     </properties>
 
     <!-- Actual location for GitLab Pages instance, relativizes any absolute site links -->
-    <url>http://it1901.pages.stud.idi.ntnu.no/groups-2020/gr2002/gr2002 </url>
+    <url>http://it1901.pages.stud.idi.ntnu.no/groups-2020/gr2002/gr2002</url>
 
     <!-- Required for site:stage -->
     <distributionManagement>
@@ -28,7 +31,7 @@
             <id>site</id>
             <name>site</name>
             <!-- Actual location for GitLab Pages instance -->
-            <url>http://it1901.pages.stud.idi.ntnu.no/groups-2020/gr2002/gr2002 </url>
+            <url>http://it1901.pages.stud.idi.ntnu.no/groups-2020/gr2002/gr2002</url>
         </site>
     </distributionManagement>
 
@@ -136,8 +139,53 @@
                 <scope>test</scope>
             </dependency>
 
-        </dependencies>
+            <!-- JAX-RS Jersey -->
+            <dependency>
+                <groupId>org.glassfish.jersey.core</groupId>
+                <artifactId>jersey-server</artifactId>
+                <version>${jersey.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.glassfish.jersey.test-framework</groupId>
+                <artifactId>jersey-test-framework-util</artifactId>
+                <version>${jersey.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.glassfish.jersey.inject</groupId>
+                <artifactId>jersey-hk2</artifactId>
+                <version>${jersey.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.glassfish.jersey.media</groupId>
+                <artifactId>jersey-media-json-jackson</artifactId>
+                <version>${jersey.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.glassfish.jersey.containers</groupId>
+                <artifactId>jersey-container-grizzly2-http</artifactId>
+                <version>${jersey.version}</version>
+            </dependency>
 
+            <!-- Java JAX-RS-API (standard for REST APIs) -->
+            <dependency>
+                <groupId>jakarta.ws.rs</groupId>
+                <artifactId>jakarta.ws.rs-api</artifactId>
+                <version>3.0.0-M1</version>
+            </dependency>
+            <dependency>
+                <groupId>jakarta.xml.bind</groupId>
+                <artifactId>jakarta.xml.bind-api</artifactId>
+                <version>3.0.0-RC3</version>
+            </dependency>
+
+            <!-- Dependency injection annotations -->
+            <dependency>
+                <groupId>javax.inject</groupId>
+                <artifactId>javax.inject</artifactId>
+                <version>1</version>
+            </dependency>
+        </dependencies>
     </dependencyManagement>
 
     <build>
@@ -168,6 +216,13 @@
                         <showWarnings>true</showWarnings>
                         <failOnWarning>true</failOnWarning>
                     </configuration>
+                </plugin>
+
+                <!-- Running REST-server-->
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>exec-maven-plugin</artifactId>
+                    <version>1.2.1</version>
                 </plugin>
 
                 <!-- Running tests -->
