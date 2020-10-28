@@ -64,7 +64,8 @@ public class CountryCollectorTest {
         CountryCollector cc = new CountryCollector(world4);
         cc.registerVisit(visit2);
         cc.registerVisit(visit3);
-        assertEquals("[" + visit2.toString() + ", " + visit3.toString() + "]", cc.toString());
+        assertTrue(cc.toString().equals("[" + visit2.toString() + ", " + visit3.toString() + "]")
+                || cc.toString().equals("[" + visit3.toString() + ", " + visit2.toString() + "]"));
     }
 
     @Test
@@ -109,7 +110,7 @@ public class CountryCollectorTest {
         assertFalse(cc.isVisited(country3));
         cc.registerVisit(country3, dt);
         assertTrue(cc.isVisited(country3));
-        
+
         Collection<Visit> visits = cc.getCountryVisits(country3);
         assertTrue(visits.stream().anyMatch(v -> v.getArrival() == dt));
     }
@@ -140,7 +141,7 @@ public class CountryCollectorTest {
         try {
             cc.registerVisit(country1);
             fail("No exception thrown for attempted marking of country as visited even though country "
-                         + "is not part of this collector's World");
+                    + "is not part of this collector's World");
         } catch (IllegalArgumentException ignored) {
         }
     }
@@ -151,7 +152,7 @@ public class CountryCollectorTest {
         try {
             cc.removeVisit(country1);
             fail("No exception thrown for attempted removal of marking of country as visited even though country "
-                         + "is not part of this collector's World");
+                    + "is not part of this collector's World");
         } catch (IllegalArgumentException ignored) {
         }
     }
@@ -162,7 +163,7 @@ public class CountryCollectorTest {
         try {
             cc.isVisited(country1);
             fail("No exception thrown for attempted checking of country's visited-status even though country "
-                         + "is not part of this collector's World");
+                    + "is not part of this collector's World");
         } catch (IllegalArgumentException ignored) {
         }
     }
@@ -173,7 +174,8 @@ public class CountryCollectorTest {
         try {
             cc.visitsProperty().add(visit0);
             fail("Returned set is writable");
-        } catch (UnsupportedOperationException ignored) {}
+        } catch (UnsupportedOperationException ignored) {
+        }
     }
 
     @Test
@@ -182,7 +184,8 @@ public class CountryCollectorTest {
         try {
             cc.getVisits().add(visit0);
             fail("Returned set is writable");
-        } catch (UnsupportedOperationException ignored) {}
+        } catch (UnsupportedOperationException ignored) {
+        }
     }
 
     @Test
@@ -207,7 +210,8 @@ public class CountryCollectorTest {
         try {
             cc.visitedCountriesProperty().add(country0);
             fail("Returned set is writable");
-        } catch (UnsupportedOperationException ignored) {}
+        } catch (UnsupportedOperationException ignored) {
+        }
     }
 
     @Test
@@ -216,7 +220,8 @@ public class CountryCollectorTest {
         try {
             cc.getVisitedCountries().add(country0);
             fail("Returned set is writable");
-        } catch (UnsupportedOperationException ignored) {}
+        } catch (UnsupportedOperationException ignored) {
+        }
     }
 
     @Test
@@ -225,7 +230,8 @@ public class CountryCollectorTest {
         try {
             cc.getVisitedCountriesSorted().add(country0);
             fail("Returned list is writable");
-        } catch (UnsupportedOperationException ignored) {}
+        } catch (UnsupportedOperationException ignored) {
+        }
     }
 
     @Test
