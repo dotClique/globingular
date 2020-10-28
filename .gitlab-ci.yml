@@ -57,7 +57,7 @@ pages:
     - i33/fix-surefire-report
   script:
     - 'cd globingular'
-    - 'mvn $MAVEN_CLI_OPTS -fn verify; mvn $MAVEN_CLI_OPTS site -DskipTests' # Run tests first so surefire can aggregate reports
+    - 'mvn --batch-mode -fn verify; mvn $MAVEN_CLI_OPTS site -DskipTests' # Run tests first so surefire can aggregate reports
     - 'mv target/staging ../public'
   artifacts:
     paths:
