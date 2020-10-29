@@ -388,9 +388,7 @@
                         </reports>
                         <configuration>
                             <linkXRef>true</linkXRef>
-                            <!-- Note: to actually aggregate, one must run twice, as only child modules can be aggregated, -->
-                            <!-- but child modules are always run after the parent. Run twice efficiently like this: -->
-                            <!-- mvn -fn verify; mvn site -DskipTests -->
+                            <!-- Note: to actually aggregate, one must run twice. See README. -->
                             <aggregate>true</aggregate>
                         </configuration>
                     </reportSet>
