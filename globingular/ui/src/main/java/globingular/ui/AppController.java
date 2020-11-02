@@ -313,8 +313,8 @@ public class AppController implements Initializable {
             nrOfCountriesVisited.setText(cs.getNrOfVisitedCountries(collector));
             mostPopulatedVisitedCountry.setText(cs.getMostPopulatedVisitedCountry(collector));
         } catch (Exception e) {
-            nrOfCountriesVisited.setText("error");
-            mostPopulatedVisitedCountry.setText("error");
+            nrOfCountriesVisited.setText("-");
+            mostPopulatedVisitedCountry.setText("-");
         }
     }
 

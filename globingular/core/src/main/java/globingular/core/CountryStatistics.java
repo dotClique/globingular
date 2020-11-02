@@ -7,7 +7,7 @@ import java.util.Map.Entry;
 import javafx.collections.ObservableSet;
 
 /**
- * The CountryStatistics class creates statistics that can be used in the AppController.
+ * The CountryStatistics class creates statistics that can be viewed in UI.
  */
 public class CountryStatistics {
 
@@ -37,19 +37,7 @@ public class CountryStatistics {
         Entry<String, Long> maxEntry = Collections.max(pop.entrySet(), (Entry<String, Long> e1,
         Entry<String, Long> e2) -> e1.getValue().compareTo(e2.getValue()));
 
-        return maxEntry.getKey() + "(" + Long.toString(maxEntry.getValue()) + ")";
+        return maxEntry.getKey() + " (" + Long.toString(maxEntry.getValue()) + ")";
     }
 
-    //TODO implement methods below
-    //public String getMostVisitedCountry() {
-    //    return "";
-    //}
-
-    //public String getLongestDurationVisit() {
-    //    return "";
-    //}
-
-    //public String getBiggestVisitedCountry() {
-    //    return "";
-    //}
 }
