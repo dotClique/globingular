@@ -3,6 +3,7 @@ package globingular.persistence;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import globingular.core.Country;
 import globingular.core.Visit;
@@ -33,12 +34,12 @@ public class VisitDeserializer extends JsonDeserializer<Visit> {
 
         ObjectNode visitNode = p.readValueAsTree();
         String countryCode = visitNode.get("countryCode").asText();
-        String arrivalText = visitNode.get("arrival").asText();
-        String departureText = visitNode.get("departure").asText();
+        JsonNode arrivalNode = visitNode.get("arrival");
+        JsonNode departureNode = visitNode.get("departure");
 
         Country country = world.getCountryFromCode(countryCode);
-        LocalDateTime arrival = LocalDateTime.parse(arrivalText);
-        LocalDateTime departure = LocalDateTime.parse(departureText);
+        LocalDateTime arrival = arrivalNode.isNull() ? null : LocalDateTime.parse(arrivalNode.asText());
+        LocalDateTime departure = departureNode.isNull() ? null : LocalDateTime.parse(departureNode.asText());
 
         return new Visit(country, arrival, departure);
     }

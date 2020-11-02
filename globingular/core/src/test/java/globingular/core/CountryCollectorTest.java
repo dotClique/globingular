@@ -95,11 +95,15 @@ public class CountryCollectorTest {
     }
 
     @Test
-    public void testRegisterVisitWithCountryWithoutArrival() {
+    public void testRegisterVisitWithCountryWithoutTimeRange() {
         CountryCollector cc = new CountryCollector(world3);
         assertFalse(cc.isVisited(country3));
         cc.registerVisit(country3);
         assertTrue(cc.isVisited(country3));
+
+        // Test to make sure that arrival and departure is set to null
+        Collection<Visit> visits = cc.getCountryVisits(country3);
+        assertTrue(visits.stream().anyMatch(v -> v.getArrival() == null && v .getDeparture() == null));
     }
 
     @Test

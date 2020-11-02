@@ -105,7 +105,7 @@ public class CountryCollector {
      * @throws IllegalArgumentException If Country has already been visited
      */
     public void registerVisit(final Country country) {
-        this.registerVisit(country, LocalDateTime.now(), LocalDateTime.now());
+        this.registerVisit(country, null, null);
     }
 
     /**
@@ -200,6 +200,17 @@ public class CountryCollector {
      */
     public ReadOnlySetProperty<Visit> visitsProperty() {
         return visitsReadOnly;
+    }
+
+    /**
+     * Get a collection containing all visits to the given Country.
+     * NB: Visits are immutable, so there's no leak here.
+     * 
+     * @param country The country to retrieve visits to
+     * @return A collection containing all (current) Visits to the given country
+     */
+    public Collection<Visit> getVisitsToCountry(Country country) {
+        return this.getVisits().stream().filter(v -> v.getCountry() == country).collect(Collectors.toList());
     }
 
     /**
