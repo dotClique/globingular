@@ -10,4 +10,7 @@ module globingular.restserver {
     requires jersey.media.json.jackson;
     // Prevnts compilation failure: cannot access org.glassfish.jersey.ExtendedConfig
     requires jersey.common;
+
+    requires transitive globingular.persistence;
+    requires jakarta.ws.rs;
 }

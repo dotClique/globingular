@@ -58,19 +58,15 @@ public class PersistenceHandler {
      * ObjectMapper used for serialization and deserialization. Contains registered
      * modules for correct (de)serialization.
      */
-    private ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper = getObjectMapper();
 
     /**
      * Get a valid instance of objectmapper.
      *
      * @return an objectmapper instance
      */
-    private ObjectMapper getObjectMapper() {
-        if (objectMapper == null) {
-            objectMapper = new ObjectMapper();
-            objectMapper.registerModule(new CountryCollectorModule());
-        }
-        return objectMapper;
+    public ObjectMapper getObjectMapper() {
+        return new ObjectMapper().registerModule(new CountryCollectorModule());
     }
 
     /**
@@ -83,14 +79,14 @@ public class PersistenceHandler {
         // Inject value of world into context for CountryCollector-parsing
         InjectableValues.Std injectableWorlds = new InjectableValues.Std();
         injectableWorlds.addValue("_globingular_map_world", world);
-        getObjectMapper().setInjectableValues(injectableWorlds);
+        objectMapper.setInjectableValues(injectableWorlds);
 
         CountryCollector countryCollector = new CountryCollector(world);
         try (InputStream in = new BufferedInputStream(new FileInputStream(FILE_COLLECTOR.toFile()))) {
-            countryCollector = getObjectMapper().readValue(in, CountryCollector.class);
+            countryCollector = objectMapper.readValue(in, CountryCollector.class);
         } catch (FileNotFoundException e) {
             try (InputStream in = getClass().getResourceAsStream(SAMPLE_COLLECTOR)) {
-                countryCollector = getObjectMapper().readValue(in, CountryCollector.class);
+                countryCollector = objectMapper.readValue(in, CountryCollector.class);
             } catch (Exception err) {
                 err.printStackTrace();
             }
@@ -116,7 +112,7 @@ public class PersistenceHandler {
     private World loadWorld() {
         World world = new World();
         try (InputStream in = getClass().getResourceAsStream(FILE_MAP_WORLD)) {
-            world = getObjectMapper().readValue(in, World.class);
+            world = objectMapper.readValue(in, World.class);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -136,7 +132,7 @@ public class PersistenceHandler {
             e.printStackTrace();
         }
         try (Writer out = Files.newBufferedWriter(FILE_COLLECTOR)) {
-            getObjectMapper().writerWithDefaultPrettyPrinter().writeValue(out, countryCollector);
+            objectMapper.writerWithDefaultPrettyPrinter().writeValue(out, countryCollector);
         } catch (IOException e) {
             e.printStackTrace();
         }

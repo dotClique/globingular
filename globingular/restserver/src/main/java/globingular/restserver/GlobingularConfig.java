@@ -18,6 +18,7 @@ public class GlobingularConfig extends ResourceConfig {
      * Initialize config with REST API package.
      */
     public GlobingularConfig() {
+        register(GlobingularObjectMapperProvider.class);
         packages(REST_API_PACKAGE);
     }
 }

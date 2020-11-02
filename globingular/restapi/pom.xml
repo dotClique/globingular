@@ -10,6 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>restapi</artifactId>
+    <version>0.0.2-SNAPSHOT</version>
 
     <dependencies>
         <!-- Dependency injection annotations -->
@@ -28,6 +29,10 @@
             <groupId>jakarta.xml.bind</groupId>
             <artifactId>jakarta.xml.bind-api</artifactId>
             <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>it1901.gr2002.globingular</groupId>
+            <artifactId>core</artifactId>
         </dependency>
     </dependencies>
 
