@@ -10,6 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 /**
  * <p>JUnit test class that tests the following:
@@ -189,6 +190,26 @@ public class CountryCollectorTest {
                     + "is not part of this collector's World");
         } catch (IllegalArgumentException ignored) {
         }
+    }
+
+    @Test
+    public void testGetVisitsToCountry() {
+        CountryCollector cc = new CountryCollector(world4);
+        cc.registerVisit(country1);
+        cc.registerVisit(country1);
+        cc.registerVisit(visit1);
+        cc.registerVisit(country2);
+        cc.registerVisit(country2);
+        cc.registerVisit(visit2);
+        cc.registerVisit(country3);
+        cc.registerVisit(visit3);
+
+        Collection<Visit> arr1 = cc.getVisitsToCountry(country2);
+        assertTrue(arr1.stream().allMatch(v -> v.getCountry() == country2),
+                "The returned collection didn't only contain visits with the correct country");
+        
+        Collection<Visit> arr2 = cc.getVisits().stream().filter(v -> v.getCountry() == country2).collect(Collectors.toList());
+        assertTrue(arr1.equals(arr2), "The returned collection doesn't contain all the visits to the given country");
     }
 
     @Test

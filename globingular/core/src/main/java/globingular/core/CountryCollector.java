@@ -209,7 +209,7 @@ public class CountryCollector {
      * @param country The country to retrieve visits to
      * @return A collection containing all (current) Visits to the given country
      */
-    public Collection<Visit> getVisitsToCountry(Country country) {
+    public Collection<Visit> getVisitsToCountry(final Country country) {
         return this.getVisits().stream().filter(v -> v.getCountry() == country).collect(Collectors.toList());
     }
 
