@@ -10,7 +10,6 @@
     </parent>
 
     <artifactId>restserver</artifactId>
-    <version>0.0.2-SNAPSHOT</version>
 
     <dependencies>
         <!-- Globingular REST API -->
