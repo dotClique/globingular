@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 
 /**
- * Deserializer for {@link Country} objects.
+ * Deserializer for {@link Visit} objects.
  */
 public class VisitDeserializer extends JsonDeserializer<Visit> {
 
@@ -20,7 +20,7 @@ public class VisitDeserializer extends JsonDeserializer<Visit> {
      * Deserilize a Visit from JSON.
      * @param p The relevant JsonParser
      * @param ctxt The current parsing context
-     * @return The deserialized Country
+     * @return The deserialized Visit
      * @throws IOException on general parsing error
      * @throws NullPointerException on missing fields
      */

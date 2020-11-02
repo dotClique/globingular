@@ -79,7 +79,7 @@ public class CountryCollector {
                 visitedCountries.add(e.getElementAdded().getCountry());
             } else {
                 Country country = e.getElementRemoved().getCountry();
-                if (!visits.stream().anyMatch(v -> v.getCountry() == country)) {
+                if (visits.stream().noneMatch(v -> v.getCountry() == country)) {
                     visitedCountries.remove(country);
                 }
             }

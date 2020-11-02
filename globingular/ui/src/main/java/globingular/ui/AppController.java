@@ -5,8 +5,8 @@ import globingular.core.CountryCollector;
 import globingular.core.World;
 import globingular.persistence.PersistenceHandler;
 import javafx.collections.SetChangeListener;
+import javafx.concurrent.Worker;
 import javafx.css.PseudoClass;
-import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -15,12 +15,11 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import org.apache.batik.transcoder.TranscoderException;
-import org.apache.batik.transcoder.TranscoderInput;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.events.EventTarget;
 
 import java.net.URL;
 import java.util.Collection;
@@ -43,23 +42,6 @@ import java.util.ResourceBundle;
 public class AppController implements Initializable {
 
     /**
-     * Manager of which countries have been visited.
-     */
-    private final CountryCollector countryCollector;
-    /**
-     * Manager of which countries exist.
-     */
-    private final World world;
-    /**
-     * The SVG document containing the world map.
-     */
-    private final Document document = new CreateDocument().createDocument();
-    /**
-     * Helper field containing whichever Country the input field currently resolves to, if any.
-     */
-    private Country inputCountry = null;
-
-    /**
      * Pseudoclass designating that an form element has invalid input.
      */
     public static final PseudoClass INVALID = new PseudoClass() {
@@ -77,54 +59,90 @@ public class AppController implements Initializable {
             return "blank";
         }
     };
+
+    /**
+     * Name of the Javascript-const in the WebView set to the map SVG-element.
+     */
+    private static final String MAP_ELEMENT_NAME = "countryMap";
+
+    /**
+     * ID of the map SVG element in the WebView.
+     */
+    private static final String MAP_ELEMENT_ID = "Earth";
+
+    /**
+     * The HTML-attribute declaring that this element is a visited country.
+     * Also serves as the value of the attribute, if set.
+     */
+    private static final String MAP_VISITED_COUNTRY_ATTRIBUTE = "visited";
+
     /**
      * The root of the FXML document.
      */
     @FXML
     private Parent root;
-
     /**
      * The list of countries visible in the interface.
      */
     @FXML
     private ListView<Country> countriesList;
-
     /**
      * The input for country-shortnames or -codes visible in the interface.
      */
     @FXML
     private TextField countryInput;
-
     /**
      * The button for marking the inputted country-code as visited.
      */
     @FXML
     private Button countryAdd;
-
     /**
      * The button for marking the inputted country-code as not visited.
      */
     @FXML
     private Button countryDel;
-
     /**
-     * The visible image view holding the map-svg converted to JavaFX-legible format.
+     * The WebView containing the world map.
      */
     @FXML
-    private ImageView imgView;
+    private WebView webView;
 
     /**
-     * Initialize field which do not require FXML to be loaded.
+     * The WebEngine for the world map.
+     */
+    private WebEngine webEngine;
+    /**
+     * Responsible for persisting state across runs.
+     */
+    private final PersistenceHandler persistence;
+    /**
+     * Manager of which countries have been visited.
+     */
+    private final CountryCollector countryCollector;
+    /**
+     * Manager of which countries exist.
+     */
+    private final World world;
+    /**
+     * Helper field containing whichever Country the input field currently resolves to, if any.
+     */
+    private Country inputCountry = null;
+    /**
+     * The HTML Document containing the world map.
+     */
+    private Document document;
+
+    /**
+     * Initialize fields which do not require FXML to be loaded.
      */
     public AppController() {
         // Create a persistenceHandler
-        PersistenceHandler p = new PersistenceHandler();
+        persistence = new PersistenceHandler();
         // Use it to retrieve CountryCollector from file
-        countryCollector = p.loadMapCountryCollector();
+        countryCollector = persistence.loadMapCountryCollector();
         // And register it for autosaving
-        p.setAutosave(countryCollector);
+        persistence.setAutosave(countryCollector);
 
-        // Get world-instance
         world = countryCollector.getWorld();
     }
 
@@ -133,31 +151,34 @@ public class AppController implements Initializable {
      */
     @Override
     public void initialize(final URL location, final ResourceBundle resources) {
-        setColorAll(countryCollector.getVisitedCountries(), Colors.COUNTRY_VISITED);
+        this.webEngine = webView.getEngine();
 
         countryCollector.visitedCountriesProperty()
                         .addListener((SetChangeListener<? super Country>) e -> {
                             if (e.wasAdded()) {
-                                setColor(e.getElementAdded(), Colors.COUNTRY_VISITED);
+                                setVisitedOnMap(e.getElementAdded());
                             } else {
-                                setColor(e.getElementRemoved(), Colors.COUNTRY_NOT_VISITED);
+                                setNotVisitedOnMap(e.getElementRemoved());
                             }
                         });
 
-        countriesList.itemsProperty().set(countryCollector.getVisitedCountriesSorted());
-        countriesList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        countriesList.setCellFactory(countryListView -> new ListCell<>() {
-            @Override
-            protected void updateItem(final Country item, final boolean empty) {
-                super.updateItem(item, empty);
-                setText(item == null ? "" : item.getShortName());
-            }
-        });
+        initializeCountriesList();
 
         countryInput.textProperty().addListener(e -> onInputChange());
-        root.getStylesheets().add(getClass().getResource("/css/App.css").toExternalForm());
+        root.getStylesheets().add(getClass().getResource("/fxml-css/App.css").toExternalForm());
 
-        updateMap();
+        webEngine.load(getClass().getResource("/html/world.html").toExternalForm());
+
+        // Operations to perform when SVG has loaded
+        webEngine.getLoadWorker().stateProperty().addListener(((observableValue, state, t1) -> {
+            if (t1 == Worker.State.SUCCEEDED) {
+                this.document = webEngine.getDocument();
+                webEngine.executeScript("const " + MAP_ELEMENT_NAME + " = document.getElementById('" + MAP_ELEMENT_ID
+                        + "').getSVGDocument();");
+                registerClickListenersOnExistingCountries();
+                setVisitedOnMapAll(countryCollector.getVisitedCountries());
+            }
+        }));
     }
 
     /**
@@ -188,6 +209,33 @@ public class AppController implements Initializable {
                 countryInput.pseudoClassStateChanged(INVALID, true);
             }
 
+        }
+    }
+
+    /**
+     * Register a click listener on every SVG element representing an entire Country registered in this world.
+     */
+    private void registerClickListenersOnExistingCountries() {
+        for (Country country : world.getCountries()) {
+            try {
+                final Element countryElement = getCountryMapElement(country);
+                if (countryElement == null) {
+                    System.out.println(
+                            "Given country does not exist on map as id: " + country.getCountryCode());
+                } else {
+                    ((EventTarget) countryElement).addEventListener("click",
+                            e -> {
+                                if (countryCollector.isVisited(country)) {
+                                    countryCollector.removeAllVisitsToCountry(country);
+                                } else {
+                                    countryCollector.registerVisit(country);
+                                }
+                            },
+                            true);
+                }
+            } catch (ClassCastException e) {
+                System.out.println("Given country does not exist on map: " + country);
+            }
         }
     }
 
@@ -239,49 +287,79 @@ public class AppController implements Initializable {
     }
 
     /**
-     * Change displayed color on the world map for the given country.
+     * Set the attribute "visited" for the given Country's map representation, allowing custom css styling.
      *
      * @param country Target country
-     * @param color   Target color
      */
-    private void setColor(final Country country, final Colors color) {
-        Element c = document.getElementById(country.getCountryCode());
-
-        if (c == null) {
+    private void setVisitedOnMap(final Country country) {
+        // Abort if map hasn't fully loaded
+        if (document == null) {
             return;
         }
 
-        c.setAttribute("style", "fill: " + color.getHex());
-        updateMap();
+        getCountryMapElement(country).setAttribute(MAP_VISITED_COUNTRY_ATTRIBUTE, MAP_VISITED_COUNTRY_ATTRIBUTE);
+    }
+
+    /**
+     * Unset the attribute "visited" for the given Country's map representation, removing custom css styling.
+     *
+     * @param country Target country
+     */
+    private void setNotVisitedOnMap(final Country country) {
+        // Abort if map hasn't fully loaded
+        if (document == null) {
+            return;
+        }
+
+        getCountryMapElement(country).removeAttribute(MAP_VISITED_COUNTRY_ATTRIBUTE);
     }
 
     /**
      * Change displayed color on the world map for the given countries.
      *
      * @param countries Target countries
-     * @param color     Target color
      */
-    private void setColorAll(final Collection<Country> countries, final Colors color) {
+    private void setVisitedOnMapAll(final Collection<Country> countries) {
         for (Country country : countries) {
-            setColor(country, color);
+            setVisitedOnMap(country);
         }
     }
 
     /**
-     * Change the world map to reflect updated state, e.g. country colors.
+     * Set the attribute "visited" for the given countries' map representations, allowing custom css styling.
+     *
+     * @param countries Target countries
      */
-    private void updateMap() {
-        BufferedImageTranscoder transcoder = new BufferedImageTranscoder();
-        TranscoderInput transcoderIn = new TranscoderInput(document);
-        try {
-            transcoder.transcode(transcoderIn, null);
-            Image img = SwingFXUtils.toFXImage(transcoder.getBufferedImage(), null);
-            imgView.setImage(img);
-
-        } catch (TranscoderException e) {
-            e.printStackTrace();
+    private void setNotVisitedOnMapAll(final Collection<Country> countries) {
+        for (Country country : countries) {
+            setNotVisitedOnMap(country);
         }
     }
 
+    /**
+     * Unset the attribute "visited" for the given countries' map representations, removing custom css styling.
+     */
+    private void initializeCountriesList() {
+        countriesList.itemsProperty().set(countryCollector.getVisitedCountriesSorted());
+        countriesList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        countriesList.setCellFactory(countryListView -> new ListCell<>() {
+            @Override
+            protected void updateItem(final Country item, final boolean empty) {
+                super.updateItem(item, empty);
+                setText(item == null ? "" : item.getShortName());
+            }
+        });
+    }
 
+    /**
+     * Find the element on the map representing the given Country.
+     *
+     * @param country Country to find the map element of
+     * @return Country element in map
+     * @throws ClassCastException If element does not exist
+     */
+    private Element getCountryMapElement(final Country country) {
+        return (Element) webEngine
+                .executeScript(MAP_ELEMENT_NAME + ".getElementById('" + country.getCountryCode() + "')");
+    }
 }

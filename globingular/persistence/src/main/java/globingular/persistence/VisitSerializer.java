@@ -8,14 +8,14 @@ import globingular.core.Visit;
 import java.io.IOException;
 
 /**
- * Serializer for {@link World} objects.
+ * Serializer for {@link Visit} objects.
  */
 public class VisitSerializer extends JsonSerializer<Visit> {
 
     /**
-     * Serialize a given {@link World} to JSON.
+     * Serialize a given {@link Visit} to JSON.
      *
-     * @param value The World to serialize
+     * @param value The Visit to serialize
      * @param gen The current JSON generator
      * @param serializers The active serializers
      * @throws IOException On general generation error

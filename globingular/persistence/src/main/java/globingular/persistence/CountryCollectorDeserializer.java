@@ -26,7 +26,8 @@ public class CountryCollectorDeserializer extends JsonDeserializer<CountryCollec
      * @param p a JsonParser
      * @param ctxt a context for the deserialization
      * @return a CountryCollector object
-     * @throws IOException
+     * @throws IOException on general parsing error
+     * @throws NullPointerException on missing fields
      */
     @Override
     public CountryCollector deserialize(final JsonParser p, final DeserializationContext ctxt)

@@ -171,14 +171,6 @@
       "population": 112309
     },
     {
-      "countryCode": "AX",
-      "name": "Åland Islands",
-      "longname": "Åland",
-      "sovereignty": "Finland",
-      "region": "EU",
-      "population": 29789
-    },
-    {
       "countryCode": "AZ",
       "name": "Azerbaijan",
       "longname": "The Republic of Azerbaijan",
@@ -323,14 +315,6 @@
       "population": 741672
     },
     {
-      "countryCode": "BV",
-      "name": "Bouvet Island",
-      "longname": "Bouvet Island",
-      "sovereignty": "Norway",
-      "region": "AN",
-      "population": 0
-    },
-    {
       "countryCode": "BW",
       "name": "Botswana",
       "longname": "The Republic of Botswana",
@@ -441,14 +425,6 @@
           "population": 41078
         }
       ]
-    },
-    {
-      "countryCode": "CC",
-      "name": "Cocos (Keeling) Islands",
-      "longname": "The Territory of Cocos (Keeling) Islands",
-      "sovereignty": "Australia",
-      "region": "AS",
-      "population": 544
     },
     {
       "countryCode": "CD",
@@ -1105,14 +1081,6 @@
       "population": 7500700
     },
     {
-      "countryCode": "HM",
-      "name": "Heard Island and McDonald Islands",
-      "longname": "The Territory of Heard Island and McDonald Islands",
-      "sovereignty": "Australia",
-      "region": "AN",
-      "population": 0
-    },
-    {
       "countryCode": "HN",
       "name": "Honduras",
       "longname": "The Republic of Honduras",
@@ -1641,14 +1609,6 @@
       "population": 22314743
     },
     {
-      "countryCode": "NF",
-      "name": "Norfolk Island",
-      "longname": "The Territory of Norfolk Island",
-      "sovereignty": "Australia",
-      "region": "OC",
-      "population": 1748
-    },
-    {
       "countryCode": "NG",
       "name": "Nigeria",
       "longname": "The Federal Republic of Nigeria",
@@ -1946,14 +1906,6 @@
       "population": 2094060
     },
     {
-      "countryCode": "SJ",
-      "name": "Svalbard and Jan Mayen",
-      "longname": "Svalbard and Jan Mayen",
-      "sovereignty": "Norway",
-      "region": "EU",
-      "population": 0
-    },
-    {
       "countryCode": "SK",
       "name": "Slovakia",
       "longname": "The Slovak Republic",
@@ -2195,14 +2147,6 @@
       "sovereignty": "UN",
       "region": "AF",
       "population": 40299300
-    },
-    {
-      "countryCode": "UM",
-      "name": "United States Minor Outlying Islands",
-      "longname": "Baker Island, Howland Island, Jarvis Island, Johnston Atoll, Kingman Reef, Midway Atoll, Navassa Island, Palmyra Atoll, and Wake Island",
-      "sovereignty": "United States",
-      "region": "OC",
-      "population": 0
     },
     {
       "countryCode": "US",
