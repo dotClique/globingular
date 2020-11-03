@@ -17,7 +17,6 @@ public class CountryStatistics {
      */
     public CountryStatistics(final CountryCollector countryCollector) {
         this.countryCollector = countryCollector;
-
     }
     /**
      * Gets the number of visited countries from a countryCollector.
@@ -36,6 +35,9 @@ public class CountryStatistics {
     public String getMostPopulatedVisitedCountry() {
         Country country = this.countryCollector.getVisitedCountries().stream()
         .sorted((c1, c2) -> Long.compare(c2.getPopulation(), c1.getPopulation())).findFirst().get();
+        if (country == null) {
+            return "-";
+        }
         return country.getShortName() + " (" + country.getPopulation() + ")";
     }
 

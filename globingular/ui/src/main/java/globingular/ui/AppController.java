@@ -185,6 +185,9 @@ public class AppController implements Initializable {
                                 setNotVisitedOnMap(e.getElementRemoved());
                             }
                         });
+        countryCollector.visitedCountriesProperty().addListener((SetChangeListener<? super Country>) e -> {
+                            updateStatistics();
+                        });
 
         initializeCountriesList();
 
@@ -203,8 +206,6 @@ public class AppController implements Initializable {
                 setVisitedOnMapAll(countryCollector.getVisitedCountries());
             }
         }));
-
-        getCountryStatistics();
     }
 
     /**
@@ -236,7 +237,6 @@ public class AppController implements Initializable {
             }
 
         }
-        getCountryStatistics();
     }
 
     /**
@@ -311,7 +311,6 @@ public class AppController implements Initializable {
             }
         }
         countriesList.getSelectionModel().clearSelection();
-        getCountryStatistics();
     }
 
     /**
@@ -364,16 +363,12 @@ public class AppController implements Initializable {
         }
     }
 
-    @FXML
-    private void getCountryStatistics() {
-        try {
-            numberOfCountriesVisited.setText(countryStatistics.getNumberOfVisitedCountries());
-            mostPopulatedVisitedCountry.setText(countryStatistics.getMostPopulatedVisitedCountry());
-        } catch (Exception e) {
-            numberOfCountriesVisited.setText("-");
-            mostPopulatedVisitedCountry.setText("-");
-            e.printStackTrace();
-        }
+    /**
+     * Update statistics view in the UI.
+     */
+    private void updateStatistics() {
+        numberOfCountriesVisited.setText(countryStatistics.getNumberOfVisitedCountries());
+        mostPopulatedVisitedCountry.setText(countryStatistics.getMostPopulatedVisitedCountry());
     }
 
     /**
