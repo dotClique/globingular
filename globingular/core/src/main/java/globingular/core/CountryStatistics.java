@@ -34,11 +34,10 @@ public class CountryStatistics {
      */
     public String getMostPopulatedVisitedCountry() {
         Country country = this.countryCollector.getVisitedCountries().stream()
-        .sorted((c1, c2) -> Long.compare(c2.getPopulation(), c1.getPopulation())).findFirst().get();
+        .sorted((c1, c2) -> Long.compare(c2.getPopulation(), c1.getPopulation())).findFirst().orElse(null);
         if (country == null) {
             return "-";
         }
         return country.getShortName() + " (" + country.getPopulation() + ")";
     }
-
 }
