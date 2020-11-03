@@ -12,13 +12,25 @@ import javafx.collections.ObservableSet;
 public class CountryStatistics {
 
     /**
-     * Gets the number of visited countries from a countrycollector.
+     * CountryCollector that holds the data needed for statistics.
+     */
+    private final CountryCollector collector;
+
+    /**
+     * Constructor that initializes with a CountryCollector
+     */
+    public CountryStatistics(final CountryCollector collector) {
+        this.collector = collector;
+
+    }
+    /**
+     * Gets the number of visited countries from a countryCollector.
      * 
      * @param collector
      * @return string representing the number of visited countries
      */
-    public String getNrOfVisitedCountries(final CountryCollector collector) {
-        return Integer.toString(collector.numberVisited());
+    public String getNumberOfVisitedCountries(final CountryCollector collector) {
+        return Integer.toString(this.collector.numberVisited());
     }
 
     /**
@@ -29,7 +41,7 @@ public class CountryStatistics {
      */
     public String getMostPopulatedVisitedCountry(final CountryCollector collector) {
         Map<String, Long> pop = new HashMap<String, Long>();
-        ObservableSet<Country> visitedCountries = collector.getVisitedCountries();
+        ObservableSet<Country> visitedCountries = this.collector.getVisitedCountries();
         for (Country country : visitedCountries) {
             pop.put(country.getShortName(), country.getPopulation());
         }

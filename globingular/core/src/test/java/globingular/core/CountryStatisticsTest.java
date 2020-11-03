@@ -25,13 +25,13 @@ public class CountryStatisticsTest {
     }
     
     @Test
-    public void testGetNrOfVisitedCountries() {
-        CountryStatistics cs = new CountryStatistics();
+    public void testGetNumberOfVisitedCountries() {
+        CountryStatistics countryStatistics = new CountryStatistics();
         collector.removeVisited(country0);
         collector.removeVisited(country1);
-        assertEquals("0", cs.getNrOfVisitedCountries(collector));
+        assertEquals("0", countryStatistics.getNumberOfVisitedCountries(collector));
         collector.setVisited(country0);
-        assertEquals("1", cs.getNrOfVisitedCountries(collector));
+        assertEquals("1", countryStatistics.getNumberOfVisitedCountries(collector));
     }
 
     @Test
@@ -40,8 +40,8 @@ public class CountryStatisticsTest {
         collector.removeVisited(country1);
         CountryStatistics cs = new CountryStatistics();
         collector.setVisited(country0);
-        assertEquals("Andorra (77543)", cs.getMostPopulatedVisitedCountry(collector));
+        assertEquals("Andorra (77543)", countryStatistics.getMostPopulatedVisitedCountry(collector));
         collector.setVisited(country1);
-        assertEquals("French Guiana (290601)", cs.getMostPopulatedVisitedCountry(collector));
+        assertEquals("French Guiana (290601)", countryStatistics.getMostPopulatedVisitedCountry(collector));
     }
 }

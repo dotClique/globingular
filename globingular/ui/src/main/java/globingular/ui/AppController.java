@@ -64,7 +64,7 @@ public class AppController implements Initializable {
     /**
      * Manager of statistics about countries the user has visited.
      */
-    private CountryStatistics cs;
+    private CountryStatistics countryStatistics;
 
     /**
      * Pseudoclass designating that an form element has invalid input.
@@ -124,7 +124,7 @@ public class AppController implements Initializable {
      * A label containing a string with the number of countries visited.
      */
     @FXML
-    private Label nrOfCountriesVisited;
+    private Label numberOfCountriesVisited;
 
     /**
      * A label with a string of the most populated country visited.
@@ -143,7 +143,7 @@ public class AppController implements Initializable {
         // And register it for autosaving
         p.setAutosave(countryCollector);
 
-        cs = new CountryStatistics();
+        countryStatistics = new CountryStatistics();
 
         // Get world-instance
         world = countryCollector.getWorld();
@@ -310,10 +310,10 @@ public class AppController implements Initializable {
     @FXML
     private void getCountryStatistics(final CountryCollector collector) {
         try {
-            nrOfCountriesVisited.setText(cs.getNrOfVisitedCountries(collector));
-            mostPopulatedVisitedCountry.setText(cs.getMostPopulatedVisitedCountry(collector));
+            numberOfCountriesVisited.setText(countryStatistics.getNumberOfVisitedCountries(collector));
+            mostPopulatedVisitedCountry.setText(countryStatistics.getMostPopulatedVisitedCountry(collector));
         } catch (Exception e) {
-            nrOfCountriesVisited.setText("-");
+            numberOfCountriesVisited.setText("-");
             mostPopulatedVisitedCountry.setText("-");
         }
     }
