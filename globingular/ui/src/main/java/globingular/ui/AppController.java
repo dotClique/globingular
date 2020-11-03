@@ -164,7 +164,7 @@ public class AppController implements Initializable {
         persistence.setAutosave(countryCollector);
 
         // Initialize a countryStatistics
-        countryStatistics = new CountryStatistics();
+        countryStatistics = new CountryStatistics(countryCollector);
 
         // Get world-instance
         world = countryCollector.getWorld();
@@ -204,7 +204,7 @@ public class AppController implements Initializable {
             }
         }));
 
-        getCountryStatistics(countryCollector);
+        getCountryStatistics();
     }
 
     /**
@@ -236,7 +236,7 @@ public class AppController implements Initializable {
             }
 
         }
-        getCountryStatistics(countryCollector);
+        getCountryStatistics();
     }
 
     /**
@@ -311,7 +311,7 @@ public class AppController implements Initializable {
             }
         }
         countriesList.getSelectionModel().clearSelection();
-        getCountryStatistics(countryCollector);
+        getCountryStatistics();
     }
 
     /**
@@ -365,13 +365,14 @@ public class AppController implements Initializable {
     }
 
     @FXML
-    private void getCountryStatistics(final CountryCollector collector) {
+    private void getCountryStatistics() {
         try {
-            numberOfCountriesVisited.setText(countryStatistics.getNumberOfVisitedCountries(collector));
-            mostPopulatedVisitedCountry.setText(countryStatistics.getMostPopulatedVisitedCountry(collector));
+            numberOfCountriesVisited.setText(countryStatistics.getNumberOfVisitedCountries());
+            mostPopulatedVisitedCountry.setText(countryStatistics.getMostPopulatedVisitedCountry());
         } catch (Exception e) {
             numberOfCountriesVisited.setText("-");
             mostPopulatedVisitedCountry.setText("-");
+            e.printStackTrace();
         }
     }
 

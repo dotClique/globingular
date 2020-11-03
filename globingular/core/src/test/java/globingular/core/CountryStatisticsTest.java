@@ -26,22 +26,22 @@ public class CountryStatisticsTest {
     
     @Test
     public void testGetNumberOfVisitedCountries() {
-        CountryStatistics countryStatistics = new CountryStatistics();
-        collector.removeVisited(country0);
-        collector.removeVisited(country1);
-        assertEquals("0", countryStatistics.getNumberOfVisitedCountries(collector));
-        collector.setVisited(country0);
-        assertEquals("1", countryStatistics.getNumberOfVisitedCountries(collector));
+        CountryStatistics countryStatistics = new CountryStatistics(collector);
+        collector.removeAllVisitsToCountry(country0);
+        collector.removeAllVisitsToCountry(country1);
+        assertEquals("0", countryStatistics.getNumberOfVisitedCountries());
+        collector.registerVisit(country0);
+        assertEquals("1", countryStatistics.getNumberOfVisitedCountries());
     }
 
     @Test
     public void testGetMostPopulatedVisitedCountry() {
-        collector.removeVisited(country0);
-        collector.removeVisited(country1);
-        CountryStatistics cs = new CountryStatistics();
-        collector.setVisited(country0);
-        assertEquals("Andorra (77543)", countryStatistics.getMostPopulatedVisitedCountry(collector));
-        collector.setVisited(country1);
-        assertEquals("French Guiana (290601)", countryStatistics.getMostPopulatedVisitedCountry(collector));
+        collector.removeAllVisitsToCountry(country0);
+        collector.removeAllVisitsToCountry(country1);
+        CountryStatistics countryStatistics = new CountryStatistics(collector);
+        collector.registerVisit(country0);
+        assertEquals("Andorra (77543)", countryStatistics.getMostPopulatedVisitedCountry());
+        collector.registerVisit(country1);
+        assertEquals("French Guiana (290601)", countryStatistics.getMostPopulatedVisitedCountry());
     }
 }

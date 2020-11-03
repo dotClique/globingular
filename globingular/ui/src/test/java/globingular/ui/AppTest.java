@@ -14,6 +14,7 @@ import javafx.stage.Stage;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.Pane;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
