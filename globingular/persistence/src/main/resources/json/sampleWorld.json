@@ -2,161 +2,161 @@
   "Countries": [
     {
       "countryCode": "World",
-      "name": "Earth",
-      "longname": "",
+      "shortName": "Earth",
+      "longName": "",
       "sovereignty": "",
       "region": "",
       "population": 7658209137
     },
     {
       "countryCode": "AD",
-      "name": "Andorra",
-      "longname": "The Principality of Andorra",
+      "shortName": "Andorra",
+      "longName": "The Principality of Andorra",
       "sovereignty": "UN",
       "region": "EU",
       "population": 77543
     },
     {
       "countryCode": "AE",
-      "name": "United Arab Emirates",
-      "longname": "The United Arab Emirates",
+      "shortName": "United Arab Emirates",
+      "longName": "The United Arab Emirates",
       "sovereignty": "UN",
       "region": "AS",
       "population": 9890400
     },
     {
       "countryCode": "AF",
-      "name": "Afghanistan",
-      "longname": "The Islamic Republic of Afghanistan",
+      "shortName": "Afghanistan",
+      "longName": "The Islamic Republic of Afghanistan",
       "sovereignty": "UN",
       "region": "AS",
       "population": 32225560
     },
     {
       "countryCode": "AG",
-      "name": "Antigua and Barbuda",
-      "longname": "Antigua and Barbuda",
+      "shortName": "Antigua and Barbuda",
+      "longName": "Antigua and Barbuda",
       "sovereignty": "UN",
       "region": "NA",
       "population": 96453
     },
     {
       "countryCode": "AI",
-      "name": "Anguilla",
-      "longname": "Anguilla",
+      "shortName": "Anguilla",
+      "longName": "Anguilla",
       "sovereignty": "United Kingdom",
       "region": "NA",
       "population": 14869
     },
     {
       "countryCode": "AL",
-      "name": "Albania",
-      "longname": "The Republic of Albania",
+      "shortName": "Albania",
+      "longName": "The Republic of Albania",
       "sovereignty": "UN",
       "region": "EU",
       "population": 2862427
     },
     {
       "countryCode": "AM",
-      "name": "Armenia",
-      "longname": "The Republic of Armenia",
+      "shortName": "Armenia",
+      "longName": "The Republic of Armenia",
       "sovereignty": "UN",
       "region": "AS",
       "population": 2957500
     },
     {
       "countryCode": "AO",
-      "name": "Angola",
-      "longname": "The Republic of Angola",
+      "shortName": "Angola",
+      "longName": "The Republic of Angola",
       "sovereignty": "UN",
       "region": "AF",
       "population": 31127674
     },
     {
       "countryCode": "AQ",
-      "name": "Antarctica",
-      "longname": "All land and ice shelves south of the 60th parallel south",
+      "shortName": "Antarctica",
+      "longName": "All land and ice shelves south of the 60th parallel south",
       "sovereignty": "Antarctic Treaty",
       "region": "AN",
       "population": 0
     },
     {
       "countryCode": "AR",
-      "name": "Argentina",
-      "longname": "The Argentine Republic",
+      "shortName": "Argentina",
+      "longName": "The Argentine Republic",
       "sovereignty": "UN",
       "region": "SA",
       "population": 44938712
     },
     {
       "countryCode": "AS",
-      "name": "American Samoa",
-      "longname": "The Territory of American Samoa",
+      "shortName": "American Samoa",
+      "longName": "The Territory of American Samoa",
       "sovereignty": "United States",
       "region": "OC",
       "population": 55191
     },
     {
       "countryCode": "AT",
-      "name": "Austria",
-      "longname": "The Republic of Austria",
+      "shortName": "Austria",
+      "longName": "The Republic of Austria",
       "sovereignty": "UN",
       "region": "EU",
       "population": 8902600
     },
     {
       "countryCode": "AU",
-      "name": "Australia",
-      "longname": "The Commonwealth of Australia",
+      "shortName": "Australia",
+      "longName": "The Commonwealth of Australia",
       "sovereignty": "UN",
       "region": "OC",
       "population": 25646823,
       "provinces": [
         {
           "provinceCode": "AU-ACT",
-          "name": "Australian Capital Territory",
+          "shortName": "Australian Capital Territory",
           "capital": "Canberra",
           "population": 426709
         },
         {
           "provinceCode": "AU-NSW",
-          "name": "New South Wales",
+          "shortName": "New South Wales",
           "capital": "Sydney",
           "population": 8089526
         },
         {
           "provinceCode": "AU-NT",
-          "name": "Northern Territory",
+          "shortName": "Northern Territory",
           "capital": "Darwin",
           "population": 245869
         },
         {
           "provinceCode": "AU-QLD",
-          "name": "Queensland",
+          "shortName": "Queensland",
           "capital": "Brisbane",
           "population": 5095100
         },
         {
           "provinceCode": "AU-SA",
-          "name": "South Australia",
+          "shortName": "South Australia",
           "capital": "Adelaide",
           "population": 1751693
         },
         {
           "provinceCode": "AU-TAS",
-          "name": "Tasmania",
+          "shortName": "Tasmania",
           "capital": "Hobart",
           "population": 534281
         },
         {
           "provinceCode": "AU-VIC",
-          "name": "Victoria",
+          "shortName": "Victoria",
           "capital": "Melbourne",
           "population": 6594804
         },
         {
           "provinceCode": "AU-WA",
-          "name": "Western Australia",
+          "shortName": "Western Australia",
           "capital": "Perth",
           "population": 2621680
         }
@@ -164,263 +164,263 @@
     },
     {
       "countryCode": "AW",
-      "name": "Aruba",
-      "longname": "Aruba",
+      "shortName": "Aruba",
+      "longName": "Aruba",
       "sovereignty": "Netherlands",
       "region": "SA",
       "population": 112309
     },
     {
       "countryCode": "AZ",
-      "name": "Azerbaijan",
-      "longname": "The Republic of Azerbaijan",
+      "shortName": "Azerbaijan",
+      "longName": "The Republic of Azerbaijan",
       "sovereignty": "UN",
       "region": "AS",
       "population": 10067108
     },
     {
       "countryCode": "BA",
-      "name": "Bosnia and Herzegovina",
-      "longname": "Bosnia and Herzegovina",
+      "shortName": "Bosnia and Herzegovina",
+      "longName": "Bosnia and Herzegovina",
       "sovereignty": "UN",
       "region": "EU",
       "population": 3301000
     },
     {
       "countryCode": "BB",
-      "name": "Barbados",
-      "longname": "Barbados",
+      "shortName": "Barbados",
+      "longName": "Barbados",
       "sovereignty": "UN",
       "region": "SA",
       "population": 287025
     },
     {
       "countryCode": "BD",
-      "name": "Bangladesh",
-      "longname": "The People's Republic of Bangladesh",
+      "shortName": "Bangladesh",
+      "longName": "The People's Republic of Bangladesh",
       "sovereignty": "UN",
       "region": "AS",
       "population": 168270652
     },
     {
       "countryCode": "BE",
-      "name": "Belgium",
-      "longname": "The Kingdom of Belgium",
+      "shortName": "Belgium",
+      "longName": "The Kingdom of Belgium",
       "sovereignty": "UN",
       "region": "EU",
       "population": 11524454
     },
     {
       "countryCode": "BF",
-      "name": "Burkina Faso",
-      "longname": "Burkina Faso",
+      "shortName": "Burkina Faso",
+      "longName": "Burkina Faso",
       "sovereignty": "UN",
       "region": "AF",
       "population": 20870060
     },
     {
       "countryCode": "BG",
-      "name": "Bulgaria",
-      "longname": "The Republic of Bulgaria",
+      "shortName": "Bulgaria",
+      "longName": "The Republic of Bulgaria",
       "sovereignty": "UN",
       "region": "EU",
       "population": 7000039
     },
     {
       "countryCode": "BH",
-      "name": "Bahrain",
-      "longname": "The Kingdom of Bahrain",
+      "shortName": "Bahrain",
+      "longName": "The Kingdom of Bahrain",
       "sovereignty": "UN",
       "region": "AS",
       "population": 1569446
     },
     {
       "countryCode": "BI",
-      "name": "Burundi",
-      "longname": "The Republic of Burundi",
+      "shortName": "Burundi",
+      "longName": "The Republic of Burundi",
       "sovereignty": "UN",
       "region": "AF",
       "population": 10953317
     },
     {
       "countryCode": "BJ",
-      "name": "Benin",
-      "longname": "The Republic of Benin",
+      "shortName": "Benin",
+      "longName": "The Republic of Benin",
       "sovereignty": "UN",
       "region": "AF",
       "population": 11733059
     },
     {
       "countryCode": "BL",
-      "name": "Saint Barthelemy",
-      "longname": "The Collectivity of Saint-Barthélemy",
+      "shortName": "Saint Barthelemy",
+      "longName": "The Collectivity of Saint-Barthélemy",
       "sovereignty": "France",
       "region": "NA",
       "population": 9793
     },
     {
       "countryCode": "BM",
-      "name": "Bermuda",
-      "longname": "Bermuda",
+      "shortName": "Bermuda",
+      "longName": "Bermuda",
       "sovereignty": "United Kingdom",
       "region": "NA",
       "population": 64027
     },
     {
       "countryCode": "BN",
-      "name": "Brunei",
-      "longname": "The Nation of Brunei",
+      "shortName": "Brunei",
+      "longName": "The Nation of Brunei",
       "sovereignty": "UN",
       "region": "AS",
       "population": 442400
     },
     {
       "countryCode": "BO",
-      "name": "Bolivia",
-      "longname": "The Plurinational State of Bolivia",
+      "shortName": "Bolivia",
+      "longName": "The Plurinational State of Bolivia",
       "sovereignty": "UN",
       "region": "SA",
       "population": 11469896
     },
     {
       "countryCode": "BQ",
-      "name": "Bonaire, Sint Eustatius and Saba",
-      "longname": "Bonaire, Sint Eustatius and Saba",
+      "shortName": "Bonaire, Sint Eustatius and Saba",
+      "longName": "Bonaire, Sint Eustatius and Saba",
       "sovereignty": "Netherlands",
       "region": "SA",
       "population": 25157
     },
     {
       "countryCode": "BR",
-      "name": "Brazil",
-      "longname": "The Federative Republic of Brazil",
+      "shortName": "Brazil",
+      "longName": "The Federative Republic of Brazil",
       "sovereignty": "UN",
       "region": "SA",
       "population": 211257279
     },
     {
       "countryCode": "BS",
-      "name": "Bahamas",
-      "longname": "The Commonwealth of The Bahamas",
+      "shortName": "Bahamas",
+      "longName": "The Commonwealth of The Bahamas",
       "sovereignty": "UN",
       "region": "NA",
       "population": 385340
     },
     {
       "countryCode": "BT",
-      "name": "Bhutan",
-      "longname": "The Kingdom of Bhutan",
+      "shortName": "Bhutan",
+      "longName": "The Kingdom of Bhutan",
       "sovereignty": "UN",
       "region": "AS",
       "population": 741672
     },
     {
       "countryCode": "BW",
-      "name": "Botswana",
-      "longname": "The Republic of Botswana",
+      "shortName": "Botswana",
+      "longName": "The Republic of Botswana",
       "sovereignty": "UN",
       "region": "AF",
       "population": 2338851
     },
     {
       "countryCode": "BY",
-      "name": "Belarus",
-      "longname": "The Republic of Belarus",
+      "shortName": "Belarus",
+      "longName": "The Republic of Belarus",
       "sovereignty": "UN",
       "region": "EU",
       "population": 9413446
     },
     {
       "countryCode": "BZ",
-      "name": "Belize",
-      "longname": "Belize",
+      "shortName": "Belize",
+      "longName": "Belize",
       "sovereignty": "UN",
       "region": "NA",
       "population": 408487
     },
     {
       "countryCode": "CA",
-      "name": "Canada",
-      "longname": "Canada",
+      "shortName": "Canada",
+      "longName": "Canada",
       "sovereignty": "UN",
       "region": "NA",
       "population": 37958039,
       "provinces": [
         {
           "provinceCode": "CA-AB",
-          "name": "Alberta",
+          "shortName": "Alberta",
           "capital": "Edmonton",
           "population": 4413146
         },
         {
           "provinceCode": "CA-BC",
-          "name": "British Columbia",
+          "shortName": "British Columbia",
           "capital": "Victoria",
           "population": 5110917
         },
         {
           "provinceCode": "CA-MB",
-          "name": "Manitoba",
+          "shortName": "Manitoba",
           "capital": "Winnipeg",
           "population": 1377517
         },
         {
           "provinceCode": "CA-NB",
-          "name": "New Brunswick",
+          "shortName": "New Brunswick",
           "capital": "Fredericton",
           "population": 779993
         },
         {
           "provinceCode": "CA-NL",
-          "name": "Newfoundland and Labrador",
+          "shortName": "Newfoundland and Labrador",
           "capital": "St. John's",
           "population": 521365
         },
         {
           "provinceCode": "CA-NT",
-          "name": "Northwest Territories",
+          "shortName": "Northwest Territories",
           "capital": "Yellowknife",
           "population": 44904
         },
         {
           "provinceCode": "CA-NU",
-          "name": "Nunavut",
+          "shortName": "Nunavut",
           "capital": "Iqaluit",
           "population": 39097
         },
         {
           "provinceCode": "CA-NS",
-          "name": "Nova Scotia",
+          "shortName": "Nova Scotia",
           "capital": "Halifax",
           "population": 977457
         },
         {
           "provinceCode": "CA-ON",
-          "name": "Ontario",
+          "shortName": "Ontario",
           "capital": "Toronto",
           "population": 14711827
         },
         {
           "provinceCode": "CA-PE",
-          "name": "Prince Edward Island",
+          "shortName": "Prince Edward Island",
           "capital": "Charlottetown",
           "population": 158158
         },
         {
           "provinceCode": "CA-QC",
-          "name": "Quebec",
+          "shortName": "Quebec",
           "capital": "Quebec City",
           "population": 8537674
         },
         {
           "provinceCode": "CA-SK",
-          "name": "Saskatchewan",
+          "shortName": "Saskatchewan",
           "capital": "Regina",
           "population": 1181666
         },
         {
           "provinceCode": "CA-YT",
-          "name": "Yukon",
+          "shortName": "Yukon",
           "capital": "Whitehorse",
           "population": 41078
         }
@@ -428,8 +428,8 @@
     },
     {
       "countryCode": "CD",
-      "name": "Congo (Dem. Rep.)",
-      "longname": "The Democratic Republic of the Congo",
+      "shortName": "Congo (Dem. Rep.)",
+      "longName": "The Democratic Republic of the Congo",
       "altnames": "Democratic Republic of the Congo",
       "sovereignty": "UN",
       "region": "AF",
@@ -437,16 +437,16 @@
     },
     {
       "countryCode": "CF",
-      "name": "Central African Republic",
-      "longname": "The Central African Republic",
+      "shortName": "Central African Republic",
+      "longName": "The Central African Republic",
       "sovereignty": "UN",
       "region": "AF",
       "population": 5496011
     },
     {
       "countryCode": "CG",
-      "name": "Congo",
-      "longname": "The Republic of the Congo",
+      "shortName": "Congo",
+      "longName": "The Republic of the Congo",
       "altnames": "Republic of the Congo",
       "sovereignty": "UN",
       "region": "AF",
@@ -454,16 +454,16 @@
     },
     {
       "countryCode": "CH",
-      "name": "Switzerland",
-      "longname": "The Swiss Confederation",
+      "shortName": "Switzerland",
+      "longName": "The Swiss Confederation",
       "sovereignty": "UN",
       "region": "EU",
       "population": 8586550
     },
     {
       "countryCode": "CI",
-      "name": "Côte d'Ivoire",
-      "longname": "The Republic of Côte d'Ivoire",
+      "shortName": "Côte d'Ivoire",
+      "longName": "The Republic of Côte d'Ivoire",
       "altnames": "Ivory Coast",
       "sovereignty": "UN",
       "region": "AF",
@@ -471,231 +471,231 @@
     },
     {
       "countryCode": "CK",
-      "name": "Cook Islands",
-      "longname": "The Cook Islands",
+      "shortName": "Cook Islands",
+      "longName": "The Cook Islands",
       "sovereignty": "New Zealand",
       "region": "OC",
       "population": 17518
     },
     {
       "countryCode": "CL",
-      "name": "Chile",
-      "longname": "The Republic of Chile",
+      "shortName": "Chile",
+      "longName": "The Republic of Chile",
       "sovereignty": "UN",
       "region": "SA",
       "population": 19107216
     },
     {
       "countryCode": "CM",
-      "name": "Cameroon",
-      "longname": "The Republic of Cameroon",
+      "shortName": "Cameroon",
+      "longName": "The Republic of Cameroon",
       "sovereignty": "UN",
       "region": "AF",
       "population": 26545864
     },
     {
       "countryCode": "CN",
-      "name": "China",
-      "longname": "The People's Republic of China",
+      "shortName": "China",
+      "longName": "The People's Republic of China",
       "sovereignty": "UN",
       "region": "AS",
       "population": 1401768800,
       "provinces": [
         {
           "provinceCode": "CN-AH",
-          "name": "Anhui",
+          "shortName": "Anhui",
           "capital": "Hefei",
           "population": 59500510
         },
         {
           "provinceCode": "CN-BJ",
-          "name": "Beijing",
+          "shortName": "Beijing",
           "capital": "Beijing",
           "population": 19612368
         },
         {
           "provinceCode": "CN-CQ",
-          "name": "Chongqing",
+          "shortName": "Chongqing",
           "capital": "Chongqing",
           "population": 28846170
         },
         {
           "provinceCode": "CN-FJ",
-          "name": "Fujian",
+          "shortName": "Fujian",
           "capital": "Fuzhou",
           "population": 36894216
         },
         {
           "provinceCode": "CN-GD",
-          "name": "Guangdong",
+          "shortName": "Guangdong",
           "capital": "Guangzhou",
           "population": 104303132
         },
         {
           "provinceCode": "CN-GS",
-          "name": "Gansu",
+          "shortName": "Gansu",
           "capital": "Lanzhou",
           "population": 25575254
         },
         {
           "provinceCode": "CN-GX",
-          "name": "Guangxi",
+          "shortName": "Guangxi",
           "capital": "Nanning",
           "population": 46026629
         },
         {
           "provinceCode": "CN-GZ",
-          "name": "Guizhou",
+          "shortName": "Guizhou",
           "capital": "Guiyang",
           "population": 34746468
         },
         {
           "provinceCode": "CN-HA",
-          "name": "Henan",
+          "shortName": "Henan",
           "capital": "Zhengzhou",
           "population": 94023567
         },
         {
           "provinceCode": "CN-HB",
-          "name": "Hubei",
+          "shortName": "Hubei",
           "capital": "Wuhan",
           "population": 57237740
         },
         {
           "provinceCode": "CN-HE",
-          "name": "Hebei",
+          "shortName": "Hebei",
           "capital": "Shijiazhuang",
           "population": 71854202
         },
         {
           "provinceCode": "CN-HI",
-          "name": "Hainan",
+          "shortName": "Hainan",
           "capital": "Haikou",
           "population": 9171300
         },
         {
           "provinceCode": "CN-HK",
-          "name": "Hong Kong",
+          "shortName": "Hong Kong",
           "capital": "Hong Kong",
           "population": 7061200
         },
         {
           "provinceCode": "CN-HL",
-          "name": "Heilongjiang",
+          "shortName": "Heilongjiang",
           "capital": "Harbin",
           "population": 38312224
         },
         {
           "provinceCode": "CN-HN",
-          "name": "Hunan",
+          "shortName": "Hunan",
           "capital": "Changsha",
           "population": 65683722
         },
         {
           "provinceCode": "CN-JL",
-          "name": "Jilin",
+          "shortName": "Jilin",
           "capital": "Changchun",
           "population": 27462297
         },
         {
           "provinceCode": "CN-JS",
-          "name": "Jiangsu",
+          "shortName": "Jiangsu",
           "capital": "Nanjing",
           "population": 78659903
         },
         {
           "provinceCode": "CN-JX",
-          "name": "Jiangxi",
+          "shortName": "Jiangxi",
           "capital": "Nanchang",
           "population": 44567475
         },
         {
           "provinceCode": "CN-LN",
-          "name": "Liaoning",
+          "shortName": "Liaoning",
           "capital": "Shenyang",
           "population": 43746323
         },
         {
           "provinceCode": "CN-MO",
-          "name": "Macau",
+          "shortName": "Macau",
           "capital": "Macau",
           "population": 552300
         },
         {
           "provinceCode": "CN-NM",
-          "name": "Inner Mongolia",
+          "shortName": "Inner Mongolia",
           "capital": "Hohhot",
           "population": 24706321
         },
         {
           "provinceCode": "CN-NX",
-          "name": "Ningxia",
+          "shortName": "Ningxia",
           "capital": "Yinchuan",
           "population": 6301350
         },
         {
           "provinceCode": "CN-QH",
-          "name": "Qinghai",
+          "shortName": "Qinghai",
           "capital": "Xining",
           "population": 5626722
         },
         {
           "provinceCode": "CN-SC",
-          "name": "Sichuan",
+          "shortName": "Sichuan",
           "capital": "Chengdu",
           "population": 80418200
         },
         {
           "provinceCode": "CN-SD",
-          "name": "Shandong",
+          "shortName": "Shandong",
           "capital": "Jinan",
           "population": 95793065
         },
         {
           "provinceCode": "CN-SH",
-          "name": "Shanghai",
+          "shortName": "Shanghai",
           "capital": "Shanghai",
           "population": 23019148
         },
         {
           "provinceCode": "CN-SN",
-          "name": "Shaanxi",
+          "shortName": "Shaanxi",
           "capital": "Xi'an",
           "population": 37327378
         },
         {
           "provinceCode": "CN-SX",
-          "name": "Shanxi",
+          "shortName": "Shanxi",
           "capital": "Taiyuan",
           "population": 35712111
         },
         {
           "provinceCode": "CN-TJ",
-          "name": "Tianjin",
+          "shortName": "Tianjin",
           "capital": "Tianjin",
           "population": 12938224
         },
         {
           "provinceCode": "CN-XJ",
-          "name": "Xinjiang",
+          "shortName": "Xinjiang",
           "capital": "Ürümqi",
           "population": 21813334
         },
         {
           "provinceCode": "CN-XZ",
-          "name": "Tibet",
+          "shortName": "Tibet",
           "capital": "Lhasa",
           "population": 3002166
         },
         {
           "provinceCode": "CN-YN",
-          "name": "Yunnan",
+          "shortName": "Yunnan",
           "capital": "Kunming",
           "population": 45966239
         },
         {
           "provinceCode": "CN-ZJ",
-          "name": "Zhejiang",
+          "shortName": "Zhejiang",
           "capital": "Hangzhou",
           "population": 54426891
         }
@@ -703,32 +703,32 @@
     },
     {
       "countryCode": "CO",
-      "name": "Colombia",
-      "longname": "The Republic of Colombia",
+      "shortName": "Colombia",
+      "longName": "The Republic of Colombia",
       "sovereignty": "UN",
       "region": "SA",
       "population": 49395678
     },
     {
       "countryCode": "CR",
-      "name": "Costa Rica",
-      "longname": "The Republic of Costa Rica",
+      "shortName": "Costa Rica",
+      "longName": "The Republic of Costa Rica",
       "sovereignty": "UN",
       "region": "NA",
       "population": 5058007
     },
     {
       "countryCode": "CU",
-      "name": "Cuba",
-      "longname": "The Republic of Cuba",
+      "shortName": "Cuba",
+      "longName": "The Republic of Cuba",
       "sovereignty": "UN",
       "region": "NA",
       "population": 11209628
     },
     {
       "countryCode": "CV",
-      "name": "Cabo Verde",
-      "longname": "The Republic of Cabo Verde",
+      "shortName": "Cabo Verde",
+      "longName": "The Republic of Cabo Verde",
       "altnames": "Cape Verde",
       "sovereignty": "UN",
       "region": "AF",
@@ -736,32 +736,32 @@
     },
     {
       "countryCode": "CW",
-      "name": "Curacao",
-      "longname": "The Country of Curaçao",
+      "shortName": "Curacao",
+      "longName": "The Country of Curaçao",
       "sovereignty": "Netherlands",
       "region": "SA",
       "population": 158665
     },
     {
       "countryCode": "CX",
-      "name": "Christmas Island",
-      "longname": "The Territory of Christmas Island",
+      "shortName": "Christmas Island",
+      "longName": "The Territory of Christmas Island",
       "sovereignty": "Australia",
       "region": "AS",
       "population": 1843
     },
     {
       "countryCode": "CY",
-      "name": "Cyprus",
-      "longname": "The Republic of Cyprus",
+      "shortName": "Cyprus",
+      "longName": "The Republic of Cyprus",
       "sovereignty": "UN",
       "region": "EU",
       "population": 875900
     },
     {
       "countryCode": "CZ",
-      "name": "Czechia",
-      "longname": "The Czech Republic",
+      "shortName": "Czechia",
+      "longName": "The Czech Republic",
       "altnames": "Czech Republic",
       "sovereignty": "UN",
       "region": "EU",
@@ -769,80 +769,80 @@
     },
     {
       "countryCode": "DE",
-      "name": "Germany",
-      "longname": "The Federal Republic of Germany",
+      "shortName": "Germany",
+      "longName": "The Federal Republic of Germany",
       "sovereignty": "UN",
       "region": "EU",
       "population": 83149300
     },
     {
       "countryCode": "DJ",
-      "name": "Djibouti",
-      "longname": "The Republic of Djibouti",
+      "shortName": "Djibouti",
+      "longName": "The Republic of Djibouti",
       "sovereignty": "UN",
       "region": "AF",
       "population": 1078373
     },
     {
       "countryCode": "DK",
-      "name": "Denmark",
-      "longname": "The Kingdom of Denmark",
+      "shortName": "Denmark",
+      "longName": "The Kingdom of Denmark",
       "sovereignty": "UN",
       "region": "EU",
       "population": 5822763
     },
     {
       "countryCode": "DM",
-      "name": "Dominica",
-      "longname": "The Commonwealth of Dominica",
+      "shortName": "Dominica",
+      "longName": "The Commonwealth of Dominica",
       "sovereignty": "UN",
       "region": "NA",
       "population": 71808
     },
     {
       "countryCode": "DO",
-      "name": "Dominican Republic",
-      "longname": "The Dominican Republic",
+      "shortName": "Dominican Republic",
+      "longName": "The Dominican Republic",
       "sovereignty": "UN",
       "region": "NA",
       "population": 10358320
     },
     {
       "countryCode": "DZ",
-      "name": "Algeria",
-      "longname": "The People's Democratic Republic of Algeria",
+      "shortName": "Algeria",
+      "longName": "The People's Democratic Republic of Algeria",
       "sovereignty": "UN",
       "region": "AF",
       "population": 43000000
     },
     {
       "countryCode": "EC",
-      "name": "Ecuador",
-      "longname": "The Republic of Ecuador",
+      "shortName": "Ecuador",
+      "longName": "The Republic of Ecuador",
       "sovereignty": "UN",
       "region": "SA",
       "population": 17444556
     },
     {
       "countryCode": "EE",
-      "name": "Estonia",
-      "longname": "The Republic of Estonia",
+      "shortName": "Estonia",
+      "longName": "The Republic of Estonia",
       "sovereignty": "UN",
       "region": "EU",
       "population": 1328360
     },
     {
       "countryCode": "EG",
-      "name": "Egypt",
-      "longname": "The Arab Republic of Egypt",
+      "shortName": "Egypt",
+      "longName": "The Arab Republic of Egypt",
       "sovereignty": "UN",
       "region": "AF",
       "population": 100131097
     },
     {
       "countryCode": "EH",
-      "name": "Western Sahara",
-      "longname": "The Sahrawi Arab Democratic Republic",
+      "shortName": "Western Sahara",
+      "longName": "The Sahrawi Arab Democratic Republic",
       "altnames": "Sahrawi Arab Democratic Republic",
       "sovereignty": "disputed",
       "region": "AF",
@@ -850,920 +850,920 @@
     },
     {
       "countryCode": "ER",
-      "name": "Eritrea",
-      "longname": "The State of Eritrea",
+      "shortName": "Eritrea",
+      "longName": "The State of Eritrea",
       "sovereignty": "UN",
       "region": "AF",
       "population": 582463
     },
     {
       "countryCode": "ES",
-      "name": "Spain",
-      "longname": "The Kingdom of Spain",
+      "shortName": "Spain",
+      "longName": "The Kingdom of Spain",
       "sovereignty": "UN",
       "region": "EU",
       "population": 47100396
     },
     {
       "countryCode": "ET",
-      "name": "Ethiopia",
-      "longname": "The Federal Democratic Republic of Ethiopia",
+      "shortName": "Ethiopia",
+      "longName": "The Federal Democratic Republic of Ethiopia",
       "sovereignty": "UN",
       "region": "AF",
       "population": 98665000
     },
     {
       "countryCode": "FI",
-      "name": "Finland",
-      "longname": "The Republic of Finland",
+      "shortName": "Finland",
+      "longName": "The Republic of Finland",
       "sovereignty": "UN",
       "region": "EU",
       "population": 5527573
     },
     {
       "countryCode": "FJ",
-      "name": "Fiji",
-      "longname": "The Republic of Fiji",
+      "shortName": "Fiji",
+      "longName": "The Republic of Fiji",
       "sovereignty": "UN",
       "region": "OC",
       "population": 884887
     },
     {
       "countryCode": "FK",
-      "name": "Falkland Islands",
-      "longname": "The Falkland Islands",
+      "shortName": "Falkland Islands",
+      "longName": "The Falkland Islands",
       "sovereignty": "United Kingdom",
       "region": "SA",
       "population": 3198
     },
     {
       "countryCode": "FM",
-      "name": "Micronesia",
-      "longname": "The Federated States of Micronesia",
+      "shortName": "Micronesia",
+      "longName": "The Federated States of Micronesia",
       "sovereignty": "UN",
       "region": "OC",
       "population": 112640
     },
     {
       "countryCode": "FO",
-      "name": "Faroe Islands",
-      "longname": "The Faroe Islands",
+      "shortName": "Faroe Islands",
+      "longName": "The Faroe Islands",
       "sovereignty": "Denmark",
       "region": "EU",
       "population": 52124
     },
     {
       "countryCode": "FR",
-      "name": "France",
-      "longname": "The French Republic",
+      "shortName": "France",
+      "longName": "The French Republic",
       "sovereignty": "UN",
       "region": "EU",
       "population": 67064000
     },
     {
       "countryCode": "GA",
-      "name": "Gabon",
-      "longname": "The Gabonese Republic",
+      "shortName": "Gabon",
+      "longName": "The Gabonese Republic",
       "sovereignty": "UN",
       "region": "AF",
       "population": 2172579
     },
     {
       "countryCode": "GB",
-      "name": "United Kingdom",
-      "longname": "The United Kingdom of Great Britain and Northern Ireland",
+      "shortName": "United Kingdom",
+      "longName": "The United Kingdom of Great Britain and Northern Ireland",
       "sovereignty": "UN",
       "region": "EU",
       "population": 66435600
     },
     {
       "countryCode": "GD",
-      "name": "Grenada",
-      "longname": "Grenada",
+      "shortName": "Grenada",
+      "longName": "Grenada",
       "sovereignty": "UN",
       "region": "NA",
       "population": 112003
     },
     {
       "countryCode": "GE",
-      "name": "Georgia",
-      "longname": "Georgia",
+      "shortName": "Georgia",
+      "longName": "Georgia",
       "sovereignty": "UN",
       "region": "AS",
       "population": 3723464
     },
     {
       "countryCode": "GF",
-      "name": "French Guiana",
-      "longname": "Guyane",
+      "shortName": "French Guiana",
+      "longName": "Guyane",
       "sovereignty": "France",
       "region": "SA",
       "population": 290691
     },
     {
       "countryCode": "GG",
-      "name": "Guernsey",
-      "longname": "The Bailiwick of Guernsey",
+      "shortName": "Guernsey",
+      "longName": "The Bailiwick of Guernsey",
       "sovereignty": "British Crown",
       "region": "EU",
       "population": 63026
     },
     {
       "countryCode": "GH",
-      "name": "Ghana",
-      "longname": "The Republic of Ghana",
+      "shortName": "Ghana",
+      "longName": "The Republic of Ghana",
       "sovereignty": "UN",
       "region": "AF",
       "population": 30280811
     },
     {
       "countryCode": "GI",
-      "name": "Gibraltar",
-      "longname": "Gibraltar",
+      "shortName": "Gibraltar",
+      "longName": "Gibraltar",
       "sovereignty": "United Kingdom",
       "region": "EU",
       "population": 32194
     },
     {
       "countryCode": "GL",
-      "name": "Greenland",
-      "longname": "Kalaallit Nunaat",
+      "shortName": "Greenland",
+      "longName": "Kalaallit Nunaat",
       "sovereignty": "Denmark",
       "region": "NA",
       "population": 56081
     },
     {
       "countryCode": "GM",
-      "name": "Gambia",
-      "longname": "The Republic of The Gambia",
+      "shortName": "Gambia",
+      "longName": "The Republic of The Gambia",
       "sovereignty": "UN",
       "region": "AF",
       "population": 2347706
     },
     {
       "countryCode": "GN",
-      "name": "Guinea",
-      "longname": "The Republic of Guinea",
+      "shortName": "Guinea",
+      "longName": "The Republic of Guinea",
       "sovereignty": "UN",
       "region": "AF",
       "population": 12218357
     },
     {
       "countryCode": "GP",
-      "name": "Guadeloupe",
-      "longname": "Guadeloupe",
+      "shortName": "Guadeloupe",
+      "longName": "Guadeloupe",
       "sovereignty": "France",
       "region": "NA",
       "population": 395700
     },
     {
       "countryCode": "GQ",
-      "name": "Equatorial Guinea",
-      "longname": "The Republic of Equatorial Guinea",
+      "shortName": "Equatorial Guinea",
+      "longName": "The Republic of Equatorial Guinea",
       "sovereignty": "UN",
       "region": "AF",
       "population": 1358276
     },
     {
       "countryCode": "GR",
-      "name": "Greece",
-      "longname": "The Hellenic Republic",
+      "shortName": "Greece",
+      "longName": "The Hellenic Republic",
       "sovereignty": "UN",
       "region": "EU",
       "population": 10724599
     },
     {
       "countryCode": "GS",
-      "name": "South Georgia and the South Sandwich Islands",
-      "longname": "South Georgia and the South Sandwich Islands",
+      "shortName": "South Georgia and the South Sandwich Islands",
+      "longName": "South Georgia and the South Sandwich Islands",
       "sovereignty": "United Kingdom",
       "region": "AN",
       "population": 30
     },
     {
       "countryCode": "GT",
-      "name": "Guatemala",
-      "longname": "The Republic of Guatemala",
+      "shortName": "Guatemala",
+      "longName": "The Republic of Guatemala",
       "sovereignty": "UN",
       "region": "NA",
       "population": 16604026
     },
     {
       "countryCode": "GU",
-      "name": "Guam",
-      "longname": "The Territory of Guam",
+      "shortName": "Guam",
+      "longName": "The Territory of Guam",
       "sovereignty": "United States",
       "region": "OC",
       "population": 165768
     },
     {
       "countryCode": "GW",
-      "name": "Guinea-Bissau",
-      "longname": "The Republic of Guinea-Bissau",
+      "shortName": "Guinea-Bissau",
+      "longName": "The Republic of Guinea-Bissau",
       "sovereignty": "UN",
       "region": "AF",
       "population": 12218357
     },
     {
       "countryCode": "GY",
-      "name": "Guyana",
-      "longname": "The Co-operative Republic of Guyana",
+      "shortName": "Guyana",
+      "longName": "The Co-operative Republic of Guyana",
       "sovereignty": "UN",
       "region": "SA",
       "population": 782766
     },
     {
       "countryCode": "HK",
-      "name": "Hong Kong",
-      "longname": "The Hong Kong Special Administrative Region of China",
+      "shortName": "Hong Kong",
+      "longName": "The Hong Kong Special Administrative Region of China",
       "sovereignty": "China",
       "region": "AS",
       "population": 7500700
     },
     {
       "countryCode": "HN",
-      "name": "Honduras",
-      "longname": "The Republic of Honduras",
+      "shortName": "Honduras",
+      "longName": "The Republic of Honduras",
       "sovereignty": "UN",
       "region": "NA",
       "population": 9158345
     },
     {
       "countryCode": "HR",
-      "name": "Croatia",
-      "longname": "The Republic of Croatia",
+      "shortName": "Croatia",
+      "longName": "The Republic of Croatia",
       "sovereignty": "UN",
       "region": "EU",
       "population": 4076246
     },
     {
       "countryCode": "HT",
-      "name": "Haiti",
-      "longname": "The Republic of Haiti",
+      "shortName": "Haiti",
+      "longName": "The Republic of Haiti",
       "sovereignty": "UN",
       "region": "NA",
       "population": 11577779
     },
     {
       "countryCode": "HU",
-      "name": "Hungary",
-      "longname": "Hungary",
+      "shortName": "Hungary",
+      "longName": "Hungary",
       "sovereignty": "UN",
       "region": "EU",
       "population": 9772756
     },
     {
       "countryCode": "ID",
-      "name": "Indonesia",
-      "longname": "The Republic of Indonesia",
+      "shortName": "Indonesia",
+      "longName": "The Republic of Indonesia",
       "sovereignty": "UN",
       "region": "AS",
       "population": 266911900
     },
     {
       "countryCode": "IE",
-      "name": "Ireland",
-      "longname": "Ireland",
+      "shortName": "Ireland",
+      "longName": "Ireland",
       "sovereignty": "UN",
       "region": "EU",
       "population": 4921500
     },
     {
       "countryCode": "IL",
-      "name": "Israel",
-      "longname": "The State of Israel",
+      "shortName": "Israel",
+      "longName": "The State of Israel",
       "sovereignty": "UN",
       "region": "AS",
       "population": 9171900
     },
     {
       "countryCode": "IM",
-      "name": "Isle of Man",
-      "longname": "The Isle of Man",
+      "shortName": "Isle of Man",
+      "longName": "The Isle of Man",
       "sovereignty": "British Crown",
       "region": "EU",
       "population": 83314
     },
     {
       "countryCode": "IN",
-      "name": "India",
-      "longname": "The Republic of India",
+      "shortName": "India",
+      "longName": "The Republic of India",
       "sovereignty": "UN",
       "region": "AS",
       "population": 1359812346
     },
     {
       "countryCode": "IO",
-      "name": "British Indian Ocean Territory",
-      "longname": "The British Indian Ocean Territory",
+      "shortName": "British Indian Ocean Territory",
+      "longName": "The British Indian Ocean Territory",
       "sovereignty": "United Kingdom",
       "region": "AS",
       "population": 0
     },
     {
       "countryCode": "IQ",
-      "name": "Iraq",
-      "longname": "The Republic of Iraq",
+      "shortName": "Iraq",
+      "longName": "The Republic of Iraq",
       "sovereignty": "UN",
       "region": "AS",
       "population": 39127900
     },
     {
       "countryCode": "IR",
-      "name": "Iran",
-      "longname": "The Islamic Republic of Iran",
+      "shortName": "Iran",
+      "longName": "The Islamic Republic of Iran",
       "sovereignty": "UN",
       "region": "AS",
       "population": 83281956
     },
     {
       "countryCode": "IS",
-      "name": "Iceland",
-      "longname": "Iceland",
+      "shortName": "Iceland",
+      "longName": "Iceland",
       "sovereignty": "UN",
       "region": "EU",
       "population": 364260
     },
     {
       "countryCode": "IT",
-      "name": "Italy",
-      "longname": "The Italian Republic",
+      "shortName": "Italy",
+      "longName": "The Italian Republic",
       "sovereignty": "UN",
       "region": "EU",
       "population": 60243406
     },
     {
       "countryCode": "JE",
-      "name": "Jersey",
-      "longname": "The Bailiwick of Jersey",
+      "shortName": "Jersey",
+      "longName": "The Bailiwick of Jersey",
       "sovereignty": "British Crown",
       "region": "EU",
       "population": 106800
     },
     {
       "countryCode": "JM",
-      "name": "Jamaica",
-      "longname": "Jamaica",
+      "shortName": "Jamaica",
+      "longName": "Jamaica",
       "sovereignty": "UN",
       "region": "NA",
       "population": 2726667
     },
     {
       "countryCode": "JO",
-      "name": "Jordan",
-      "longname": "The Hashemite Kingdom of Jordan",
+      "shortName": "Jordan",
+      "longName": "The Hashemite Kingdom of Jordan",
       "sovereignty": "UN",
       "region": "AS",
       "population": 10636364
     },
     {
       "countryCode": "JP",
-      "name": "Japan",
-      "longname": "Japan",
+      "shortName": "Japan",
+      "longName": "Japan",
       "sovereignty": "UN",
       "region": "AS",
       "population": 126010000
     },
     {
       "countryCode": "KE",
-      "name": "Kenya",
-      "longname": "The Republic of Kenya",
+      "shortName": "Kenya",
+      "longName": "The Republic of Kenya",
       "sovereignty": "UN",
       "region": "AF",
       "population": 47564296
     },
     {
       "countryCode": "KG",
-      "name": "Kyrgyzstan",
-      "longname": "The Kyrgyz Republic",
+      "shortName": "Kyrgyzstan",
+      "longName": "The Kyrgyz Republic",
       "sovereignty": "UN",
       "region": "AS",
       "population": 6523500
     },
     {
       "countryCode": "KH",
-      "name": "Cambodia",
-      "longname": "The Kingdom of Cambodia",
+      "shortName": "Cambodia",
+      "longName": "The Kingdom of Cambodia",
       "sovereignty": "UN",
       "region": "AS",
       "population": 15288489
     },
     {
       "countryCode": "KI",
-      "name": "Kiribati",
-      "longname": "The Republic of Kiribati",
+      "shortName": "Kiribati",
+      "longName": "The Republic of Kiribati",
       "sovereignty": "UN",
       "region": "OC",
       "population": 115847
     },
     {
       "countryCode": "KM",
-      "name": "Comoros",
-      "longname": "The Union of the Comoros",
+      "shortName": "Comoros",
+      "longName": "The Union of the Comoros",
       "sovereignty": "UN",
       "region": "AF",
       "population": 873724
     },
     {
       "countryCode": "KN",
-      "name": "Saint Kitts and Nevis",
-      "longname": "Saint Kitts and Nevis",
+      "shortName": "Saint Kitts and Nevis",
+      "longName": "Saint Kitts and Nevis",
       "sovereignty": "UN",
       "region": "NA",
       "population": 52823
     },
     {
       "countryCode": "KP",
-      "name": "North Korea",
-      "longname": "The Democratic People's Republic of Korea",
+      "shortName": "North Korea",
+      "longName": "The Democratic People's Republic of Korea",
       "sovereignty": "UN",
       "region": "AS",
       "population": 25450000
     },
     {
       "countryCode": "KR",
-      "name": "South Korea",
-      "longname": "The Republic of Korea",
+      "shortName": "South Korea",
+      "longName": "The Republic of Korea",
       "sovereignty": "UN",
       "region": "AS",
       "population": 51780579
     },
     {
       "countryCode": "KW",
-      "name": "Kuwait",
-      "longname": "The State of Kuwait",
+      "shortName": "Kuwait",
+      "longName": "The State of Kuwait",
       "sovereignty": "UN",
       "region": "AS",
       "population": 4420110
     },
     {
       "countryCode": "KY",
-      "name": "Cayman Islands",
-      "longname": "The Cayman Islands",
+      "shortName": "Cayman Islands",
+      "longName": "The Cayman Islands",
       "sovereignty": "United Kingdom",
       "region": "NA",
       "population": 65813
     },
     {
       "countryCode": "KZ",
-      "name": "Kazakhstan",
-      "longname": "The Republic of Kazakhstan",
+      "shortName": "Kazakhstan",
+      "longName": "The Republic of Kazakhstan",
       "sovereignty": "UN",
       "region": "AS",
       "population": 18663384
     },
     {
       "countryCode": "LA",
-      "name": "Laos",
-      "longname": "The Lao People's Democratic Republic",
+      "shortName": "Laos",
+      "longName": "The Lao People's Democratic Republic",
       "sovereignty": "UN",
       "region": "AS",
       "population": 7123205
     },
     {
       "countryCode": "LB",
-      "name": "Lebanon",
-      "longname": "The Lebanese Republic",
+      "shortName": "Lebanon",
+      "longName": "The Lebanese Republic",
       "sovereignty": "UN",
       "region": "AS",
       "population": 6825442
     },
     {
       "countryCode": "LC",
-      "name": "Saint Lucia",
-      "longname": "Saint Lucia",
+      "shortName": "Saint Lucia",
+      "longName": "Saint Lucia",
       "sovereignty": "UN",
       "region": "NA",
       "population": 178696
     },
     {
       "countryCode": "LI",
-      "name": "Liechtenstein",
-      "longname": "The Principality of Liechtenstein",
+      "shortName": "Liechtenstein",
+      "longName": "The Principality of Liechtenstein",
       "sovereignty": "UN",
       "region": "EU",
       "population": 38557
     },
     {
       "countryCode": "LK",
-      "name": "Sri Lanka",
-      "longname": "The Democratic Socialist Republic of Sri Lanka",
+      "shortName": "Sri Lanka",
+      "longName": "The Democratic Socialist Republic of Sri Lanka",
       "sovereignty": "UN",
       "region": "AS",
       "population": 21803000
     },
     {
       "countryCode": "LR",
-      "name": "Liberia",
-      "longname": "The Republic of Liberia",
+      "shortName": "Liberia",
+      "longName": "The Republic of Liberia",
       "sovereignty": "UN",
       "region": "AF",
       "population": 4475353
     },
     {
       "countryCode": "LS",
-      "name": "Lesotho",
-      "longname": "The Kingdom of Lesotho",
+      "shortName": "Lesotho",
+      "longName": "The Kingdom of Lesotho",
       "sovereignty": "UN",
       "region": "AF",
       "population": 2007201
     },
     {
       "countryCode": "LT",
-      "name": "Lithuania",
-      "longname": "The Republic of Lithuania",
+      "shortName": "Lithuania",
+      "longName": "The Republic of Lithuania",
       "sovereignty": "UN",
       "region": "EU",
       "population": 2793350
     },
     {
       "countryCode": "LU",
-      "name": "Luxembourg",
-      "longname": "The Grand Duchy of Luxembourg",
+      "shortName": "Luxembourg",
+      "longName": "The Grand Duchy of Luxembourg",
       "sovereignty": "UN",
       "region": "EU",
       "population": 613894
     },
     {
       "countryCode": "LV",
-      "name": "Latvia",
-      "longname": "The Republic of Latvia",
+      "shortName": "Latvia",
+      "longName": "The Republic of Latvia",
       "sovereignty": "UN",
       "region": "EU",
       "population": 1906800
     },
     {
       "countryCode": "LY",
-      "name": "Libya",
-      "longname": "The State of Libya",
+      "shortName": "Libya",
+      "longName": "The State of Libya",
       "sovereignty": "UN",
       "region": "AF",
       "population": 6871287
     },
     {
       "countryCode": "MA",
-      "name": "Morocco",
-      "longname": "The Kingdom of Morocco",
+      "shortName": "Morocco",
+      "longName": "The Kingdom of Morocco",
       "sovereignty": "UN",
       "region": "AF",
       "population": 35839345
     },
     {
       "countryCode": "MC",
-      "name": "Monaco",
-      "longname": "The Principality of Monaco",
+      "shortName": "Monaco",
+      "longName": "The Principality of Monaco",
       "sovereignty": "UN",
       "region": "EU",
       "population": 38300
     },
     {
       "countryCode": "MD",
-      "name": "Moldova",
-      "longname": "The Republic of Moldova",
+      "shortName": "Moldova",
+      "longName": "The Republic of Moldova",
       "sovereignty": "UN",
       "region": "EU",
       "population": 2681735
     },
     {
       "countryCode": "ME",
-      "name": "Montenegro",
-      "longname": "Montenegro",
+      "shortName": "Montenegro",
+      "longName": "Montenegro",
       "sovereignty": "UN",
       "region": "EU",
       "population": 622359
     },
     {
       "countryCode": "MF",
-      "name": "St Martin",
-      "longname": "The Collectivity of Saint-Martin",
+      "shortName": "St Martin",
+      "longName": "The Collectivity of Saint-Martin",
       "sovereignty": "France",
       "region": "NA",
       "population": 35107
     },
     {
       "countryCode": "MG",
-      "name": "Madagascar",
-      "longname": "The Republic of Madagascar",
+      "shortName": "Madagascar",
+      "longName": "The Republic of Madagascar",
       "sovereignty": "UN",
       "region": "AF",
       "population": 25680342
     },
     {
       "countryCode": "MH",
-      "name": "Marshall Islands",
-      "longname": "The Republic of the Marshall Islands",
+      "shortName": "Marshall Islands",
+      "longName": "The Republic of the Marshall Islands",
       "sovereignty": "UN",
       "region": "OC",
       "population": 58413
     },
     {
       "countryCode": "MK",
-      "name": "North Macedonia",
-      "longname": "Republic of North Macedonia",
+      "shortName": "North Macedonia",
+      "longName": "Republic of North Macedonia",
       "sovereignty": "UN",
       "region": "EU",
       "population": 2077132
     },
     {
       "countryCode": "ML",
-      "name": "Mali",
-      "longname": "The Republic of Mali",
+      "shortName": "Mali",
+      "longName": "The Republic of Mali",
       "sovereignty": "UN",
       "region": "AF",
       "population": 19973000
     },
     {
       "countryCode": "MM",
-      "name": "Myanmar",
-      "longname": "The Republic of the Union of Myanmar",
+      "shortName": "Myanmar",
+      "longName": "The Republic of the Union of Myanmar",
       "sovereignty": "UN",
       "region": "AS",
       "population": 54339766
     },
     {
       "countryCode": "MN",
-      "name": "Mongolia",
-      "longname": "The State of Mongolia",
+      "shortName": "Mongolia",
+      "longName": "The State of Mongolia",
       "sovereignty": "UN",
       "region": "AS",
       "population": 3307640
     },
     {
       "countryCode": "MO",
-      "name": "Macao",
-      "longname": "Macao Special Administrative Region of China",
+      "shortName": "Macao",
+      "longName": "Macao Special Administrative Region of China",
       "sovereignty": "China",
       "region": "AS",
       "population": 667400
     },
     {
       "countryCode": "MP",
-      "name": "Northern Mariana Islands",
-      "longname": "The Commonwealth of the Northern Mariana Islands",
+      "shortName": "Northern Mariana Islands",
+      "longName": "The Commonwealth of the Northern Mariana Islands",
       "sovereignty": "United States",
       "region": "AS",
       "population": 53883
     },
     {
       "countryCode": "MQ",
-      "name": "Martinique",
-      "longname": "Martinique",
+      "shortName": "Martinique",
+      "longName": "Martinique",
       "sovereignty": "France",
       "region": "NA",
       "population": 376480
     },
     {
       "countryCode": "MR",
-      "name": "Mauritania",
-      "longname": "The Islamic Republic of Mauritania",
+      "shortName": "Mauritania",
+      "longName": "The Islamic Republic of Mauritania",
       "sovereignty": "UN",
       "region": "AF",
       "population": 4077347
     },
     {
       "countryCode": "MS",
-      "name": "Montserrat",
-      "longname": "Montserrat",
+      "shortName": "Montserrat",
+      "longName": "Montserrat",
       "sovereignty": "United Kingdom",
       "region": "NA",
       "population": 4989
     },
     {
       "countryCode": "MT",
-      "name": "Malta",
-      "longname": "The Republic of Malta",
+      "shortName": "Malta",
+      "longName": "The Republic of Malta",
       "sovereignty": "UN",
       "region": "EU",
       "population": 493559
     },
     {
       "countryCode": "MU",
-      "name": "Mauritius",
-      "longname": "The Republic of Mauritius",
+      "shortName": "Mauritius",
+      "longName": "The Republic of Mauritius",
       "sovereignty": "UN",
       "region": "AF",
       "population": 1265985
     },
     {
       "countryCode": "MV",
-      "name": "Maldives",
-      "longname": "The Republic of Maldives",
+      "shortName": "Maldives",
+      "longName": "The Republic of Maldives",
       "sovereignty": "UN",
       "region": "AS",
       "population": 374775
     },
     {
       "countryCode": "MW",
-      "name": "Malawi",
-      "longname": "The Republic of Malawi",
+      "shortName": "Malawi",
+      "longName": "The Republic of Malawi",
       "sovereignty": "UN",
       "region": "AF",
       "population": 17563749
     },
     {
       "countryCode": "MX",
-      "name": "Mexico",
-      "longname": "The United Mexican States",
+      "shortName": "Mexico",
+      "longName": "The United Mexican States",
       "sovereignty": "UN",
       "region": "NA",
       "population": 126577691
     },
     {
       "countryCode": "MY",
-      "name": "Malaysia",
-      "longname": "Malaysia",
+      "shortName": "Malaysia",
+      "longName": "Malaysia",
       "sovereignty": "UN",
       "region": "AS",
       "population": 32719760
     },
     {
       "countryCode": "MZ",
-      "name": "Mozambique",
-      "longname": "The Republic of Mozambique",
+      "shortName": "Mozambique",
+      "longName": "The Republic of Mozambique",
       "sovereignty": "UN",
       "region": "AF",
       "population": 30066648
     },
     {
       "countryCode": "NA",
-      "name": "Namibia",
-      "longname": "The Republic of Namibia",
+      "shortName": "Namibia",
+      "longName": "The Republic of Namibia",
       "sovereignty": "UN",
       "region": "AF",
       "population": 2458936
     },
     {
       "countryCode": "NC",
-      "name": "New Caledonia",
-      "longname": "New Caledonia",
+      "shortName": "New Caledonia",
+      "longName": "New Caledonia",
       "sovereignty": "France",
       "region": "OC",
       "population": 282200
     },
     {
       "countryCode": "NE",
-      "name": "Niger",
-      "longname": "The Republic of the Niger",
+      "shortName": "Niger",
+      "longName": "The Republic of the Niger",
       "sovereignty": "UN",
       "region": "AF",
       "population": 22314743
     },
     {
       "countryCode": "NG",
-      "name": "Nigeria",
-      "longname": "The Federal Republic of Nigeria",
+      "shortName": "Nigeria",
+      "longName": "The Federal Republic of Nigeria",
       "sovereignty": "UN",
       "region": "AF",
       "population": 206139587
     },
     {
       "countryCode": "NI",
-      "name": "Nicaragua",
-      "longname": "The Republic of Nicaragua",
+      "shortName": "Nicaragua",
+      "longName": "The Republic of Nicaragua",
       "sovereignty": "UN",
       "region": "NA",
       "population": 6460411
     },
     {
       "countryCode": "NL",
-      "name": "Netherlands",
-      "longname": "The Kingdom of the Netherlands",
+      "shortName": "Netherlands",
+      "longName": "The Kingdom of the Netherlands",
       "sovereignty": "UN",
       "region": "EU",
       "population": 17444731
     },
     {
       "countryCode": "NO",
-      "name": "Norway",
-      "longname": "The Kingdom of Norway",
+      "shortName": "Norway",
+      "longName": "The Kingdom of Norway",
       "sovereignty": "UN",
       "region": "EU",
       "population": 5367580
     },
     {
       "countryCode": "NP",
-      "name": "Nepal",
-      "longname": "The Federal Democratic Republic of Nepal",
+      "shortName": "Nepal",
+      "longName": "The Federal Democratic Republic of Nepal",
       "sovereignty": "UN",
       "region": "AS",
       "population": 29609623
     },
     {
       "countryCode": "NR",
-      "name": "Nauru",
-      "longname": "The Republic of Nauru",
+      "shortName": "Nauru",
+      "longName": "The Republic of Nauru",
       "sovereignty": "UN",
       "region": "OC",
       "population": 11000
     },
     {
       "countryCode": "NU",
-      "name": "Niue",
-      "longname": "Niue",
+      "shortName": "Niue",
+      "longName": "Niue",
       "sovereignty": "New Zealand",
       "region": "OC",
       "population": 1620
     },
     {
       "countryCode": "NZ",
-      "name": "New Zealand",
-      "longname": "New Zealand",
+      "shortName": "New Zealand",
+      "longName": "New Zealand",
       "sovereignty": "UN",
       "region": "OC",
       "population": 4970447
     },
     {
       "countryCode": "OM",
-      "name": "Oman",
-      "longname": "The Sultanate of Oman",
+      "shortName": "Oman",
+      "longName": "The Sultanate of Oman",
       "sovereignty": "UN",
       "region": "AS",
       "population": 4664790
     },
     {
       "countryCode": "PA",
-      "name": "Panama",
-      "longname": "The Republic of Panamá",
+      "shortName": "Panama",
+      "longName": "The Republic of Panamá",
       "sovereignty": "UN",
       "region": "NA",
       "population": 4218808
     },
     {
       "countryCode": "PE",
-      "name": "Peru",
-      "longname": "The Republic of Perú",
+      "shortName": "Peru",
+      "longName": "The Republic of Perú",
       "sovereignty": "UN",
       "region": "SA",
       "population": 32131400
     },
     {
       "countryCode": "PF",
-      "name": "French Polynesia",
-      "longname": "French Polynesia",
+      "shortName": "French Polynesia",
+      "longName": "French Polynesia",
       "sovereignty": "France",
       "region": "OC",
       "population": 275918
     },
     {
       "countryCode": "PG",
-      "name": "Papua New Guinea",
-      "longname": "The Independent State of Papua New Guinea",
+      "shortName": "Papua New Guinea",
+      "longName": "The Independent State of Papua New Guinea",
       "sovereignty": "UN",
       "region": "OC",
       "population": 8935000
     },
     {
       "countryCode": "PH",
-      "name": "Philippines",
-      "longname": "The Republic of the Philippines",
+      "shortName": "Philippines",
+      "longName": "The Republic of the Philippines",
       "sovereignty": "UN",
       "region": "AS",
       "population": 108407287
     },
     {
       "countryCode": "PK",
-      "name": "Pakistan",
-      "longname": "The Islamic Republic of Pakistan",
+      "shortName": "Pakistan",
+      "longName": "The Islamic Republic of Pakistan",
       "sovereignty": "UN",
       "region": "AS",
       "population": 218950520
     },
     {
       "countryCode": "PL",
-      "name": "Poland",
-      "longname": "The Republic of Poland",
+      "shortName": "Poland",
+      "longName": "The Republic of Poland",
       "sovereignty": "UN",
       "region": "EU",
       "population": 38386000
     },
     {
       "countryCode": "PM",
-      "name": "Saint Pierre and Miquelon",
-      "longname": "The Overseas Collectivity of Saint-Pierre and Miquelon",
+      "shortName": "Saint Pierre and Miquelon",
+      "longName": "The Overseas Collectivity of Saint-Pierre and Miquelon",
       "sovereignty": "France",
       "region": "NA",
       "population": 6008
     },
     {
       "countryCode": "PN",
-      "name": "Pitcairn Islands",
-      "longname": "The Pitcairn, Henderson, Ducie and Oeno Islands",
+      "shortName": "Pitcairn Islands",
+      "longName": "The Pitcairn, Henderson, Ducie and Oeno Islands",
       "sovereignty": "United Kingdom",
       "region": "OC",
       "population": 50
     },
     {
       "countryCode": "PR",
-      "name": "Puerto Rico",
-      "longname": "The Commonwealth of Puerto Rico",
+      "shortName": "Puerto Rico",
+      "longName": "The Commonwealth of Puerto Rico",
       "sovereignty": "United States",
       "region": "NA",
       "population": 3193694
     },
     {
       "countryCode": "PS",
-      "name": "Palestine",
-      "longname": "The State of Palestine",
+      "shortName": "Palestine",
+      "longName": "The State of Palestine",
       "altnames": "State of Palestine",
       "sovereignty": "UN observer",
       "region": "AS",
@@ -1771,200 +1771,200 @@
     },
     {
       "countryCode": "PT",
-      "name": "Portugal",
-      "longname": "The Portuguese Republic",
+      "shortName": "Portugal",
+      "longName": "The Portuguese Republic",
       "sovereignty": "UN",
       "region": "EU",
       "population": 10276617
     },
     {
       "countryCode": "PW",
-      "name": "Palau",
-      "longname": "The Republic of Palau",
+      "shortName": "Palau",
+      "longName": "The Republic of Palau",
       "sovereignty": "UN",
       "region": "OC",
       "population": 17907
     },
     {
       "countryCode": "PY",
-      "name": "Paraguay",
-      "longname": "The Republic of Paraguay",
+      "shortName": "Paraguay",
+      "longName": "The Republic of Paraguay",
       "sovereignty": "UN",
       "region": "SA",
       "population": 7152703
     },
     {
       "countryCode": "QA",
-      "name": "Qatar",
-      "longname": "The State of Qatar",
+      "shortName": "Qatar",
+      "longName": "The State of Qatar",
       "sovereignty": "UN",
       "region": "AS",
       "population": 2747282
     },
     {
       "countryCode": "RE",
-      "name": "Reunion",
-      "longname": "Réunion",
+      "shortName": "Reunion",
+      "longName": "Réunion",
       "sovereignty": "France",
       "region": "AF",
       "population": 859959
     },
     {
       "countryCode": "RO",
-      "name": "Romania",
-      "longname": "Romania",
+      "shortName": "Romania",
+      "longName": "Romania",
       "sovereignty": "UN",
       "region": "EU",
       "population": 19405156
     },
     {
       "countryCode": "RS",
-      "name": "Serbia",
-      "longname": "The Republic of Serbia",
+      "shortName": "Serbia",
+      "longName": "The Republic of Serbia",
       "sovereignty": "UN",
       "region": "EU",
       "population": 6963764
     },
     {
       "countryCode": "RU",
-      "name": "Russia",
-      "longname": "The Russian Federation",
+      "shortName": "Russia",
+      "longName": "The Russian Federation",
       "sovereignty": "UN",
       "region": "EU",
       "population": 146745098
     },
     {
       "countryCode": "RW",
-      "name": "Rwanda",
-      "longname": "The Republic of Rwanda",
+      "shortName": "Rwanda",
+      "longName": "The Republic of Rwanda",
       "sovereignty": "UN",
       "region": "AF",
       "population": 12374397
     },
     {
       "countryCode": "SA",
-      "name": "Saudi Arabia",
-      "longname": "The Kingdom of Saudi Arabia",
+      "shortName": "Saudi Arabia",
+      "longName": "The Kingdom of Saudi Arabia",
       "sovereignty": "UN",
       "region": "AS",
       "population": 34218169
     },
     {
       "countryCode": "SB",
-      "name": "Solomon Islands",
-      "longname": "The Solomon Islands",
+      "shortName": "Solomon Islands",
+      "longName": "The Solomon Islands",
       "sovereignty": "UN",
       "region": "OC",
       "population": 680806
     },
     {
       "countryCode": "SC",
-      "name": "Seychelles",
-      "longname": "The Republic of Seychelles",
+      "shortName": "Seychelles",
+      "longName": "The Republic of Seychelles",
       "sovereignty": "UN",
       "region": "AF",
       "population": 97625
     },
     {
       "countryCode": "SD",
-      "name": "Sudan",
-      "longname": "The Republic of the Sudan",
+      "shortName": "Sudan",
+      "longName": "The Republic of the Sudan",
       "sovereignty": "UN",
       "region": "AF",
       "population": 42345710
     },
     {
       "countryCode": "SE",
-      "name": "Sweden",
-      "longname": "The Kingdom of Sweden",
+      "shortName": "Sweden",
+      "longName": "The Kingdom of Sweden",
       "sovereignty": "UN",
       "region": "EU",
       "population": 10333456
     },
     {
       "countryCode": "SG",
-      "name": "Singapore",
-      "longname": "The Republic of Singapore",
+      "shortName": "Singapore",
+      "longName": "The Republic of Singapore",
       "sovereignty": "UN",
       "region": "AS",
       "population": 5703600
     },
     {
       "countryCode": "SH",
-      "name": "Saint Helena, Ascension and Tristan da Cunha",
-      "longname": "Saint Helena, Ascension and Tristan da Cunha",
+      "shortName": "Saint Helena, Ascension and Tristan da Cunha",
+      "longName": "Saint Helena, Ascension and Tristan da Cunha",
       "sovereignty": "United Kingdom",
       "region": "AF",
       "population": 5633
     },
     {
       "countryCode": "SI",
-      "name": "Slovenia",
-      "longname": "The Republic of Slovenia",
+      "shortName": "Slovenia",
+      "longName": "The Republic of Slovenia",
       "sovereignty": "UN",
       "region": "EU",
       "population": 2094060
     },
     {
       "countryCode": "SK",
-      "name": "Slovakia",
-      "longname": "The Slovak Republic",
+      "shortName": "Slovakia",
+      "longName": "The Slovak Republic",
       "sovereignty": "UN",
       "region": "EU",
       "population": 5456362
     },
     {
       "countryCode": "SL",
-      "name": "Sierra Leone",
-      "longname": "The Republic of Sierra Leone",
+      "shortName": "Sierra Leone",
+      "longName": "The Republic of Sierra Leone",
       "sovereignty": "UN",
       "region": "AF",
       "population": 7901454
     },
     {
       "countryCode": "SM",
-      "name": "San Marino",
-      "longname": "The Republic of San Marino",
+      "shortName": "San Marino",
+      "longName": "The Republic of San Marino",
       "sovereignty": "UN",
       "region": "EU",
       "population": 33344
     },
     {
       "countryCode": "SN",
-      "name": "Senegal",
-      "longname": "The Republic of Senegal",
+      "shortName": "Senegal",
+      "longName": "The Republic of Senegal",
       "sovereignty": "UN",
       "region": "AF",
       "population": 16209125
     },
     {
       "countryCode": "SO",
-      "name": "Somalia",
-      "longname": "The Federal Republic of Somalia",
+      "shortName": "Somalia",
+      "longName": "The Federal Republic of Somalia",
       "sovereignty": "UN",
       "region": "AF",
       "population": 15893219
     },
     {
       "countryCode": "SR",
-      "name": "Suriname",
-      "longname": "The Republic of Suriname",
+      "shortName": "Suriname",
+      "longName": "The Republic of Suriname",
       "sovereignty": "UN",
       "region": "SA",
       "population": 581372
     },
     {
       "countryCode": "SS",
-      "name": "South Sudan",
-      "longname": "The Republic of South Sudan",
+      "shortName": "South Sudan",
+      "longName": "The Republic of South Sudan",
       "sovereignty": "UN",
       "region": "AF",
       "population": 12778250
     },
     {
       "countryCode": "ST",
-      "name": "Sao Tome and Principe",
-      "longname": "The Democratic Republic of São Tomé and Príncipe",
+      "shortName": "Sao Tome and Principe",
+      "longName": "The Democratic Republic of São Tomé and Príncipe",
       "altnames": "São Tomé and Príncipe",
       "sovereignty": "UN",
       "region": "AF",
@@ -1972,24 +1972,24 @@
     },
     {
       "countryCode": "SV",
-      "name": "El Salvador",
-      "longname": "The Republic of El Salvador",
+      "shortName": "El Salvador",
+      "longName": "The Republic of El Salvador",
       "sovereignty": "UN",
       "region": "NA",
       "population": 6486201
     },
     {
       "countryCode": "SX",
-      "name": "Sint Maarten",
-      "longname": "Sint Maarten",
+      "shortName": "Sint Maarten",
+      "longName": "Sint Maarten",
       "sovereignty": "Netherlands",
       "region": "NA",
       "population": 41486
     },
     {
       "countryCode": "SY",
-      "name": "Syria",
-      "longname": "The Syrian Arab Republic",
+      "shortName": "Syria",
+      "longName": "The Syrian Arab Republic",
       "altnames": "Syrian Arab Republic",
       "sovereignty": "UN",
       "region": "AS",
@@ -1997,8 +1997,8 @@
     },
     {
       "countryCode": "SZ",
-      "name": "Eswatini",
-      "longname": "The Kingdom of Eswatini",
+      "shortName": "Eswatini",
+      "longName": "The Kingdom of Eswatini",
       "altnames": "Swaziland",
       "sovereignty": "UN",
       "region": "AF",
@@ -2006,288 +2006,288 @@
     },
     {
       "countryCode": "TC",
-      "name": "Turks and Caicos Islands",
-      "longname": "The Turks and Caicos Islands",
+      "shortName": "Turks and Caicos Islands",
+      "longName": "The Turks and Caicos Islands",
       "sovereignty": "United Kingdom",
       "region": "NA",
       "population": 41369
     },
     {
       "countryCode": "TD",
-      "name": "Chad",
-      "longname": "The Republic of Chad",
+      "shortName": "Chad",
+      "longName": "The Republic of Chad",
       "sovereignty": "UN",
       "region": "AF",
       "population": 15692969
     },
     {
       "countryCode": "TF",
-      "name": "French Southern Territories",
-      "longname": "The French Southern and Antarctic Lands",
+      "shortName": "French Southern Territories",
+      "longName": "The French Southern and Antarctic Lands",
       "sovereignty": "France",
       "region": "AF",
       "population": 0
     },
     {
       "countryCode": "TG",
-      "name": "Togo",
-      "longname": "The Togolese Republic",
+      "shortName": "Togo",
+      "longName": "The Togolese Republic",
       "sovereignty": "UN",
       "region": "AF",
       "population": 7538000
     },
     {
       "countryCode": "TH",
-      "name": "Thailand",
-      "longname": "The Kingdom of Thailand",
+      "shortName": "Thailand",
+      "longName": "The Kingdom of Thailand",
       "sovereignty": "UN",
       "region": "AS",
       "population": 66481630
     },
     {
       "countryCode": "TJ",
-      "name": "Tajikistan",
-      "longname": "The Republic of Tajikistan",
+      "shortName": "Tajikistan",
+      "longName": "The Republic of Tajikistan",
       "sovereignty": "UN",
       "region": "AS",
       "population": 9127000
     },
     {
       "countryCode": "TK",
-      "name": "Tokelau",
-      "longname": "Tokelau",
+      "shortName": "Tokelau",
+      "longName": "Tokelau",
       "sovereignty": "New Zealand",
       "region": "OC",
       "population": 1499
     },
     {
       "countryCode": "TL",
-      "name": "Timor-Leste (East Timor)",
-      "longname": "The Democratic Republic of Timor-Leste",
+      "shortName": "Timor-Leste (East Timor)",
+      "longName": "The Democratic Republic of Timor-Leste",
       "sovereignty": "UN",
       "region": "AS",
       "population": 1387149
     },
     {
       "countryCode": "TM",
-      "name": "Turkmenistan",
-      "longname": "Turkmenistan",
+      "shortName": "Turkmenistan",
+      "longName": "Turkmenistan",
       "sovereignty": "UN",
       "region": "AS",
       "population": 6031187
     },
     {
       "countryCode": "TN",
-      "name": "Tunisia",
-      "longname": "The Republic of Tunisia",
+      "shortName": "Tunisia",
+      "longName": "The Republic of Tunisia",
       "sovereignty": "UN",
       "region": "AF",
       "population": 11722038
     },
     {
       "countryCode": "TO",
-      "name": "Tonga",
-      "longname": "The Kingdom of Tonga",
+      "shortName": "Tonga",
+      "longName": "The Kingdom of Tonga",
       "sovereignty": "UN",
       "region": "AF",
       "population": 100651
     },
     {
       "countryCode": "TR",
-      "name": "Turkey",
-      "longname": "The Republic of Turkey",
+      "shortName": "Turkey",
+      "longName": "The Republic of Turkey",
       "sovereignty": "UN",
       "region": "AS",
       "population": 83154997
     },
     {
       "countryCode": "TT",
-      "name": "Trinidad and Tobago",
-      "longname": "The Republic of Trinidad and Tobago",
+      "shortName": "Trinidad and Tobago",
+      "longName": "The Republic of Trinidad and Tobago",
       "sovereignty": "UN",
       "region": "NA",
       "population": 1363985
     },
     {
       "countryCode": "TV",
-      "name": "Tuvalu",
-      "longname": "Tuvalu",
+      "shortName": "Tuvalu",
+      "longName": "Tuvalu",
       "sovereignty": "UN",
       "region": "OC",
       "population": 11192
     },
     {
       "countryCode": "TW",
-      "name": "Taiwan",
-      "longname": "The Republic of China",
+      "shortName": "Taiwan",
+      "longName": "The Republic of China",
       "sovereignty": "disputed",
       "region": "AS",
       "population": 23604265
     },
     {
       "countryCode": "TZ",
-      "name": "Tanzania",
-      "longname": "The United Republic of Tanzania",
+      "shortName": "Tanzania",
+      "longName": "The United Republic of Tanzania",
       "sovereignty": "UN",
       "region": "AF",
       "population": 55890747
     },
     {
       "countryCode": "UA",
-      "name": "Ukraine",
-      "longname": "Ukraine",
+      "shortName": "Ukraine",
+      "longName": "Ukraine",
       "sovereignty": "UN",
       "region": "EU",
       "population": 41902416
     },
     {
       "countryCode": "UG",
-      "name": "Uganda",
-      "longname": "The Republic of Uganda",
+      "shortName": "Uganda",
+      "longName": "The Republic of Uganda",
       "sovereignty": "UN",
       "region": "AF",
       "population": 40299300
     },
     {
       "countryCode": "US",
-      "name": "United States",
-      "longname": "The United States of America",
+      "shortName": "United States",
+      "longName": "The United States of America",
       "sovereignty": "UN",
       "region": "NA",
       "population": 329453849
     },
     {
       "countryCode": "UY",
-      "name": "Uruguay",
-      "longname": "The Oriental Republic of Uruguay",
+      "shortName": "Uruguay",
+      "longName": "The Oriental Republic of Uruguay",
       "sovereignty": "UN",
       "region": "SA",
       "population": 3518552
     },
     {
       "countryCode": "UZ",
-      "name": "Uzbekistan",
-      "longname": "The Republic of Uzbekistan",
+      "shortName": "Uzbekistan",
+      "longName": "The Republic of Uzbekistan",
       "sovereignty": "UN",
       "region": "AS",
       "population": 34070275
     },
     {
       "countryCode": "VA",
-      "name": "Holy See",
-      "longname": "The Holy See",
+      "shortName": "Holy See",
+      "longName": "The Holy See",
       "sovereignty": "UN observer",
       "region": "EU",
       "population": 1000
     },
     {
       "countryCode": "VC",
-      "name": "Saint Vincent and the Grenadines",
-      "longname": "Saint Vincent and the Grenadines",
+      "shortName": "Saint Vincent and the Grenadines",
+      "longName": "Saint Vincent and the Grenadines",
       "sovereignty": "UN",
       "region": "NA",
       "population": 110211
     },
     {
       "countryCode": "VE",
-      "name": "Venezuela",
-      "longname": "The Bolivarian Republic of Venezuela",
+      "shortName": "Venezuela",
+      "longName": "The Bolivarian Republic of Venezuela",
       "sovereignty": "UN",
       "region": "SA",
       "population": 32219521
     },
     {
       "countryCode": "VG",
-      "name": "British Virgin Islands",
-      "longname": "The Virgin Islands",
+      "shortName": "British Virgin Islands",
+      "longName": "The Virgin Islands",
       "sovereignty": "United Kingdom",
       "region": "NA",
       "population": 30030
     },
     {
       "countryCode": "VI",
-      "name": "Virgin Islands (U.S.)",
-      "longname": "The Virgin Islands of the United States",
+      "shortName": "Virgin Islands (U.S.)",
+      "longName": "The Virgin Islands of the United States",
       "sovereignty": "United States",
       "region": "NA",
       "population": 104578
     },
     {
       "countryCode": "VN",
-      "name": "Viet Nam",
-      "longname": "The Socialist Republic of Viet Nam",
+      "shortName": "Viet Nam",
+      "longName": "The Socialist Republic of Viet Nam",
       "sovereignty": "UN",
       "region": "AS",
       "population": 96208984
     },
     {
       "countryCode": "VU",
-      "name": "Vanuatu",
-      "longname": "The Republic of Vanuatu",
+      "shortName": "Vanuatu",
+      "longName": "The Republic of Vanuatu",
       "sovereignty": "UN",
       "region": "OC",
       "population": 304500
     },
     {
       "countryCode": "WF",
-      "name": "Wallis and Futuna",
-      "longname": "The Territory of the Wallis and Futuna Islands",
+      "shortName": "Wallis and Futuna",
+      "longName": "The Territory of the Wallis and Futuna Islands",
       "sovereignty": "France",
       "region": "OC",
       "population": 11558
     },
     {
       "countryCode": "WS",
-      "name": "Samoa",
-      "longname": "The Independent State of Samoa",
+      "shortName": "Samoa",
+      "longName": "The Independent State of Samoa",
       "sovereignty": "UN",
       "region": "OC",
       "population": 195843
     },
     {
       "countryCode": "XK",
-      "name": "Kosovo",
-      "longname": "The Republic of Kosovo",
+      "shortName": "Kosovo",
+      "longName": "The Republic of Kosovo",
       "sovereignty": "disputed",
       "region": "EU",
       "population": 1810463
     },
     {
       "countryCode": "YE",
-      "name": "Yemen",
-      "longname": "The Republic of Yemen",
+      "shortName": "Yemen",
+      "longName": "The Republic of Yemen",
       "sovereignty": "UN",
       "region": "AS",
       "population": 29825968
     },
     {
       "countryCode": "YT",
-      "name": "Mayotte",
-      "longname": "The Department of Mayotte",
+      "shortName": "Mayotte",
+      "longName": "The Department of Mayotte",
       "sovereignty": "France",
       "region": "AF",
       "population": 279471
     },
     {
       "countryCode": "ZA",
-      "name": "South Africa",
-      "longname": "The Republic of South Africa",
+      "shortName": "South Africa",
+      "longName": "The Republic of South Africa",
       "sovereignty": "UN",
       "region": "AF",
       "population": 58775022
     },
     {
       "countryCode": "ZM",
-      "name": "Zambia",
-      "longname": "The Republic of Zambia",
+      "shortName": "Zambia",
+      "longName": "The Republic of Zambia",
       "sovereignty": "UN",
       "region": "AF",
       "population": 17381168
     },
     {
       "countryCode": "ZW",
-      "name": "Zimbabwe",
-      "longname": "The Republic of Zimbabwe",
+      "shortName": "Zimbabwe",
+      "longName": "The Republic of Zimbabwe",
       "sovereignty": "UN",
       "region": "AF",
       "population": 15159624
