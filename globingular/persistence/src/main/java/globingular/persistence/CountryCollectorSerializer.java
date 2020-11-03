@@ -6,8 +6,8 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 
-import globingular.core.Country;
 import globingular.core.CountryCollector;
+import globingular.core.Visit;
 
 /**
  * <p>CountryCollectorSerializer class has one method,
@@ -26,10 +26,13 @@ public class CountryCollectorSerializer extends JsonSerializer<CountryCollector>
             throws IOException {
                 gen.writeStartObject();
 
-                gen.writeFieldName("VisitedCountries");
-                String[] arr =
-                        collector.getVisitedCountries().stream().map(Country::getCountryCode).toArray(String[]::new);
-                gen.writeArray(arr, 0, arr.length);
+                gen.writeFieldName("Visits");
+                gen.writeStartArray();
+                for (Visit visit : collector.getVisits()) {
+                    gen.writeObject(visit);
+                }
+                gen.writeEndArray();
+
                 gen.writeEndObject();
     }
 }

@@ -27,8 +27,8 @@ public class CountryDeserializer extends JsonDeserializer<Country> {
             throws IOException {
         ObjectNode countryNode = p.readValueAsTree();
         String countryCode = countryNode.get("countryCode").asText();
-        String name = countryNode.get("name").asText();
-        String longname = countryNode.get("longname").asText();
+        String name = countryNode.get("shortName").asText();
+        String longname = countryNode.get("longName").asText();
         String sovereignty = countryNode.get("sovereignty").asText();
         String region = countryNode.get("region").asText();
         long population = countryNode.get("population").asLong();

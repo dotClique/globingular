@@ -17,6 +17,16 @@ import java.io.IOException;
 public final class App extends Application {
 
     /**
+     * Default window height.
+     */
+    public static final int WINDOW_HEIGHT = 600;
+
+    /**
+     * Default window width.
+     */
+    public static final int WINDOW_WIDTH = 1290;
+
+    /**
      * Starts the application in this instance.
      * @param primaryStage The Stage this application will fill
      * @throws IOException if FXML-file cannot be found
@@ -24,10 +34,9 @@ public final class App extends Application {
   @Override
   public void start(final Stage primaryStage) throws IOException {
     final Parent parent = FXMLLoader.load(getClass().getResource("/fxml/App.fxml"));
-    primaryStage.setScene(new Scene(parent));
+    primaryStage.setScene(new Scene(parent, WINDOW_WIDTH, WINDOW_HEIGHT));
     primaryStage.show();
     primaryStage.setTitle("Globingular");
-    parent.getStylesheets().add("css/App.css");
   }
 
     /**

@@ -3,14 +3,9 @@ module globingular.ui {
 	requires globingular.persistence;
 
 	requires javafx.fxml;
-	requires javafx.controls;
-	requires javafx.swing;
-
-	/* Batik-imports */
-	requires batik.transcoder;
-	requires batik.anim;
-	requires batik.util;
-	requires batik.dom;
+	requires javafx.web;
+	
+	requires java.desktop;
 
 	opens globingular.ui to javafx.fxml, javafx.graphics;
 }
