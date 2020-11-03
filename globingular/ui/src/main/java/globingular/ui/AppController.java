@@ -185,7 +185,8 @@ public class AppController implements Initializable {
                                 setNotVisitedOnMap(e.getElementRemoved());
                             }
                         });
-        countryCollector.visitedCountriesProperty().addListener((SetChangeListener<? super Country>) e -> {
+        countryCollector.visitedCountriesProperty()
+                        .addListener((SetChangeListener<? super Country>) e -> {
                             updateStatistics();
                         });
 
