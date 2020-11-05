@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.scene.image.Image;
 
 import java.io.IOException;
 
@@ -37,7 +38,8 @@ public final class App extends Application {
     primaryStage.setScene(new Scene(parent, WINDOW_WIDTH, WINDOW_HEIGHT));
     primaryStage.show();
     primaryStage.setTitle("Globingular");
-  }
+    primaryStage.getIcons().add(new Image("/icons/globingular.png"));
+    }
 
     /**
      * Main method, launches a new instance of the application.

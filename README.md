@@ -30,6 +30,10 @@ Certain reports are automatically aggregated and put into `target/staging/projec
 
 **Jacoco** is aggregated and a report is saved in a separate 'aggregator'-module. It can be viewed there: `target/staging/aggregator/project-reports.html`.
 
+**Surefire tests** are aggregated *only* if the reports already exist when `site` is run.
+To get the aggregated test results without running the tests twice, use
+`mvn verify -fn; mvn site -DskipTests`. The aggregate report can then be viewed in `target/staging/project-reports.html`.
+
 **Spotbugs** cannot be aggregated, so any errors are only visible on the page for each individual module, for example `target/staging/core/project-reports.html`, or when running `mvn verify`.
 
 ## Build and launch
