@@ -122,7 +122,6 @@ public class AppController implements Initializable {
     private Label mostPopulatedVisitedCountry;
 
     /**
-     * Initialize field which do not require FXML to be loaded.
      * The WebEngine for the world map.
      */
     private WebEngine webEngine;

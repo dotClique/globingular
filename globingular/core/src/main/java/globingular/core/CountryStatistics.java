@@ -13,7 +13,7 @@ public class CountryStatistics {
     /**
      * Constructor that initializes with a CountryCollector.
      * 
-     * @param countryCollector
+     * @param countryCollector that holds visited countries
      */
     public CountryStatistics(final CountryCollector countryCollector) {
         this.countryCollector = countryCollector;
@@ -33,8 +33,12 @@ public class CountryStatistics {
      * @return a country name and the population as a string
      */
     public String getMostPopulatedVisitedCountry() {
-        Country country = this.countryCollector.getVisitedCountries().stream()
-        .sorted((c1, c2) -> Long.compare(c2.getPopulation(), c1.getPopulation())).findFirst().orElse(null);
+        Country country = this.countryCollector
+                .getVisitedCountries()
+                .stream()
+                .max(Comparator.comparingLong(Country::getPopulation))
+                .orElse(null);
+
         if (country == null) {
             return "-";
         }

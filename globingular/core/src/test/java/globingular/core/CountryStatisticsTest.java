@@ -1,11 +1,7 @@
 package globingular.core;
 
-import globingular.core.World;
-import globingular.core.CountryCollector;
-import globingular.core.CountryStatistics;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -23,7 +19,10 @@ public class CountryStatisticsTest {
         world0 = new World(country0, country1);
         collector = new CountryCollector(world0);
     }
-    
+    /**
+     * Test for the method getNumberOfVisitedCountries() in CountryStatistics class.
+     * @see globingular.core.CountryStatistics#getNumberOfVisitedCountries()
+     */
     @Test
     public void testGetNumberOfVisitedCountries() {
         CountryStatistics countryStatistics = new CountryStatistics(collector);
@@ -34,6 +33,10 @@ public class CountryStatisticsTest {
         assertEquals("1", countryStatistics.getNumberOfVisitedCountries());
     }
 
+    /**
+     * Test for the method getMostPopulatedVisitedCountry() in CountryStatistics class.
+     * @see globingular.core.CountryStatistics#getMostPopulatedVisitedCountry()
+     */
     @Test
     public void testGetMostPopulatedVisitedCountry() {
         collector.removeAllVisitsToCountry(country0);
