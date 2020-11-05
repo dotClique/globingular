@@ -1,5 +1,7 @@
 package globingular.core;
 
+import java.util.Comparator;
+
 /**
  * The CountryStatistics class creates statistics that can be viewed in UI.
  */
