@@ -30,9 +30,7 @@ globingular.ui ..> globingular.persistence
 component javafx {
 	component "fxml" as javafx.fxml {
     }
-    component "controls" as javafx.controls {
-    }
-    component "swing" as javafx.swing {
+    component "web" as javafx.web {
     }
     component "base" as javafx.base {
     }
@@ -40,25 +38,7 @@ component javafx {
 
 'ui ..> javafx
 ui ..> javafx.fxml
-ui ..> javafx.controls
-ui ..> javafx.swing
+ui ..> javafx.web
 core ..> javafx.base
-
-component batik {
-    component "transcoder" as batik.transcoder {
-    }
-    component "anim" as batik.anim {
-    }
-    component "util" as batik.util {
-    }
-    component "dom" as batik.dom {
-    }
-}
-
-'ui ..> batik
-ui ..> batik.transcoder
-ui ..> batik.anim
-ui ..> batik.util
-ui ..> batik.dom
 
 @enduml
