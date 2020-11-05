@@ -1,83 +1,57 @@
 @startuml classes_ui
 
-skinparam PageMargin 50
-
 package globingular.ui {
-	class App [[java:App]] {
+	class App [[java:globingular.ui.App]] {
+		+{static}int WINDOW_HEIGHT
+		+{static}int WINDOW_WIDTH
 		+void start(Stage primaryStage)
 		+{static}void main(String[] args)
 	}
-	class Application [[java:com.sun.glass.ui.Application]] {
+	class Application [[java:com.apple.eawt.Application]] {
 	}
 	Application <|-- App
-
+	
+	
 	class AppController [[java:globingular.ui.AppController]] {
-		-PersistenceHandler persistence
-		-CountryCollector countryCollector
-		-World world
-		-Document document
-		-Country inputCountry
 		+{static}PseudoClass INVALID
 		+{static}PseudoClass BLANK
+		-{static}String MAP_ELEMENT_NAME
+		-{static}String MAP_ELEMENT_ID
+		-{static}String MAP_VISITED_COUNTRY_ATTRIBUTE
 		-Parent root
 		-ListView<Country> countriesList
 		-TextField countryInput
 		-Button countryAdd
 		-Button countryDel
-		-ImageView imgView
+		-WebView webView
+		-WebEngine webEngine
+		-PersistenceHandler persistence
+		-CountryCollector countryCollector
+		-World world
+		-Country inputCountry
+		-Document document
 		+AppController()
 		+void initialize(URL location, ResourceBundle resources)
 		+CountryCollector getCountryCollector()
 		~void onCountryAdd()
+		-void registerClickListenersOnExistingCountries()
 		-void onInputChange()
 		~void onCountryDel()
-		-void setColor(Country country, Colors color)
-		-void setColorAll(Collection<Country> countries, Colors color)
-		-void updateMap()
+		-void setVisitedOnMap(Country country)
+		-void setNotVisitedOnMap(Country country)
+		-void setVisitedOnMapAll(Collection<Country> countries)
+		-void setNotVisitedOnMapAll(Collection<Country> countries)
+		-void initializeCountriesList()
+		-Element getCountryMapElement(Country country)
 	}
-	interface Initializable [[java:javafx.fxml.Initializable]] {
+	interface Initializable [[java:org.glassfish.jersey.client.Initializable]] {
 	}
 	Initializable <|.. AppController
-
-	class BufferedImageTranscoder [[java:globingular.ui.BufferedImageTranscoder]] {
-		-BufferedImage img
-		+BufferedImage createImage(int w, int h)
-		+void writeImage(BufferedImage image, TranscoderOutput ignoredTO)
-		+BufferedImage getBufferedImage()
-		+void setImg(BufferedImage img)
-	}
-	class ImageTranscoder [[java:javax.imageio.ImageTranscoder]] {
-	}
-	ImageTranscoder <|-- BufferedImageTranscoder
-
-	enum Colors [[java:globingular.ui.Colors]] {
-		COUNTRY_NOT_VISITED
-		COUNTRY_VISITED
-		hex
-		~Colors(String hex)
-		+String getHex()
-	}
 }
-
-
-' package globingular.core {
-'     class Country {
-'     }
-'     class CountryCollector {
-'     }
-'     class World {
-'     }
-' }
-
-' package globingular.persistence {
-'     class PersistenceHandler {
-'     }
-' }
 
 AppController --> "persistence: 1" PersistenceHandler
 AppController --> "countryCollector: 1" CountryCollector
 AppController --> "world: 1" World
-AppController --> "inputCountry: 1" Country
-AppController --> "countriesList: *" Country
+AppController --> "inputCountry: 1 \n countriesList: *" Country
 
 @enduml
