@@ -206,6 +206,7 @@ public class AppController implements Initializable {
                 setVisitedOnMapAll(countryCollector.getVisitedCountries());
             }
         }));
+        updateStatistics();
     }
 
     /**
