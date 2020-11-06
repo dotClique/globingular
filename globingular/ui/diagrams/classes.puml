@@ -49,6 +49,18 @@ package globingular.ui {
 	Initializable <|.. AppController
 }
 
+class "persistence.PersistenceHandler" as PersistenceHandler {
+}
+
+class "core.Country" as Country {
+}
+
+class "core.CountryCollector" as CountryCollector {
+}
+
+class "core.World" as World {
+}
+
 AppController --> "persistence: 1" PersistenceHandler
 AppController --> "countryCollector: 1" CountryCollector
 AppController --> "world: 1" World
