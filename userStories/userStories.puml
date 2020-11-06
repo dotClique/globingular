@@ -25,5 +25,12 @@ AppController --> User: *Map updated with colored countries*
 title <b>User story 4</b>\nUser has been in Italy on holiday.\nThey open the app and click on Italy to mark it as visited.
 
 actor User
+User -> "~#webView: WebView" as webView: *click on Italy*
+webView -> AppController: *notifyListener(#Italy: Country)*
+AppController -> CountryCollector: isVisited(#Italy: Country)
+CountryCollector --> AppController: false
+AppController -> CountryCollector: registerVisit(#Italy: Country)
+CountryCollector --> webView: *notifyListener*
+webView --> User: *Map updated with colored countries*
 
 @enduml
