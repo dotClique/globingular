@@ -2,7 +2,7 @@
 
 ## Classes
 The projects class diagrams can be found in each modules own Diagrams folder.
-For example the Class-diagram for the Core module can be found in [globingular/core/diagrams/README.md](globingular/core/diagrams/README.md).
+For example the Class-diagram for the Core module can be found in [globingular/core/diagrams](/globingular/core/diagrams).
 
 ## Modules and dependencies
 The following diagram shows the different modules and packages in this project, as well as their dependencies between each other and to external dependencies:
@@ -53,4 +53,4 @@ core ..> javafx.base
 ```
 
 ## User stories
-The projects user stories, and their sequence diagrams can be found in [userStories](../userStories/README.md)
+The projects user stories, and their sequence diagrams can be found in [userStories](/userStories)

@@ -1,3 +1,7 @@
+# Class diagram for the Core module
+
+This page only shows this modules classes. For other diagrams, like modules, dependencies and user stories: [/diagrams](/diagrams)
+
 ```plantuml
 
 package globingular.core {

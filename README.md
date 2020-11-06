@@ -5,7 +5,7 @@
 The project is contained within the `globingular`-directory, and is separated into three separate modules: Core, Persistence and UI.
 
 ## Diagrams
-Class-, Module- and Sequence-diagrams can be found in the [Diagrams-folder](diagrams).
+Class-, Module- and Sequence-diagrams can be found in the [Diagrams-folder](/diagrams).
 
 ## Module descriptions
 
