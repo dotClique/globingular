@@ -2,7 +2,7 @@
 
 ## Classes
 The projects class diagrams can be found in each modules own Diagrams folder.
-For example the Class-diagram for the Core module can be found in [globingular/core/diagrams/classes.md](globingular/core/diagrams/classes.mc).
+For example the Class-diagram for the Core module can be found in [globingular/core/diagrams/README.md](globingular/core/diagrams/README.md).
 
 ## Modules and dependencies
 The following diagram shows the different modules and packages in this project, as well as their dependencies between each other and to external dependencies:
