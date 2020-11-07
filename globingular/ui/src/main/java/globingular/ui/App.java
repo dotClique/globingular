@@ -25,7 +25,7 @@ public final class App extends Application {
     /**
      * Default window width.
      */
-    public static final int WINDOW_WIDTH = 1290;
+    public static final int WINDOW_WIDTH = 1300;
 
     /**
      * Starts the application in this instance.
