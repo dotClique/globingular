@@ -1,16 +1,56 @@
 # PlantUML diagrams
 
-**NB:** The following diagrams should render in GitLab, but as we can't get it to work they're attached as pre-rendered PNG-files.
-
 ## Classes
-The following diagram shows all classes and their connections.
-![Classes](classes.png)
+The projects class diagrams can be found in each modules own Diagrams folder.
+For example the Class-diagram for the Core module can be found in [globingular/core/diagrams](/globingular/core/diagrams).
 
 ## Modules and dependencies
-The following diagram shows the different modules and packages in this project, as well as their dependencies between each other and to external modules.
-![Modules and dependencies](modules.png)
+The following diagram shows the different modules and packages in this project, as well as their dependencies between each other and to external dependencies:
 
+```plantuml
+
+component core {
+	package globingular.core
+}
+
+component persistence {
+	package globingular.persistence
+}
+
+component ui {
+	package globingular.ui
+}
+
+component jackson {
+    component "core" as jackson.core {
+    }
+    component "databind" as jackson.databind {
+    }
+}
+
+persistence ..> jackson.core
+persistence ..> jackson.databind
+
+
+
+globingular.ui ..> globingular.core
+globingular.ui ..> globingular.persistence
+
+component javafx {
+	component "fxml" as javafx.fxml {
+    }
+    component "web" as javafx.web {
+    }
+    component "base" as javafx.base {
+    }
+}
+
+'ui ..> javafx
+ui ..> javafx.fxml
+ui ..> javafx.web
+core ..> javafx.base
+
+```
 
 ## User stories
-The following diagram shows how the program will respond to a user completing *User Story 1*.
-![UserStories](userStories.png)
+The projects user stories, and their sequence diagrams can be found in [userStories](/userStories)
