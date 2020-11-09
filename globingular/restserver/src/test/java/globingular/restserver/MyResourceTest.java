@@ -1,7 +1,6 @@
 package globingular.restserver;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.InjectableValues;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import globingular.core.Country;
 import globingular.core.CountryCollector;
@@ -14,9 +13,6 @@ import org.glassfish.grizzly.http.server.HttpServer;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -66,10 +62,6 @@ public class MyResourceTest {
     public void testGetOne() throws JsonProcessingException {
         String responseMsg = target.path("countryCollector").path("hablebable").request().get(String.class);
         World world = new World(new Country("NO", "Norway"));
-        Map<String, Object> map = new HashMap<>();
-        map.put("_globingular_map_world", world);
-        InjectableValues injectableValues = new InjectableValues.Std(map);
-        objectMapper.setInjectableValues(injectableValues);
         CountryCollector countryCollector = objectMapper.readValue(responseMsg, CountryCollector.class);
         assertEquals("[[Norway at 2020-11-02T22:22:28.792700100 - 2020-11-03T22:22:28.792700100]]",
                 countryCollector.toString());

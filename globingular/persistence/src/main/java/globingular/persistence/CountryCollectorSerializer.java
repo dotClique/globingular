@@ -21,14 +21,17 @@ public class CountryCollectorSerializer extends JsonSerializer<CountryCollector>
      * Serialize a CountryCollector object into Json format.
      */
     @Override
-    public void serialize(final CountryCollector collector, final JsonGenerator gen,
+    public void serialize(final CountryCollector countryCollector, final JsonGenerator gen,
             final SerializerProvider serializers)
             throws IOException {
                 gen.writeStartObject();
 
+                gen.writeFieldName("World");
+                gen.writeObject(countryCollector.getWorld());
+
                 gen.writeFieldName("Visits");
                 gen.writeStartArray();
-                for (Visit visit : collector.getVisits()) {
+                for (Visit visit : countryCollector.getVisits()) {
                     gen.writeObject(visit);
                 }
                 gen.writeEndArray();

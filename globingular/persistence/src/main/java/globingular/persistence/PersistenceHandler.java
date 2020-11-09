@@ -2,6 +2,7 @@ package globingular.persistence;
 
 import com.fasterxml.jackson.databind.InjectableValues;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import globingular.core.CountryCollector;
 import globingular.core.World;
 import globingular.core.Country;
@@ -16,6 +17,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
 
 /**
  * <p>PersistenceHandler handles file reading and writing from JSON
@@ -61,12 +63,21 @@ public class PersistenceHandler {
     private final ObjectMapper objectMapper = getObjectMapper();
 
     /**
-     * Get a valid instance of objectmapper.
+     * Get a valid objectMapper-instance with the the correct modules registered,
+     * and with an empty Map as an {@link InjectableValues}.
      *
-     * @return an objectmapper instance
+     * @return an objectMapper instance
      */
     public ObjectMapper getObjectMapper() {
-        return new ObjectMapper().registerModule(new CountryCollectorModule());
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new CountryCollectorModule());
+
+        // Create a new InjectableValues-instance with an empty Map and add to the mapper
+        InjectableValues.Std injectableValues = new InjectableValues.Std();
+        injectableValues.addValue("_globingular", new HashMap<String, Object>());
+        mapper.setInjectableValues(injectableValues);
+
+        return mapper;
     }
 
     /**
@@ -76,10 +87,6 @@ public class PersistenceHandler {
      */
     public CountryCollector loadCountryCollector() {
         World world = loadWorld();
-        // Inject value of world into context for CountryCollector-parsing
-        InjectableValues.Std injectableWorlds = new InjectableValues.Std();
-        injectableWorlds.addValue("_globingular_map_world", world);
-        objectMapper.setInjectableValues(injectableWorlds);
 
         CountryCollector countryCollector = new CountryCollector(world);
         try (InputStream in = new BufferedInputStream(new FileInputStream(FILE_COLLECTOR.toFile()))) {
