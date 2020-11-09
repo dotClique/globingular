@@ -46,4 +46,18 @@ public class CountryStatistics {
         }
         return country.getShortName() + " (" + country.getPopulation() + ")";
     }
+
+    /**
+     * Gets the number of visited countries on each continent.
+     * 
+     * @param continent a string representation of the continent
+     * @return the number of countries visited on that continent
+     */
+    public Long getNumberOfCountriesVisitedOnContinent(final String continent) {
+        return this.countryCollector
+            .getVisitedCountries()
+            .stream()
+            .filter(c -> c.getRegion().equals(continent))
+            .count();
+    }
 }
