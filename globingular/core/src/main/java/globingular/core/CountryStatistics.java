@@ -60,4 +60,18 @@ public class CountryStatistics {
             .filter(c -> c.getRegion().equals(continent))
             .count();
     }
+
+    /**
+     * Gets countries that start with a specific letter.
+     * 
+     * @param letter a character
+     * @return the number of countries visited that start with this letter
+     */
+    public Long getNumberOfCountriesVisitedThatStartWithLetter(final char letter) {
+        return this.countryCollector
+            .getVisitedCountries()
+            .stream()
+            .filter(c -> c.getShortName().startsWith(String.valueOf(letter).toUpperCase()))
+            .count();
+    }
 }
