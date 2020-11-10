@@ -77,8 +77,12 @@
     <module name="JavadocType"/>
     <module name="MissingJavadocType"/>
     <module name="JavadocVariable"/>
-    <module name="JavadocStyle"/>
-    <module name="MissingJavadocMethod"/>
+    <module name="JavadocStyle" />
+    <module name="MissingJavadocMethod" />
+
+    <!-- Checks that param is explained in JavaDoc.    -->
+    <!-- See https://checkstyle.org/config_javadoc.html#NonEmptyAtclauseDescription -->
+    <module name="NonEmptyAtclauseDescription"/>
 
     <!-- Checks for Naming Conventions.                  -->
     <!-- See https://checkstyle.org/config_naming.html -->

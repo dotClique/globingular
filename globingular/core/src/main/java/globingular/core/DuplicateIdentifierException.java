@@ -15,7 +15,7 @@ public class DuplicateIdentifierException extends IllegalArgumentException {
     /**
      * Construct a new DuplicateIdentifierException.
      *
-     * @param s
+     * @param s String to go in super's constructor
      */
     public DuplicateIdentifierException(final String s) {
         super(s);
