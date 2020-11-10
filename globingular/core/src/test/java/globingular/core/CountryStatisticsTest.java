@@ -47,4 +47,33 @@ public class CountryStatisticsTest {
         collector.registerVisit(country1);
         assertEquals("French Guiana (290601)", countryStatistics.getMostPopulatedVisitedCountry());
     }
+
+    /**
+     * Test to see if number of visited countries on a continent is correct.
+     * @see globingular.core.CountryStatistics#getNumberOfCountriesVisitedOnContinent()
+     */
+    @Test
+    public void testGetNumberOfCountriesVisitedOnContinent() {
+        collector.removeAllVisitsToCountry(country0);
+        collector.removeAllVisitsToCountry(country1);
+        CountryStatistics countryStatistics = new CountryStatistics(collector);
+        assertEquals(0, countryStatistics.getNumberOfCountriesVisitedOnContinent("EU"));
+        collector.registerVisit(country0);
+        assertEquals(1, countryStatistics.getNumberOfCountriesVisitedOnContinent("EU"));
+    }
+
+    /**
+     * Test to see if number of countries visited that start with letter is correct.
+     * @see globingular.core.CountryStatistics#getNumberOfCountriesVisitedThatStartWithLetter()
+     */
+    @Test
+    public void testGetNumberOfCountriesVisitedThatStartWithLetter() {
+        collector.removeAllVisitsToCountry(country0);
+        collector.removeAllVisitsToCountry(country1);
+        CountryStatistics countryStatistics = new CountryStatistics(collector);
+        assertEquals(0, countryStatistics.getNumberOfCountriesVisitedThatStartWithLetter('A'));
+        collector.registerVisit(country0);
+        assertEquals(1, countryStatistics.getNumberOfCountriesVisitedThatStartWithLetter('A'));
+
+    }
 }

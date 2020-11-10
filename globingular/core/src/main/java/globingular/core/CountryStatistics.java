@@ -57,7 +57,7 @@ public class CountryStatistics {
         return this.countryCollector
             .getVisitedCountries()
             .stream()
-            .filter(c -> c.getRegion().equals(continent))
+            .filter(c -> c.getRegion().equals(continent.toUpperCase()))
             .count();
     }
 
