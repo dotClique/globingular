@@ -1,20 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<?import javafx.geometry.Insets ?>
-<?import javafx.scene.control.Button ?>
-<?import javafx.scene.control.Label ?>
-<?import javafx.scene.control.ListView ?>
-<?import javafx.scene.control.ScrollPane ?>
-<?import javafx.scene.control.Separator ?>
-<?import javafx.scene.control.Tab ?>
-<?import javafx.scene.control.TabPane ?>
-<?import javafx.scene.control.TextField ?>
-<?import javafx.scene.layout.FlowPane ?>
-<?import javafx.scene.layout.GridPane ?>
-<?import javafx.scene.layout.HBox ?>
-<?import javafx.scene.text.Font ?>
-<?import javafx.scene.web.WebView ?>
-
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.web.WebView?>
 <HBox fx:id="root" prefHeight="720" prefWidth="1280.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="globingular.ui.AppController">
     <TabPane tabClosingPolicy="UNAVAILABLE" HBox.hgrow="ALWAYS">
         <Tab text="Map">

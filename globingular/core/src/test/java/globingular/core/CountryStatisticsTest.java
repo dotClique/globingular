@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Class that tests the implementation of country statistics.
+ * Class that tests the implementation of {@link CountryStatistics}.
  */
 public class CountryStatisticsTest {
     static Country country0, country1;
@@ -19,10 +19,7 @@ public class CountryStatisticsTest {
         world0 = new World(country0, country1);
         collector = new CountryCollector(world0);
     }
-    /**
-     * Test for the method getNumberOfVisitedCountries() in CountryStatistics class.
-     * @see globingular.core.CountryStatistics#getNumberOfVisitedCountries
-     */
+
     @Test
     public void testGetNumberOfVisitedCountries() {
         CountryStatistics countryStatistics = new CountryStatistics(collector);

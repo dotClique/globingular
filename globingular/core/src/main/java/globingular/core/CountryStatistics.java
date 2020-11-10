@@ -52,14 +52,14 @@ public class CountryStatistics {
     /**
      * Gets the number of visited countries in a region.
      * 
-     * @param continent a string representation of the continent
-     * @return the number of countries visited on that continent
+     * @param region a string representation of the region
+     * @return the number of countries visited on that region
      */
-    public Long getNumberOfCountriesVisitedInRegion(final String continent) {
+    public Long getNumberOfCountriesVisitedInRegion(final String region) {
         return this.countryCollector
             .getVisitedCountries()
             .stream()
-            .filter(c -> c.getRegion().equals(continent.toUpperCase()))
+            .filter(c -> c.getRegion().equals(region.toUpperCase()))
             .count();
     }
 
@@ -84,7 +84,7 @@ public class CountryStatistics {
      */
     public Map<String, String> getAllStatistics() {
         Map<String, String> map = new HashMap<>();
-        map.put("Number of visited countries", getNumberOfVisitedCountries().toString());
+        map.put("Number of visited countries", getNumberOfVisitedCountries());
         map.put("Most populated visited country", getMostPopulatedVisitedCountry());
         map.put("Number of countries visited in Europe", getNumberOfCountriesVisitedInRegion("EU").toString());
         map.put("Number of countries visited in Asia", getNumberOfCountriesVisitedInRegion("AS").toString());
