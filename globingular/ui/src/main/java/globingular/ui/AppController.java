@@ -164,7 +164,7 @@ public class AppController implements Initializable {
     /**
      * Padding for labels in gridpane.
      */
-    private static final int PADDING = 10;
+    private static final int TEXT_LABEL_PADDING = 10;
 
     /**
      * Initialize fields which do not require FXML to be loaded.
@@ -387,7 +387,7 @@ public class AppController implements Initializable {
         int newRowIndex = 0;
 
         Label title = createConfiguredLabel("Statistics");
-        title.setFont(Font.font("System", this.TITLE_FONT_SIZE));
+        title.setFont(Font.font("System", TITLE_FONT_SIZE));
         statisticsGrid.add(title, 0, newRowIndex++);
 
         for (Map.Entry<String, String> entry : countryStatistics.getAllStatistics().entrySet()) {
@@ -403,7 +403,7 @@ public class AppController implements Initializable {
      */
     private Label createConfiguredLabel(final String text) {
         Label label = new Label(text);
-        label.setPadding(new Insets(this.PADDING));
+        label.setPadding(new Insets(TEXT_LABEL_PADDING));
         return label;
     }
 

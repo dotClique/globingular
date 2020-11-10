@@ -21,7 +21,7 @@ public class CountryStatisticsTest {
     }
     /**
      * Test for the method getNumberOfVisitedCountries() in CountryStatistics class.
-     * @see globingular.core.CountryStatistics#getNumberOfVisitedCountries()
+     * @see globingular.core.CountryStatistics#getNumberOfVisitedCountries
      */
     @Test
     public void testGetNumberOfVisitedCountries() {
@@ -33,10 +33,6 @@ public class CountryStatisticsTest {
         assertEquals("1", countryStatistics.getNumberOfVisitedCountries());
     }
 
-    /**
-     * Test for the method getMostPopulatedVisitedCountry() in CountryStatistics class.
-     * @see globingular.core.CountryStatistics#getMostPopulatedVisitedCountry()
-     */
     @Test
     public void testGetMostPopulatedVisitedCountry() {
         collector.removeAllVisitsToCountry(country0);
@@ -48,24 +44,16 @@ public class CountryStatisticsTest {
         assertEquals("French Guiana (290601)", countryStatistics.getMostPopulatedVisitedCountry());
     }
 
-    /**
-     * Test to see if number of visited countries on a continent is correct.
-     * @see globingular.core.CountryStatistics#getNumberOfCountriesVisitedOnContinent()
-     */
     @Test
-    public void testGetNumberOfCountriesVisitedOnContinent() {
+    public void testGetNumberOfCountriesVisitedInRegion() {
         collector.removeAllVisitsToCountry(country0);
         collector.removeAllVisitsToCountry(country1);
         CountryStatistics countryStatistics = new CountryStatistics(collector);
-        assertEquals(0, countryStatistics.getNumberOfCountriesVisitedOnContinent("EU"));
+        assertEquals(0, countryStatistics.getNumberOfCountriesVisitedInRegion("EU"));
         collector.registerVisit(country0);
-        assertEquals(1, countryStatistics.getNumberOfCountriesVisitedOnContinent("EU"));
+        assertEquals(1, countryStatistics.getNumberOfCountriesVisitedInRegion("EU"));
     }
 
-    /**
-     * Test to see if number of countries visited that start with letter is correct.
-     * @see globingular.core.CountryStatistics#getNumberOfCountriesVisitedThatStartWithLetter()
-     */
     @Test
     public void testGetNumberOfCountriesVisitedThatStartWithLetter() {
         collector.removeAllVisitsToCountry(country0);
@@ -73,6 +61,8 @@ public class CountryStatisticsTest {
         CountryStatistics countryStatistics = new CountryStatistics(collector);
         assertEquals(0, countryStatistics.getNumberOfCountriesVisitedThatStartWithLetter('A'));
         collector.registerVisit(country0);
+        assertEquals(1, countryStatistics.getNumberOfCountriesVisitedThatStartWithLetter('A'));
+        collector.registerVisit(country1);
         assertEquals(1, countryStatistics.getNumberOfCountriesVisitedThatStartWithLetter('A'));
 
     }

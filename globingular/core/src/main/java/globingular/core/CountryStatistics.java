@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.HashMap;
 
 /**
- * The CountryStatistics class creates statistics that can be viewed in UI.
+ * The CountryStatistics class creates statistics about visited countries.
  */
 public class CountryStatistics {
 
@@ -17,7 +17,7 @@ public class CountryStatistics {
     /**
      * Constructor that initializes with a CountryCollector.
      * 
-     * @param countryCollector that holds visited countries
+     * @param countryCollector - A CountryCollector that holds visited countries
      */
     public CountryStatistics(final CountryCollector countryCollector) {
         this.countryCollector = countryCollector;
@@ -50,12 +50,12 @@ public class CountryStatistics {
     }
 
     /**
-     * Gets the number of visited countries on each continent.
+     * Gets the number of visited countries in a region.
      * 
      * @param continent a string representation of the continent
      * @return the number of countries visited on that continent
      */
-    public Long getNumberOfCountriesVisitedOnContinent(final String continent) {
+    public Long getNumberOfCountriesVisitedInRegion(final String continent) {
         return this.countryCollector
             .getVisitedCountries()
             .stream()
@@ -83,20 +83,20 @@ public class CountryStatistics {
      * @return map of strings
      */
     public Map<String, String> getAllStatistics() {
-        Map<String, String> map = new HashMap<String, String>();
-        map.put("Number of visited countries", String.valueOf(getNumberOfVisitedCountries()));
+        Map<String, String> map = new HashMap<>();
+        map.put("Number of visited countries", getNumberOfVisitedCountries().toString());
         map.put("Most populated visited country", getMostPopulatedVisitedCountry());
-        map.put("Number of countries visited in Europe", String.valueOf(getNumberOfCountriesVisitedOnContinent("EU")));
-        map.put("Number of countries visited in Asia", String.valueOf(getNumberOfCountriesVisitedOnContinent("AS")));
-        map.put("Number of countries visited in Africa", String.valueOf(getNumberOfCountriesVisitedOnContinent("AF")));
+        map.put("Number of countries visited in Europe", getNumberOfCountriesVisitedInRegion("EU").toString());
+        map.put("Number of countries visited in Asia", getNumberOfCountriesVisitedInRegion("AS").toString());
+        map.put("Number of countries visited in Africa", getNumberOfCountriesVisitedInRegion("AF").toString());
         map.put("Number of countries visited in North America",
-            String.valueOf(getNumberOfCountriesVisitedOnContinent("NA")));
+            getNumberOfCountriesVisitedInRegion("NA").toString());
         map.put("Number of countries visited in South America",
-            String.valueOf(getNumberOfCountriesVisitedOnContinent("SA")));
+            getNumberOfCountriesVisitedInRegion("SA").toString());
         map.put("Number of countries visited in Oceania",
-            String.valueOf(getNumberOfCountriesVisitedOnContinent("OC")));
+            getNumberOfCountriesVisitedInRegion("OC").toString());
         map.put("Number of countries that start with letter A",
-            String.valueOf(getNumberOfCountriesVisitedThatStartWithLetter('A')));
+            getNumberOfCountriesVisitedThatStartWithLetter('A').toString());
 
         return map;
     }
