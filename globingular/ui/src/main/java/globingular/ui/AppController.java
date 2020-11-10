@@ -19,6 +19,10 @@ import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextField;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.GridPane;
+import javafx.geometry.Insets;
+import javafx.scene.text.Font;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.events.EventTarget;
@@ -26,6 +30,7 @@ import org.w3c.dom.events.EventTarget;
 import java.net.URL;
 import java.util.Collection;
 import java.util.ResourceBundle;
+import java.util.Map;
 
 /**
  * <p>The AppController class handles the interaction between the FXML-file and
@@ -110,16 +115,16 @@ public class AppController implements Initializable {
     private WebView webView;
 
     /**
-     * A label containing a string with the number of countries visited.
+     * A HBox containing the entire statistics gridpane.
      */
     @FXML
-    private Label numberOfCountriesVisited;
+    private HBox statistics;
 
     /**
-     * A label with a string of the most populated country visited.
+     * A GridPane where statistics will be added.
      */
     @FXML
-    private Label mostPopulatedVisitedCountry;
+    private GridPane statisticsGrid;
 
     /**
      * The WebEngine for the world map.
@@ -150,6 +155,16 @@ public class AppController implements Initializable {
      * Manager of statistics about countries the user has visited.
      */
     private CountryStatistics countryStatistics;
+
+    /**
+     * Font size for titles in statistics tab.
+     */
+    private static final int TITLE_FONT_SIZE = 26;
+
+    /**
+     * Padding for labels in gridpane.
+     */
+    private static final int PADDING = 10;
 
     /**
      * Initialize fields which do not require FXML to be loaded.
@@ -368,8 +383,28 @@ public class AppController implements Initializable {
      * Update statistics view in the UI.
      */
     private void updateStatistics() {
-        numberOfCountriesVisited.setText(countryStatistics.getNumberOfVisitedCountries());
-        mostPopulatedVisitedCountry.setText(countryStatistics.getMostPopulatedVisitedCountry());
+        statisticsGrid.getChildren().clear();
+        int newRowIndex = 0;
+
+        Label title = createConfiguredLabel("Statistics");
+        title.setFont(Font.font("System", this.TITLE_FONT_SIZE));
+        statisticsGrid.add(title, 0, newRowIndex++);
+
+        for (Map.Entry<String, String> entry : countryStatistics.getAllStatistics().entrySet()) {
+            statisticsGrid.addRow(newRowIndex++, createConfiguredLabel(entry.getKey() + ": "),
+                createConfiguredLabel(entry.getValue()));
+        }
+    }
+
+    /**
+     * Creates a configured label with padding.
+     * @param text a string which you want to display as a label
+     * @return a label with the desired text
+     */
+    private Label createConfiguredLabel(final String text) {
+        Label label = new Label(text);
+        label.setPadding(new Insets(this.PADDING));
+        return label;
     }
 
     /**

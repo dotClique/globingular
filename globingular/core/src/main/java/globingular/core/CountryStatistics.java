@@ -1,6 +1,8 @@
 package globingular.core;
 
 import java.util.Comparator;
+import java.util.Map;
+import java.util.HashMap;
 
 /**
  * The CountryStatistics class creates statistics that can be viewed in UI.
@@ -73,5 +75,29 @@ public class CountryStatistics {
             .stream()
             .filter(c -> c.getShortName().startsWith(String.valueOf(letter).toUpperCase()))
             .count();
+    }
+
+    /**
+     * Map with all the statistics.
+     * 
+     * @return map of strings
+     */
+    public Map<String, String> getAllStatistics() {
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("Number of visited countries", String.valueOf(getNumberOfVisitedCountries()));
+        map.put("Most populated visited country", getMostPopulatedVisitedCountry());
+        map.put("Number of countries visited in Europe", String.valueOf(getNumberOfCountriesVisitedOnContinent("EU")));
+        map.put("Number of countries visited in Asia", String.valueOf(getNumberOfCountriesVisitedOnContinent("AS")));
+        map.put("Number of countries visited in Africa", String.valueOf(getNumberOfCountriesVisitedOnContinent("AF")));
+        map.put("Number of countries visited in North America",
+            String.valueOf(getNumberOfCountriesVisitedOnContinent("NA")));
+        map.put("Number of countries visited in South America",
+            String.valueOf(getNumberOfCountriesVisitedOnContinent("SA")));
+        map.put("Number of countries visited in Oceania",
+            String.valueOf(getNumberOfCountriesVisitedOnContinent("OC")));
+        map.put("Number of countries that start with letter A",
+            String.valueOf(getNumberOfCountriesVisitedThatStartWithLetter('A')));
+
+        return map;
     }
 }

@@ -4,91 +4,55 @@
 <?import javafx.scene.control.Button ?>
 <?import javafx.scene.control.Label ?>
 <?import javafx.scene.control.ListView ?>
+<?import javafx.scene.control.ScrollPane ?>
+<?import javafx.scene.control.Separator ?>
 <?import javafx.scene.control.Tab ?>
-<?import javafx.scene.layout.Pane ?>
 <?import javafx.scene.control.TabPane ?>
 <?import javafx.scene.control.TextField ?>
 <?import javafx.scene.layout.AnchorPane ?>
-<?import javafx.scene.layout.GridPane ?>
-<?import javafx.scene.web.WebView ?>
-<?import javafx.scene.layout.HBox ?>
-<?import javafx.scene.control.ScrollPane ?>
+<?import javafx.scene.layout.ColumnConstraints ?>
 <?import javafx.scene.layout.FlowPane ?>
+<?import javafx.scene.layout.GridPane ?>
+<?import javafx.scene.layout.HBox ?>
+<?import javafx.scene.layout.RowConstraints ?>
 <?import javafx.scene.text.Font ?>
-<?import javafx.scene.layout.VBox ?>
-<?import javafx.scene.control.Separator ?>
+<?import javafx.scene.web.WebView ?>
+
 <HBox fx:id="root" prefHeight="720" prefWidth="1280.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="globingular.ui.AppController">
     <TabPane tabClosingPolicy="UNAVAILABLE" HBox.hgrow="ALWAYS">
         <Tab text="Map">
-            <ScrollPane hbarPolicy="NEVER" fitToWidth="true" fx:id="mapPageScroll">
-                <FlowPane vgap="5" hgap="10" minWidth="0" fx:id="mapFlow">
+            <ScrollPane fx:id="mapPageScroll" fitToWidth="true" hbarPolicy="NEVER">
+                <FlowPane fx:id="mapFlow" hgap="10" minWidth="0" vgap="5">
                     <padding>
-                        <Insets left="20" right="20" top="20" bottom="20" />
+                        <Insets bottom="20" left="20" right="20" top="20" />
                     </padding>
-                    <ScrollPane vbarPolicy="NEVER" minWidth="0" maxWidth="${mapFlow.width-35}" prefViewportWidth="1000">
-                        <WebView fx:id="webView" minWidth="1000" minHeight="507" prefHeight="507" maxHeight="507" />
+                    <ScrollPane maxWidth="${mapFlow.width-35}" minWidth="0" prefViewportWidth="1000" vbarPolicy="NEVER">
+                        <WebView fx:id="webView" maxHeight="507" minHeight="507" minWidth="1000" prefHeight="507" />
                     </ScrollPane>
-                    <GridPane vgap="5" hgap="5" minHeight="200">
-                        <ListView fx:id="countriesList" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="0" GridPane.columnIndex="0" GridPane.columnSpan="3" />
-                        <TextField fx:id="countryInput" onAction="#onCountryAdd" prefHeight="27.0" GridPane.rowIndex="1" GridPane.columnIndex="0" />
-                        <Button fx:id="countryAdd" mnemonicParsing="false" onAction="#onCountryAdd" prefHeight="27.0" prefWidth="27.0" text="+" GridPane.rowIndex="1" GridPane.columnIndex="1" />
-                        <Button fx:id="countryDel" mnemonicParsing="false" onAction="#onCountryDel" prefHeight="27.0" prefWidth="27.0" text="-" GridPane.rowIndex="1" GridPane.columnIndex="2" />
+                    <GridPane hgap="5" minHeight="200" vgap="5">
+                        <ListView fx:id="countriesList" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="0" GridPane.columnSpan="3" GridPane.rowIndex="0" />
+                        <TextField fx:id="countryInput" onAction="#onCountryAdd" prefHeight="27.0" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                        <Button fx:id="countryAdd" mnemonicParsing="false" onAction="#onCountryAdd" prefHeight="27.0" prefWidth="27.0" text="+" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <Button fx:id="countryDel" mnemonicParsing="false" onAction="#onCountryDel" prefHeight="27.0" prefWidth="27.0" text="-" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                        <columnConstraints>
+                            <ColumnConstraints />
+                            <ColumnConstraints />
+                            <ColumnConstraints />
+                        </columnConstraints>
+                        <rowConstraints>
+                            <RowConstraints />
+                            <RowConstraints />
+                        </rowConstraints>
                     </GridPane>
                 </FlowPane>
             </ScrollPane>
         </Tab>
         <Tab text="Statistics">
-            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                <HBox prefHeight="690.0" prefWidth="1280.0">
-                    <VBox prefHeight="600.0" prefWidth="640.0">
-                        <Label text="Statistics">
-                            <font>
-                                <Font size="26.0" />
-                            </font>
-                            <padding>
-                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                            </padding>
-                        </Label>
-                        <HBox prefHeight="25.0" prefWidth="200.0">
-                            <Label text="Number of countries visited:">
-                                <font>
-                                    <Font size="14.0" />
-                                </font>
-                                <padding>
-                                    <Insets right="10.0" />
-                                </padding>
-                            </Label>
-                            <Label fx:id="numberOfCountriesVisited" text="-">
-                                <font>
-                                    <Font size="14.0" />
-                                </font>
-                            </Label>
-                            <padding>
-                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                            </padding>
-                        </HBox>
-                        <HBox prefHeight="25.0" prefWidth="200.0">
-                            <Label text="Most populated visited country:">
-                                <font>
-                                    <Font size="14.0" />
-                                </font>
-                                <padding>
-                                    <Insets right="10.0" />
-                                </padding>
-                            </Label>
-                            <Label fx:id="mostPopulatedVisitedCountry" text="-">
-                                <font>
-                                    <Font size="14.0" />
-                                </font>
-                            </Label>
-                            <padding>
-                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                            </padding>
-                        </HBox>
-                    </VBox>
-                    <Separator orientation="VERTICAL" prefHeight="200.0" />
-                </HBox>
-            </AnchorPane>
+            <HBox fx:id="statistics" prefHeight="690.0" prefWidth="1280.0">
+                <GridPane fx:id="statisticsGrid" prefHeight="125.0" prefWidth="639.0">
+                </GridPane>
+                <Separator orientation="VERTICAL" prefHeight="200.0" />
+            </HBox>
         </Tab>
     </TabPane>
 </HBox>
