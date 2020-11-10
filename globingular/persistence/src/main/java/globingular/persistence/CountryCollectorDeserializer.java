@@ -10,7 +10,6 @@ import globingular.core.Visit;
 import globingular.core.World;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Map;
 
 /**
@@ -44,25 +43,19 @@ public class CountryCollectorDeserializer extends JsonDeserializer<CountryCollec
         if (map.containsKey("_globingular_world")) {
             world = (World) map.get("_globingular_world");
         } else {
-            if (node.has("World")) {
-                // If World is present as a node in the JSON, use it!
-                JsonParser worldParser = node.get("World").traverse(p.getCodec());
-                world = p.getCodec().readValue(worldParser, World.class);
-            } else {
-                // Else load default World
-                try (InputStream in = getClass().getResourceAsStream("/json/sampleWorld.json")) {
-                    world = (new PersistenceHandler()).getObjectMapper().readValue(in, World.class);
-                } catch (IOException err) {
-                    throw err;
-                }
-            }
+            // If World is present as a node in the JSON, use it!
+            World tmpWorld = node.get("World").traverse(p.getCodec()).readValueAs(World.class);
+
+            PersistenceHandler persitencHandler = (PersistenceHandler)
+            ctxt.findInjectableValue("_globingular_persistence", null, null);
+            world = persitencHandler.getDefaultWorldOr(tmpWorld.getWorldName(), tmpWorld);
+
             map.put("_globingular_world", world);
         }
 
         CountryCollector countryCollector = new CountryCollector(world);
 
-        JsonParser visitParser = node.get("Visits").traverse(p.getCodec());
-        Visit[] visits = p.getCodec().readValue(visitParser, Visit[].class);
+        Visit[] visits = node.get("Visits").traverse(p.getCodec()).readValueAs(Visit[].class);
 
         for (Visit visit : visits) {
             countryCollector.registerVisit(visit);

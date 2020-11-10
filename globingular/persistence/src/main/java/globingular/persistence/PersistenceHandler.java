@@ -18,6 +18,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * <p>PersistenceHandler handles file reading and writing from JSON
@@ -63,6 +64,20 @@ public class PersistenceHandler {
     private final ObjectMapper objectMapper = getObjectMapper();
 
     /**
+     * Map containing default worlds shipped as part of the application.
+     */
+    private final Map<String, World> defaultWorlds;
+
+    /**
+     * Initialize a new PersistenceHandler with default parameters.
+     */
+    public PersistenceHandler() {
+        World world = loadMapWorld();
+        defaultWorlds = new HashMap<>();
+        defaultWorlds.put("Earth", world);
+    }
+
+    /**
      * Get a valid objectMapper-instance with the the correct modules registered,
      * and with an empty Map as an {@link InjectableValues}.
      *
@@ -75,6 +90,7 @@ public class PersistenceHandler {
         // Create a new InjectableValues-instance with an empty Map and add to the mapper
         InjectableValues.Std injectableValues = new InjectableValues.Std();
         injectableValues.addValue("_globingular", new HashMap<String, Object>());
+        injectableValues.addValue("_globingular_persistence", this);
         mapper.setInjectableValues(injectableValues);
 
         return mapper;
@@ -94,14 +110,35 @@ public class PersistenceHandler {
         } catch (FileNotFoundException e) {
             try (InputStream in = getClass().getResourceAsStream(SAMPLE_COLLECTOR)) {
                 countryCollector = objectMapper.readValue(in, CountryCollector.class);
-            } catch (Exception err) {
+            } catch (IOException err) {
                 err.printStackTrace();
             }
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
         return countryCollector;
+    }
+
+    /**
+     * If {@code worldName} is a default world, retrieve it. Returns {@code null} if not.
+     * 
+     * @param worldName The world name to check if is a default world
+     * @return Return the World-instance for the world name, or {@code null} if not default
+     */
+    public World getDefaultWorld(final String worldName) {
+        return this.getDefaultWorldOr(worldName, null);
+    }
+
+    /**
+     * If {@code worldName} is a default world, retrieve it. Returns {@code or} if not.
+     * 
+     * @param worldName The world name to check if is a default world
+     * @param or The world to return if not a default world
+     * @return Return the World-instance for the world name, or {@code or} if not default
+     */
+    public World getDefaultWorldOr(final String worldName, final World or) {
+        return this.defaultWorlds.getOrDefault(worldName, or);
     }
 
     /**
@@ -120,7 +157,7 @@ public class PersistenceHandler {
         World world = new World();
         try (InputStream in = getClass().getResourceAsStream(FILE_MAP_WORLD)) {
             world = objectMapper.readValue(in, World.class);
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
 

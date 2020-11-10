@@ -27,8 +27,9 @@ public class WorldDeserializer extends JsonDeserializer<World> {
             throws IOException {
         ObjectNode o = p.readValueAsTree();
 
-        JsonParser countryParser = o.get("Countries").traverse(p.getCodec());
-        Country[] countries = p.getCodec().readValue(countryParser, Country[].class);
-        return new World(countries);
+        String worldName = o.get("WorldName").asText();
+        Country[] countries = o.get("Countries").traverse(p.getCodec()).readValueAs(Country[].class);
+
+        return new World(worldName, countries);
     }
 }

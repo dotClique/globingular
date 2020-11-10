@@ -25,6 +25,10 @@ public class WorldSerializer extends JsonSerializer<World> {
     public void serialize(final World value, final JsonGenerator gen, final SerializerProvider serializers)
             throws IOException {
         gen.writeStartObject();
+
+        gen.writeFieldName("WorldName");
+        gen.writeString(value.getWorldName());
+
         gen.writeFieldName("Countries");
         gen.writeStartArray();
         for (Country country : value.getCountries()) {
