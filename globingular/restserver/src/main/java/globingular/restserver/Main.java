@@ -18,7 +18,7 @@ public final class Main {
     /**
      * Base URI the Grizzly HTTP server will listen on.
      */
-    public static final String BASE_URI = "http://localhost:8081/globingular/";
+    public static final String BASE_URI = "http://localhost:8081/";
 
     /**
      * Starts Grizzly HTTP server exposing JAX-RS resources defined in this application.

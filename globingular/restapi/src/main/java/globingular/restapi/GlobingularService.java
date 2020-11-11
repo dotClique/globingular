@@ -12,7 +12,7 @@ import jakarta.ws.rs.core.MediaType;
 /**
  * A service serving as the main handler for the API.
  */
-@Path("/")
+@Path("/globingular")
 public class GlobingularService {
 
     /**
