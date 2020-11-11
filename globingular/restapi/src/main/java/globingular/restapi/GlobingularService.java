@@ -1,9 +1,8 @@
 package globingular.restapi;
 
-import javax.inject.Inject;
-
 import globingular.core.CountryCollector;
 import globingular.core.GlobingularModule;
+import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
@@ -22,13 +21,6 @@ public class GlobingularService {
      */
     @Inject
     private GlobingularModule globingularModule;
-
-    /**
-     * Initiliaze a new GlobingularService-instance.
-     */
-    public GlobingularService() {
-        this.globingularModule = new GlobingularModule();
-    }
 
     /**
      * Retrieve the {@link GlobingularModule} being used.

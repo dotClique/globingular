@@ -15,8 +15,8 @@
     <dependencies>
         <!-- Dependency injection annotations -->
         <dependency>
-            <groupId>javax.inject</groupId>
-            <artifactId>javax.inject</artifactId>
+            <groupId>jakarta.inject</groupId>
+            <artifactId>jakarta.inject-api</artifactId>
         </dependency>
 
         <!-- Java JAX-RS-API (standard for REST APIs) -->

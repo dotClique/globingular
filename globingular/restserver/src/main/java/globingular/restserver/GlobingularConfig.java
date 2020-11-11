@@ -1,21 +1,16 @@
 package globingular.restserver;
 
 import org.glassfish.jersey.internal.inject.AbstractBinder;
+import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 
 import globingular.core.GlobingularModule;
+import globingular.restapi.GlobingularService;
 
 /**
  * Jersey-configuration for the Globingular REST server.
  */
 public class GlobingularConfig extends ResourceConfig {
-
-    /**
-     * REST API package to make available.
-     *
-     * @see globingular.restapi
-     */
-    public static final String REST_API_PACKAGE = "globingular.restapi";
 
     /**
      * The servers {@link GlobingularModule} instance, holding app-state.
@@ -29,8 +24,9 @@ public class GlobingularConfig extends ResourceConfig {
      */
     public GlobingularConfig(final GlobingularModule globingularModule) {
         setGlobingularModule(globingularModule);
-        packages(REST_API_PACKAGE);
+        register(GlobingularService.class);
         register(GlobingularObjectMapperProvider.class);
+        register(JacksonFeature.class);
         register(new AbstractBinder() {
             @Override
             protected void configure() {

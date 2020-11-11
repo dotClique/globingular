@@ -1,5 +1,7 @@
 module globingular.restapi {
     requires jakarta.ws.rs;
-    requires javax.inject;
-    requires globingular.core;
+    requires jakarta.inject;
+    requires transitive globingular.core;
+
+    exports globingular.restapi;
 }

@@ -12,5 +12,6 @@ module globingular.restserver {
     requires jersey.common;
 
     requires transitive globingular.persistence;
+    requires globingular.restapi;
     requires jakarta.ws.rs;
 }
