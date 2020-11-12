@@ -30,6 +30,6 @@ public class WorldDeserializer extends JsonDeserializer<World> {
         String worldName = o.get("WorldName").asText();
         Country[] countries = o.get("Countries").traverse(p.getCodec()).readValueAs(Country[].class);
 
-        return new World(worldName, countries);
+        return new World(worldName.equals("null") ? null : worldName, countries);
     }
 }
