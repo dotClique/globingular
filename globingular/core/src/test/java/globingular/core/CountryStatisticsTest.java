@@ -2,6 +2,9 @@ package globingular.core;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+
+import java.text.NumberFormat;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -14,8 +17,8 @@ public class CountryStatisticsTest {
 
      @BeforeAll
     public static void start() {
-        country0 = new Country("AD", "Andorra", "The Principality of Andorra", "UN", "EU", 77543, new Province[0]);
-        country1 = new Country("GF", "French Guiana", "Guyane", "France", "SA", 290601, new Province[0]);
+        country0 = new Country("AD", "Andorra", "The Principality of Andorra", "UN", "EU", 77543);
+        country1 = new Country("GF", "French Guiana", "Guyane", "France", "SA", 290601);
         world0 = new World(country0, country1);
         collector = new CountryCollector(world0);
     }
@@ -36,9 +39,10 @@ public class CountryStatisticsTest {
         collector.removeAllVisitsToCountry(country1);
         CountryStatistics countryStatistics = new CountryStatistics(collector);
         collector.registerVisit(country0);
-        assertEquals("Andorra (77543)", countryStatistics.getMostPopulatedVisitedCountry());
+        NumberFormat statisticFormat = NumberFormat.getInstance();
+        assertEquals("Andorra (" + statisticFormat.format(77543)+")", countryStatistics.getMostPopulatedVisitedCountry());
         collector.registerVisit(country1);
-        assertEquals("French Guiana (290601)", countryStatistics.getMostPopulatedVisitedCountry());
+        assertEquals("French Guiana (" + statisticFormat.format(290601)+")", countryStatistics.getMostPopulatedVisitedCountry());
     }
 
     @Test
