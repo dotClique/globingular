@@ -8,15 +8,19 @@ import globingular.core.World;
 import globingular.persistence.PersistenceHandler;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
+import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.client.WebTarget;
+import jakarta.ws.rs.core.MediaType;
+
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class MyResourceTest {
+public class CountryCollectorResourceTest {
 
     private static HttpServer server;
     private static WebTarget target;
@@ -51,8 +55,44 @@ public class MyResourceTest {
     @Test
     public void testGetCountryCollector() throws JsonProcessingException {
         String responseMsg = target.path("globingular").path("countryCollector")
-                .path("hablebable2").request().get(String.class);
+                .path("hablebable1").request().get(String.class);
         CountryCollector countryCollector = objectMapper.readValue(responseMsg, CountryCollector.class);
         assertNull(countryCollector.getWorld().getWorldName());
+    }
+
+    @Test
+    public void testPutCountryCollector() throws JsonProcessingException {
+        Country c1 = new Country("NO", "Norway");
+        Country c2 = new Country("SE", "Sweden");
+        World world = new World("testWorld", c1, c2);
+        CountryCollector cc = new CountryCollector(world);
+
+        String s1 = objectMapper.writeValueAsString(cc);
+
+        String responseMsg = target.path("globingular").path("countryCollector")
+                .path("hablebable2").request().put(Entity.entity(s1, MediaType.APPLICATION_JSON), String.class);
+
+        assertEquals("true", responseMsg);
+    }
+
+    @Test
+    public void testPutAndGetCountryCollector() throws JsonProcessingException {
+        Country c1 = new Country("NO", "Norway");
+        Country c2 = new Country("SE", "Sweden");
+        World world = new World("testWorld", c1, c2);
+        CountryCollector cc = new CountryCollector(world);
+
+        String s1 = objectMapper.writeValueAsString(cc);
+
+        String responseMsg = target.path("globingular").path("countryCollector")
+                .path("hablebable3").request().put(Entity.entity(s1, MediaType.APPLICATION_JSON), String.class);
+
+        assertEquals("true", responseMsg);
+
+        String responseMsg2 = target.path("globingular").path("countryCollector")
+                .path("hablebable3").request().get(String.class);
+
+        CountryCollector countryCollector = objectMapper.readValue(responseMsg2, CountryCollector.class);
+        assertEquals("testWorld", countryCollector.getWorld().getWorldName());
     }
 }
