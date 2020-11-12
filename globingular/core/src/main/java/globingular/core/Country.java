@@ -75,7 +75,6 @@ public class Country {
      * sovereignty: 'UN'
      * region: ''
      * population: 0L
-     * provinces: new Province[0]
      *
      * @param countryCode Two-letter representation of the Country. Following the ISO 3166-1 Alpha-2 code. I.e. 'AU'
      * @param shortName   Shortname of the Country. I.e. 'Australia'

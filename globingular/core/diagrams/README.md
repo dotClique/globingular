@@ -12,8 +12,7 @@ package globingular.core {
 		-String sovereignty
 		-String region
 		-long population
-		-Province[] provinces
-		+Country(String countryCode, String shortName, String longname, String sovereignty, String region, long population, Province[] provinces)
+		+Country(String countryCode, String shortName, String longname, String sovereignty, String region, long population)
 		+Country(String countryCode, String shortName)
 		+String getCountryCode()
 		+String getShortName()
@@ -65,18 +64,6 @@ package globingular.core {
 	}
 	IllegalArgumentException <|-- DuplicateIdentifierException
 	
-	class Province [[java:globingular.core.Province]] {
-		-String provinceCode
-		-String capital
-		-String name
-		-long population
-		+Province(String provinceCode, String capital, String name, long population)
-		+String getProvinceCode()
-		+String getName()
-		+String getCapital()
-		+long getPopulation()
-	}
-	
 	class Visit [[java:globingular.core.Visit]] {
 		-Country country
 		-LocalDateTime arrival
@@ -100,7 +87,6 @@ package globingular.core {
 	}
 }
 
-Country --> "provinces: *" Province
 CountryCollector --> "world: 1" World
 CountryCollector --> "visits: * \n visitsReadOnly: *" Visit
 CountryCollector --> "visitedCountries: * \n visitedCountriesReadOnly: * \n visitedCountriesSorted: *" Country
