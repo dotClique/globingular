@@ -26,11 +26,14 @@ import javafx.scene.text.Font;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.events.EventTarget;
+import org.controlsfx.control.textfield.TextFields;
 
 import java.net.URL;
 import java.util.Collection;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 import java.util.Map;
+import java.util.List;
 
 /**
  * <p>The AppController class handles the interaction between the FXML-file and
@@ -222,6 +225,7 @@ public class AppController implements Initializable {
             }
         }));
         updateStatistics();
+        configureAutoComplete();
     }
 
     /**
@@ -405,6 +409,20 @@ public class AppController implements Initializable {
         Label label = new Label(text);
         label.setPadding(new Insets(TEXT_LABEL_PADDING));
         return label;
+    }
+
+    private void configureAutoComplete() {
+        List<String> countryNames = world.getCountries()
+            .stream()
+            .map(c -> c.getShortName())
+            .collect(Collectors.toList());
+        List<String> countryCodes = world.getCountries()
+            .stream()
+            .map(c -> c.getCountryCode())
+            .collect(Collectors.toList());
+
+        TextFields.bindAutoCompletion(countryInput, countryNames);
+        TextFields.bindAutoCompletion(countryInput, countryCodes);
     }
 
     /**

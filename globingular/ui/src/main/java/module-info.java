@@ -4,6 +4,8 @@ module globingular.ui {
 
 	requires javafx.fxml;
 	requires javafx.web;
+
+	requires org.controlsfx.controls;
 	
 	requires java.desktop;
 

@@ -39,6 +39,13 @@
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-graphics</artifactId>
         </dependency>
+        
+        <!-- https://mvnrepository.com/artifact/org.controlsfx/controlsfx -->
+        <dependency>
+            <groupId>org.controlsfx</groupId>
+            <artifactId>controlsfx</artifactId>
+            <version>11.0.3</version>
+        </dependency>
 
         <!-- Test with JUnit5 -->
         <dependency>
@@ -87,6 +94,10 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <configuration>
                     <mainClass>${package}.App</mainClass>
+                    <options>
+                        <option>--add-exports</option>
+                        <option>javafx.base/com.sun.javafx.event=org.controlsfx.controls</option>
+                     </options>
                 </configuration>
             </plugin>
 
