@@ -1,5 +1,6 @@
 package globingular.core;
 
+import java.text.NumberFormat;
 import java.util.Comparator;
 import java.util.Map;
 import java.util.HashMap;
@@ -13,6 +14,11 @@ public class CountryStatistics {
      * CountryCollector that holds the data needed for statistics.
      */
     private final CountryCollector countryCollector;
+
+    /**
+     * Locale-specific formatter for statistic numbers.
+     */
+    private final NumberFormat statisticFormat = NumberFormat.getInstance();
 
     /**
      * Constructor that initializes with a CountryCollector.
@@ -46,7 +52,7 @@ public class CountryStatistics {
         if (country == null) {
             return "-";
         }
-        return country.getShortName() + " (" + country.getPopulation() + ")";
+        return country.getShortName() + " (" + statisticFormat.format(country.getPopulation()) + ")";
     }
 
     /**
