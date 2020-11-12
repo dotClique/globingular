@@ -17,7 +17,7 @@ g {
     fill: var(--javafx-default-bg)
 }
 
-[visited] {
+[visited], [visited] * {
     /* !important required to override inline style */
     fill: var(--visited-country)!important;
 }
