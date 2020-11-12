@@ -412,17 +412,16 @@ public class AppController implements Initializable {
     }
 
     private void configureAutoComplete() {
-        List<String> countryNames = world.getCountries()
+        List<String> countryNamesAndCodes = world.getCountries()
             .stream()
             .map(c -> c.getShortName())
             .collect(Collectors.toList());
-        List<String> countryCodes = world.getCountries()
+        countryNamesAndCodes.addAll(world.getCountries()
             .stream()
             .map(c -> c.getCountryCode())
-            .collect(Collectors.toList());
+            .collect(Collectors.toList()));
 
-        TextFields.bindAutoCompletion(countryInput, countryNames);
-        TextFields.bindAutoCompletion(countryInput, countryCodes);
+        TextFields.bindAutoCompletion(countryInput, countryNamesAndCodes);
     }
 
     /**
