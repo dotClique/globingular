@@ -2,12 +2,9 @@ package globingular.restapi;
 
 import globingular.core.CountryCollector;
 import globingular.core.GlobingularModule;
-import globingular.core.Visit;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
-import jakarta.ws.rs.POST;
 import jakarta.ws.rs.PUT;
-import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 
@@ -56,18 +53,6 @@ public class CountryCollectorResource {
     @Produces(MediaType.APPLICATION_JSON)
     public boolean putCountryCollector(final CountryCollector collector) {
         return this.globingularModule.putCountryCollector(username, collector, true);
-    }
-
-    /**
-     * Register a new {@link Visit} for the current {@link #countryCollector}.
-     * 
-     * @param visit The {@link Visit} to register.
-     */
-    @POST
-    @Path("/visit")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public void postVisit(final Visit visit) {
-        this.countryCollector.registerVisit(visit);
     }
 
     /**
