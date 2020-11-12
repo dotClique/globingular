@@ -411,14 +411,17 @@ public class AppController implements Initializable {
         return label;
     }
 
+    /**
+     * Configures the autocomplete, by retrieving necessary data and calling bindAutoCompletion on countryInput.
+     */
     private void configureAutoComplete() {
         List<String> countryNamesAndCodes = world.getCountries()
             .stream()
-            .map(c -> c.getShortName())
+            .map(Country::getShortName)
             .collect(Collectors.toList());
         countryNamesAndCodes.addAll(world.getCountries()
             .stream()
-            .map(c -> c.getCountryCode())
+            .map(Country::getCountryCode)
             .collect(Collectors.toList()));
 
         TextFields.bindAutoCompletion(countryInput, countryNamesAndCodes);
