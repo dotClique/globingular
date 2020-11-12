@@ -14,8 +14,8 @@ public class CountryStatisticsTest {
 
      @BeforeAll
     public static void start() {
-        country0 = new Country("AD", "Andorra", "The Principality of Andorra", "UN", "EU", 77543, new Province[0]);
-        country1 = new Country("GF", "French Guiana", "Guyane", "France", "SA", 290601, new Province[0]);
+        country0 = new Country("AD", "Andorra", "The Principality of Andorra", "UN", "EU", 77543);
+        country1 = new Country("GF", "French Guiana", "Guyane", "France", "SA", 290601);
         world0 = new World(country0, country1);
         collector = new CountryCollector(world0);
     }

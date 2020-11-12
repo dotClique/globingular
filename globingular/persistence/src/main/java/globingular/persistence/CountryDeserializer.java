@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import globingular.core.Country;
-import globingular.core.Province;
 
 import java.io.IOException;
 
@@ -33,6 +32,6 @@ public class CountryDeserializer extends JsonDeserializer<Country> {
         String region = countryNode.get("region").asText();
         long population = countryNode.get("population").asLong();
 
-        return new Country(countryCode, name, longname, sovereignty, region, population, new Province[0]);
+        return new Country(countryCode, name, longname, sovereignty, region, population);
     }
 }

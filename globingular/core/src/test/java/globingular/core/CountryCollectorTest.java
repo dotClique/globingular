@@ -32,7 +32,7 @@ public class CountryCollectorTest {
 
     @BeforeAll
     public static void start() {
-        country0 = new Country("_C0", "_country0", "Kingdom of Country0", "UN", "Asia", 123L, new Province[0]);
+        country0 = new Country("_C0", "_country0", "Kingdom of Country0", "UN", "Asia", 123L);
         country1 = new Country("_C1", "_country1");
         country2 = new Country("_C2", "_country2");
         country3 = new Country("_C3", "_country3");
