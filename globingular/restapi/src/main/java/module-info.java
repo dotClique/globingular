@@ -4,4 +4,5 @@ module globingular.restapi {
     requires transitive globingular.core;
 
     exports globingular.restapi;
+    opens globingular.restapi;
 }
