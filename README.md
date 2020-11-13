@@ -39,5 +39,11 @@ Sequence-diagrams for the implemented User Stories are made and can be found in 
 
 Issue assignee is the one who will write the code to solve the issue. MR assignee is the reviewer and is ultimately responsible for looking over the code that is to be merged. Please see [meeting-2020-10-28](https://gitlab.stud.idi.ntnu.no/it1901/groups-2020/gr2002/gr2002/-/wikis/Referat-2020-10-28) for details.
 
+## Work process
+
+Our wiki contains team meeting summaries that effectively show our work process, progress, and problems throughout the project work.
+
+Please see [wiki-home](https://gitlab.stud.idi.ntnu.no/it1901/groups-2020/gr2002/gr2002/-/wikis/home) for details on each individual team meeting summary.
+
 ## Data sources
 Country data & SVG World Map: [raphaellepuschitz/SVG-World-Map.](https://github.com/raphaellepuschitz/SVG-World-Map)
