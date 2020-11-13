@@ -11,13 +11,13 @@ import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class CountryCollectorResourceTest {
@@ -25,7 +25,7 @@ public class CountryCollectorResourceTest {
     private static HttpServer server;
     private static WebTarget target;
     PersistenceHandler persistenceHandler = new PersistenceHandler();
-    ObjectMapper objectMapper = persistenceHandler.getObjectMapper();
+    ObjectMapper objectMapper = new GlobingularObjectMapperProvider().getContext(getClass());
 
     @BeforeAll
     public static void setUp() {
@@ -33,13 +33,6 @@ public class CountryCollectorResourceTest {
         server = Main.startServer();
         // create the client
         Client c = ClientBuilder.newClient();
-
-        // uncomment the following line if you want to enable
-        // support for JSON in the client (you also have to uncomment
-        // dependency on jersey-media-json module in pom.xml and Main.startServer())
-        // --
-        // c.configuration().enable(new
-        // org.glassfish.jersey.media.json.JsonJaxbFeature());
 
         target = c.target(Main.BASE_URI);
     }
@@ -54,10 +47,15 @@ public class CountryCollectorResourceTest {
      */
     @Test
     public void testGetCountryCollector() throws JsonProcessingException {
-        String responseMsg = target.path("globingular").path("countryCollector")
-                .path("hablebable1").request().get(String.class);
-        CountryCollector countryCollector = objectMapper.readValue(responseMsg, CountryCollector.class);
-        assertNull(countryCollector.getWorld().getWorldName());
+        Response response = target.path("globingular").path("countryCollector")
+                .path("hablebable1").request().get();
+
+        // 204 means No Content, which is correct in this instance,
+        // as there is no CountryCollector for user "hablebable1"
+        assertEquals(204, response.getStatus());
+
+        String responseMsg = response.readEntity(String.class);
+        assertEquals("", responseMsg);
     }
 
     @Test
@@ -69,9 +67,12 @@ public class CountryCollectorResourceTest {
 
         String s1 = objectMapper.writeValueAsString(cc);
 
-        String responseMsg = target.path("globingular").path("countryCollector")
-                .path("hablebable2").request().put(Entity.entity(s1, MediaType.APPLICATION_JSON), String.class);
+        Response response = target.path("globingular").path("countryCollector")
+                .path("hablebable2").request().put(Entity.entity(s1, MediaType.APPLICATION_JSON));
 
+        assertEquals(200, response.getStatus());
+
+        String responseMsg = response.readEntity(String.class);
         assertEquals("true", responseMsg);
     }
 
@@ -84,14 +85,18 @@ public class CountryCollectorResourceTest {
 
         String s1 = objectMapper.writeValueAsString(cc);
 
-        String responseMsg = target.path("globingular").path("countryCollector")
-                .path("hablebable3").request().put(Entity.entity(s1, MediaType.APPLICATION_JSON), String.class);
+        Response response1 = target.path("globingular").path("countryCollector")
+                .path("hablebable3").request().put(Entity.entity(s1, MediaType.APPLICATION_JSON));
+        assertEquals(200, response1.getStatus());
+        String responseMsg1 = response1.readEntity(String.class);
+        assertEquals("true", responseMsg1);
 
-        assertEquals("true", responseMsg);
+        Response response2 = target.path("globingular").path("countryCollector")
+                .path("hablebable3").request().get();
 
-        String responseMsg2 = target.path("globingular").path("countryCollector")
-                .path("hablebable3").request().get(String.class);
+        assertEquals(200, response2.getStatus());
 
+        String responseMsg2 = response2.readEntity(String.class);
         CountryCollector countryCollector = objectMapper.readValue(responseMsg2, CountryCollector.class);
         assertEquals("testWorld", countryCollector.getWorld().getWorldName());
     }

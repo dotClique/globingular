@@ -4,5 +4,7 @@ module globingular.restapi {
     requires transitive globingular.core;
 
     exports globingular.restapi;
+
+    // Required for the restserver to inject values
     opens globingular.restapi;
 }

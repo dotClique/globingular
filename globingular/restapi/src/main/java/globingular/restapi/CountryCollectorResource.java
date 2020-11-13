@@ -14,7 +14,7 @@ import jakarta.ws.rs.core.MediaType;
 public class CountryCollectorResource {
 
     /**
-     * This instance's {@link GlobingularModule}, not currently in use. TODO:
+     * This instance's {@link GlobingularModule}.
      */
     private final GlobingularModule globingularModule;
     /**
@@ -29,7 +29,7 @@ public class CountryCollectorResource {
     /**
      * Initialize a CountryCollectorResource with context.
      * 
-     * @param globingularModule The {@link GlobingularModuel} to store changes in
+     * @param globingularModule The {@link GlobingularModule} to store changes in
      * @param username The username to store changes for
      * @param countryCollector The {@link CountryCollector} to change
      */
@@ -46,13 +46,13 @@ public class CountryCollectorResource {
      * NB: Overwrites if there's already a value
      * 
      * @param collector The {@link CountryCollector} to save
-     * @return Returns true if save, false otherwise
+     * @return true if successfully saved, false otherwise
      */
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public boolean putCountryCollector(final CountryCollector collector) {
-        return this.globingularModule.putCountryCollector(username, collector, true);
+        return this.globingularModule.putCountryCollector(username, collector);
     }
 
     /**

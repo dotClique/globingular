@@ -21,36 +21,37 @@ import java.util.Map;
 public class CountryCollectorDeserializer extends JsonDeserializer<CountryCollector> {
 
     /**
-     * Deserialize a CountryCollector-object from JSON using JsonParser.
-     * Requires the target World as an injectable value "_globingular_map_world" in the context.
+     * Deserialize a {@link CountryCollector}-object from JSON using JsonParser.
+     * Requires the target {@link World} in the injected map ({@link PersistenceHandler#INJECTED_MAP}) in the context
+     * or defined in the JSON itself.
      * 
      * @param p a JsonParser
      * @param ctxt a context for the deserialization
-     * @return a CountryCollector object
+     * @return a {@link CountryCollector} object
      * @throws IOException on general parsing error
      * @throws NullPointerException on missing fields
      */
     @Override
     public CountryCollector deserialize(final JsonParser p, final DeserializationContext ctxt) throws IOException {
 
-        //JsonNode node = p.getCodec().readTree(p);
         ObjectNode node = p.readValueAsTree();
         final World world;
 
-        // Suppress warning, as we know this is fine
+        // Suppress warning. This should be fine, and if it's not we want it to throw an exception anyway.
         @SuppressWarnings("unchecked")
-        Map<String, Object> map = (Map<String, Object>) ctxt.findInjectableValue("_globingular", null, null);
-        if (map.containsKey("_globingular_world")) {
-            world = (World) map.get("_globingular_world");
+        Map<String, Object> injectedMap = (Map<String, Object>)
+                ctxt.findInjectableValue(PersistenceHandler.INJECTED_MAP, null, null);
+        if (injectedMap.containsKey(PersistenceHandler.INJECTED_MAP_WORLD)) {
+            world = (World) injectedMap.get(PersistenceHandler.INJECTED_MAP_WORLD);
         } else {
             // If World is present as a node in the JSON, use it!
             World tmpWorld = node.get("World").traverse(p.getCodec()).readValueAs(World.class);
 
             PersistenceHandler persitencHandler = (PersistenceHandler)
-            ctxt.findInjectableValue("_globingular_persistence", null, null);
+                    injectedMap.get(PersistenceHandler.INJECTED_MAP_PERSISTENCE);
             world = persitencHandler.getDefaultWorldOr(tmpWorld.getWorldName(), tmpWorld);
 
-            map.put("_globingular_world", world);
+            injectedMap.put(PersistenceHandler.INJECTED_MAP_WORLD, world);
         }
 
         CountryCollector countryCollector = new CountryCollector(world);

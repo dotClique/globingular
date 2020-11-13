@@ -10,13 +10,13 @@ public class GlobingularModule {
     /**
      * The main map of the class, holding the username and appstates ({@link CountryCollector}).
      */
-    private final Map<String, CountryCollector> map;
+    private final Map<String, CountryCollector> countryCollectorsByUsername;
 
     /**
      * Initialize a new GlobingularModule with default parameters.
      */
     public GlobingularModule() {
-        this.map = new HashMap<>();
+        this.countryCollectorsByUsername = new HashMap<>();
     }
 
     /**
@@ -27,8 +27,7 @@ public class GlobingularModule {
      * @return The countryCollector for the provided username. Returns {@code null} if no such countryCollector exists
      */
     public CountryCollector getCountryCollector(final String username) {
-        return this.map.getOrDefault(username,
-                new CountryCollector(new World(new Country("NO", "Norway"), new Country("JP", "Japan"))));
+        return this.countryCollectorsByUsername.get(username);
     }
 
     /**
@@ -36,17 +35,13 @@ public class GlobingularModule {
      * 
      * @param username The username to save the countryCollector as
      * @param countryCollector The countryCollector to save
-     * @param overwrite Whether or not to overwrite (update/replace) an already
      * present countryCollector for the provided username
-     * @return true if it was saved, false if not
+     * @return true if successfully saved, false otherwise
      */
     public boolean putCountryCollector(final String username,
-            final CountryCollector countryCollector, final boolean overwrite) {
-        if (overwrite || this.isUsernameAvailable(username)) {
-            this.map.put(username, countryCollector);
-            return true;
-        }
-        return false;
+            final CountryCollector countryCollector) {
+        this.countryCollectorsByUsername.put(username, countryCollector);
+        return true;
     }
 
     /**
@@ -56,6 +51,6 @@ public class GlobingularModule {
      * @return True if this username is not in use
      */
     public boolean isUsernameAvailable(final String username) {
-        return this.map.get(username) == null;
+        return this.countryCollectorsByUsername.containsKey(username);
     }
 }

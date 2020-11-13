@@ -16,7 +16,7 @@ import jakarta.ws.rs.core.MediaType;
 public class GlobingularService {
 
     /**
-     * The services {@link GlobingularModule} instance, holding app-state.
+     * The service's {@link GlobingularModule} instance, holding app-state.
      * Being injected from the Server setup implementing the API.
      */
     @Inject

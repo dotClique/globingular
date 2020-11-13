@@ -58,6 +58,21 @@ public class PersistenceHandler {
     private static final String SAMPLE_COLLECTOR = "/json/sampleCollector.json";
 
     /**
+     * Static key used for injecting and retrieving a map used for deserialization.
+     * The map allows for values to be added in context for further deserialization.
+     */
+    public static final String INJECTED_MAP = "_globingular_map";
+    /**
+     * Static key used for storing a reference to a {@link World} used for further deserialization.
+     */
+    public static final String INJECTED_MAP_WORLD = "_globingular_world";
+
+    /**
+     * Static key used for storing a reference to this {@link PersistenceHandler} in an InjectedMap.
+     */
+    public static final String INJECTED_MAP_PERSISTENCE = "_globingular_persistence";
+
+    /**
      * ObjectMapper used for serialization and deserialization. Contains registered
      * modules for correct (de)serialization.
      */
@@ -79,18 +94,27 @@ public class PersistenceHandler {
 
     /**
      * Get a valid objectMapper-instance with the the correct modules registered,
-     * and with an empty Map as an {@link InjectableValues}.
-     *
+     * and with a Map injected (using key {@link #INJECTED_MAP}) in its {@link InjectableValues},
+     * containing a reference to this {@link PersistenceHandler}.
+     * A new {@link ObjectMapper} with a "clean" map is generated each time,
+     * ensuring that state is not shared between unrelated (de)serializations.
+     * This Map can be used for sharing state downwards when (de)serializing objects.
+     * Particularly useful for deserializing a tree of objects in need of sharing certain context,
+     * e.g. which {@link World} the {@link Visit}s references.
+     * 
      * @return an objectMapper instance
      */
     public ObjectMapper getObjectMapper() {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new CountryCollectorModule());
 
-        // Create a new InjectableValues-instance with an empty Map and add to the mapper
+        // Create a new Map and store a reference to this PersistenceHandler
+        Map<String, Object> injectedMap = new HashMap<String, Object>();
+        injectedMap.put(PersistenceHandler.INJECTED_MAP_PERSISTENCE, this);
+
+        // Create a new InjectableValues-instance with the injectedMap and add to the mapper
         InjectableValues.Std injectableValues = new InjectableValues.Std();
-        injectableValues.addValue("_globingular", new HashMap<String, Object>());
-        injectableValues.addValue("_globingular_persistence", this);
+        injectableValues.addValue(PersistenceHandler.INJECTED_MAP, injectedMap);
         mapper.setInjectableValues(injectableValues);
 
         return mapper;

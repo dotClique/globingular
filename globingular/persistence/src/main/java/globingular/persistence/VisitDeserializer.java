@@ -34,9 +34,10 @@ public class VisitDeserializer extends JsonDeserializer<Visit> {
 
         // Suppress warning, as we know this is fine
         @SuppressWarnings("unchecked")
-        Map<String, Object> map = (Map<String, Object>) ctxt.findInjectableValue("_globingular", null, null);
-        if (map.containsKey("_globingular_world")) {
-            world = (World) map.get("_globingular_world");
+        Map<String, Object> injectedMap = (Map<String, Object>)
+                ctxt.findInjectableValue(PersistenceHandler.INJECTED_MAP, null, null);
+        if (injectedMap.containsKey(PersistenceHandler.INJECTED_MAP_WORLD)) {
+            world = (World) injectedMap.get(PersistenceHandler.INJECTED_MAP_WORLD);
         } else {
             throw new IllegalStateException("Visit.class must be deserialized with an injected world.");
         }

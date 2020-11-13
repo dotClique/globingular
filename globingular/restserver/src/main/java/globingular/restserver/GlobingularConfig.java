@@ -48,7 +48,7 @@ public class GlobingularConfig extends ResourceConfig {
      * @return This instance's {@link GlobingularModule}
      */
     public GlobingularModule getGlobingularModule() {
-        return this.globingularModule; // TODO: Should this be protected, or is it ment to return it?
+        return this.globingularModule;
     }
 
     private void setGlobingularModule(final GlobingularModule globingularModule) {
