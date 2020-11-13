@@ -19,8 +19,17 @@ public class GlobingularService {
      * The service's {@link GlobingularModule} instance, holding app-state.
      * Being injected from the Server setup implementing the API.
      */
+    private final GlobingularModule globingularModule;
+
+    /**
+     * Construct a new GlobingularService using the given {@link GlobingularModule} as app-state.
+     *
+     * @param globingularModule App-state. Injected if not given.
+     */
     @Inject
-    private GlobingularModule globingularModule;
+    public GlobingularService(final GlobingularModule globingularModule) {
+        this.globingularModule = globingularModule;
+    }
 
     /**
      * Retrieve the {@link GlobingularModule} being used.
