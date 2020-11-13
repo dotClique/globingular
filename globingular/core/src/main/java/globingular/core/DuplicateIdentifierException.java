@@ -1,7 +1,7 @@
 package globingular.core;
 
 /**
- * Thrown to indicate that a data structure which requires uniquness
+ * Thrown to indicate that a data structure which requires uniqueness
  * of some property has been passed duplicate values for that property.
  */
 public class DuplicateIdentifierException extends IllegalArgumentException {

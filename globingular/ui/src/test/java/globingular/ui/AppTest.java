@@ -2,7 +2,6 @@ package globingular.ui;
 
 import globingular.core.Country;
 import globingular.core.CountryCollector;
-import javafx.geometry.VerticalDirection;
 import javafx.scene.control.ScrollPane;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -14,7 +13,6 @@ import javafx.stage.Stage;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.Pane;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 

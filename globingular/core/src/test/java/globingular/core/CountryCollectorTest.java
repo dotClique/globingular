@@ -65,6 +65,7 @@ public class CountryCollectorTest {
         CountryCollector cc = new CountryCollector(world4);
         cc.registerVisit(visit2);
         cc.registerVisit(visit3);
+        // Can't guarantee order
         assertTrue(cc.toString().equals("[" + visit2.toString() + ", " + visit3.toString() + "]")
                 || cc.toString().equals("[" + visit3.toString() + ", " + visit2.toString() + "]"));
     }

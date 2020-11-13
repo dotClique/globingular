@@ -23,5 +23,6 @@ public class VisitTest {
         Visit v = new Visit(country0, time0, time1);
         assertEquals(country0, v.getCountry());
         assertEquals(time0, v.getArrival());
+        assertEquals(time1, v.getDeparture());
     }
 }

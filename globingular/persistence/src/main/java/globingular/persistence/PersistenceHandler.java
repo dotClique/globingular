@@ -78,8 +78,8 @@ public class PersistenceHandler {
      *
      * @return A CountryCollector instance containing data loaded from file
      */
-    public CountryCollector loadMapCountryCollector() {
-        World world = loadMapWorld();
+    public CountryCollector loadCountryCollector() {
+        World world = loadWorld();
         // Inject value of world into context for CountryCollector-parsing
         InjectableValues.Std injectableWorlds = new InjectableValues.Std();
         injectableWorlds.addValue("_globingular_map_world", world);
@@ -113,7 +113,7 @@ public class PersistenceHandler {
                         });
     }
 
-    private World loadMapWorld() {
+    private World loadWorld() {
         World world = new World();
         try (InputStream in = getClass().getResourceAsStream(FILE_MAP_WORLD)) {
             world = getObjectMapper().readValue(in, World.class);

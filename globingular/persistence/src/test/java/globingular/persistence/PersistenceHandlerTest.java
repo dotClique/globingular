@@ -12,7 +12,7 @@ public class PersistenceHandlerTest {
     @Test
     public void testImportAll() {
         final PersistenceHandler p = new PersistenceHandler();
-        CountryCollector cc = p.loadMapCountryCollector();
+        CountryCollector cc = p.loadCountryCollector();
         assertNotNull(cc);
         assertNotNull(cc.getWorld());
         assertNotEquals(0, cc.getWorld().getCountries().size());
@@ -23,7 +23,7 @@ public class PersistenceHandlerTest {
     @Test
     public void testAutosaveDoesNotCrash() {
         final PersistenceHandler p = new PersistenceHandler();
-        CountryCollector cc = p.loadMapCountryCollector();
+        CountryCollector cc = p.loadCountryCollector();
         p.setAutosave(cc);
     }
 }
