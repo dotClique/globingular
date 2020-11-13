@@ -17,9 +17,14 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <package>globingular.ui</package>
-        <fast>false</fast>
         <jersey.version>3.0.0-M6</jersey.version>
         <restserver.main>globingular.restserver.Main</restserver.main>
+
+        <!-- Adding -Dfast to maven commands will speed up the process by skipping tests, checkstyle and spotbugs -->
+        <fast>false</fast>
+
+        <!-- Adding -DenableTestRedirect=false to maven commands will disable redirecting output to file, showing the stacktrace in terminal -->
+        <enableTestRedirect>true</enableTestRedirect>
     </properties>
 
     <!-- Actual location for GitLab Pages instance, relativizes any absolute site links -->
@@ -242,7 +247,7 @@
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>3.0.0-M5</version>
                     <configuration>
-                        <redirectTestOutputToFile>true</redirectTestOutputToFile>
+                        <redirectTestOutputToFile>${enableTestRedirect}</redirectTestOutputToFile>
                         <skip>${fast}</skip>
                     </configuration>
                 </plugin>
