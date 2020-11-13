@@ -35,6 +35,9 @@ Class diagrams are within each modules separate `diagrams`-directory. For instan
 
 Sequence-diagrams for the implemented User Stories are made and can be found in the [userStories-directory](/userStories)
 
+## Issue and MR workflow
+
+Issue assignee is the one who will write the code to solve the issue. MR assignee is the reviewer and is ultimately responsible for looking over the code that is to be merged. Please see [meeting-2020-10-28](https://gitlab.stud.idi.ntnu.no/it1901/groups-2020/gr2002/gr2002/-/wikis/Referat-2020-10-28) for details.
 
 ## Data sources
 Country data & SVG World Map: [raphaellepuschitz/SVG-World-Map.](https://github.com/raphaellepuschitz/SVG-World-Map)
