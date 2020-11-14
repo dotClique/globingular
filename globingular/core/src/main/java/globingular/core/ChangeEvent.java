@@ -5,7 +5,7 @@ package globingular.core;
  * 
  * @param <T> Type of element being added, updated or removed.
  */
-public class ChangeEvent<T> implements ListenerEvent<T> {
+public class ChangeEvent<T> {
 
     /**
      * Enum values for the different change statuses.
@@ -77,7 +77,6 @@ public class ChangeEvent<T> implements ListenerEvent<T> {
      * 
      * @return the element added, updated or removed
      */
-    @Override
     public T getElement() {
         return element;
     }

@@ -7,11 +7,10 @@ import javafx.collections.transformation.SortedList;
 import java.util.Comparator;
 import java.util.Set;
 
-import globingular.core.ChangeEvent;
 import globingular.core.Observable;
 
 /**
- * Custom bindings between JavaFX-Properties to extend the kinds of
+ * Custom bindings between collections to extend the kinds of
  * transformations on objects that are possible whilst still being synchronized.
  */
 public final class CustomBindings {
@@ -24,6 +23,9 @@ public final class CustomBindings {
 
     /**
      * Create a readonly sorted-list view of the target property.
+     * Takes a separate initialSet and observable parameter, usually
+     * refering to the same data. As the observable only notifies
+     * about changes, the initialSet is required for setup.
      *
      * @param <T>        The type of values in the target set and result list
      * @param initialSet The set to initialize the set with
@@ -37,14 +39,11 @@ public final class CustomBindings {
         SortedList<T> sorted = new SortedList<>(backing, comparator);
         backing.addAll(initialSet);
 
-        observable.addListener(listenerEvent -> {
-            if (listenerEvent instanceof ChangeEvent) {
-                ChangeEvent<T> event = (ChangeEvent<T>) listenerEvent;
-                if (event.wasAdded()) {
-                    backing.add(event.getElement());
-                } else if (event.wasRemoved()) {
-                    backing.remove(event.getElement());
-                }
+        observable.addListener(event -> {
+            if (event.wasAdded()) {
+                backing.add(event.getElement());
+            } else if (event.wasRemoved()) {
+                backing.remove(event.getElement());
             }
         });
 

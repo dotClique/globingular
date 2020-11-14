@@ -1,6 +1,5 @@
 package globingular.ui;
 
-import globingular.core.ChangeEvent;
 import globingular.core.Country;
 import globingular.core.CountryCollector;
 import globingular.core.CountryStatistics;
@@ -195,14 +194,11 @@ public class AppController implements Initializable {
     public void initialize(final URL location, final ResourceBundle resources) {
         this.webEngine = webView.getEngine();
 
-        countryCollector.addListener(listenerEvent -> {
-            if (listenerEvent instanceof ChangeEvent) {
-                ChangeEvent<Country> event = (ChangeEvent<Country>) listenerEvent;
-                if (event.wasAdded()) {
-                    this.setVisitedOnMap(event.getElement());
-                } else if (event.wasRemoved()) {
-                    this.setNotVisitedOnMap(event.getElement());
-                }
+        countryCollector.addListener(event -> {
+            if (event.wasAdded()) {
+                this.setVisitedOnMap(event.getElement());
+            } else if (event.wasRemoved()) {
+                this.setNotVisitedOnMap(event.getElement());
             }
             updateStatistics();
         });

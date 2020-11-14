@@ -13,5 +13,5 @@ public interface Listener<T> {
      * 
      * @param event An event passing information from the {@link Observable} to the {@link Listener}
      */
-    void notifyListener(ListenerEvent<T> event);
+    void notifyListener(ChangeEvent<T> event);
 }

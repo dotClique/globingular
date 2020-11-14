@@ -99,7 +99,7 @@ public class CountryCollector implements Observable<Country> {
         // Notify listeners with updated/added depending on which it is
         if (this.visitedCountries.contains(visit.getCountry())) {
             // Notify listeners about update
-            this.notifyListeners(new ChangeEvent<Country>(ChangeEvent.Status.UPDATED, visit.getCountry()));
+            this.notifyListeners(new ChangeEvent<>(ChangeEvent.Status.UPDATED, visit.getCountry()));
         } else {
             // Keep visitedCountries up to date
             this.visitedCountries.add(visit.getCountry());
@@ -142,7 +142,7 @@ public class CountryCollector implements Observable<Country> {
         if (this.visits.stream().noneMatch(v -> v.getCountry() == visit.getCountry())) {
             this.visitedCountries.remove(visit.getCountry());
         }
-        // Check if it was the last entry for the country. If it was, notify it's removal, else notify it's update.
+        // Check if it was the last entry for the country. If it was, notify its removal, else notify its update.
         if (this.isVisited(visit.getCountry())) {
             // Notify listeners about update
             this.notifyListeners(new ChangeEvent<>(ChangeEvent.Status.UPDATED, visit.getCountry()));
@@ -242,20 +242,22 @@ public class CountryCollector implements Observable<Country> {
 
     /**
      * {@inheritDoc}
+     * Allows for listening to changes in visited countries.
      */
     @Override
-    public boolean addListener(final Listener<Country> listener) {
-        // Return true if already registered, or if successfully removed.
-        return this.listeners.contains(listener) || this.listeners.add(listener);
+    public void addListener(final Listener<Country> listener) {
+        // Return true if already registered, or if successfully added.
+        this.listeners.add(listener);
     }
 
     /**
      * {@inheritDoc}
+     * The given listener will no longer be notified about changes in visited countries.
      */
     @Override
-    public boolean removeListener(final Listener<Country> listener) {
-        // Return true if listener successfullt removed, or isn't registered in the first place.
-        return this.listeners.remove(listener) || this.listeners.contains(listener);
+    public void removeListener(final Listener<Country> listener) {
+        // Return true if listener successfully removed, or isn't registered in the first place.
+        this.listeners.remove(listener);
     }
 
     /**
@@ -265,6 +267,6 @@ public class CountryCollector implements Observable<Country> {
      */
     private void notifyListeners(final ChangeEvent<Country> event) {
         // Notify all listeners
-        this.listeners.stream().forEach(l -> l.notifyListener(event));
+        this.listeners.forEach(l -> l.notifyListener(event));
     }
 }
