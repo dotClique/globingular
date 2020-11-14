@@ -5,6 +5,8 @@ package globingular.core;
  * of some property has been passed duplicate values for that property.
  */
 public class DuplicateIdentifierException extends IllegalArgumentException {
+    private static final long serialVersionUID = -1880267416709023081L;
+
     /**
      * Construct a new DuplicateIdentifierException.
      */

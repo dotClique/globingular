@@ -5,8 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import globingular.core.CountryCollector;
 import globingular.core.World;
-import globingular.core.Country;
-import javafx.collections.SetChangeListener;
 
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
@@ -171,10 +169,9 @@ public class PersistenceHandler {
      * @param countryCollector The CountryCollector to autosave
      */
     public void setAutosave(final CountryCollector countryCollector) {
-        countryCollector.visitedCountriesProperty()
-                        .addListener((SetChangeListener<? super Country>) e -> {
-                            this.saveState(countryCollector);
-                        });
+        countryCollector.addListener(event -> {
+            this.saveState(countryCollector);
+        });
     }
 
     private World loadWorld() {
