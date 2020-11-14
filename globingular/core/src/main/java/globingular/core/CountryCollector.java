@@ -147,6 +147,7 @@ public class CountryCollector implements Observable<Country> {
      *
      * @param country The Country to check
      * @return Returns true if the country has been visited
+     * 
      * @throws IllegalArgumentException If Country does not exist in this instances's world
      */
     public boolean isVisited(final Country country) throws IllegalArgumentException {
@@ -161,6 +162,7 @@ public class CountryCollector implements Observable<Country> {
      * NB: Visits are immutable, so there's no leak here.
      * 
      * @param country The country to retrieve visits to
+     * 
      * @return A collection containing all (current) Visits to the given country
      */
     public Collection<Visit> getVisitsToCountry(final Country country) {
@@ -189,18 +191,6 @@ public class CountryCollector implements Observable<Country> {
     }
 
     /**
-     * Get an unmodifiable set containing all non visited countries.
-     * 
-     * @return Unmodifiable set containing all countries not visited.
-     */
-    public Set<Country> getNonVisitedCountries() {
-        // TODO: Should this be another set being kept up to date instead of recomputing upon each request
-        Set<Country> nonVisitedCountries = new HashSet<>(this.world.getCountries());
-        nonVisitedCountries.removeAll(this.visitedCountries);
-        return Collections.unmodifiableSet(nonVisitedCountries);
-    }
-
-    /**
      * Get the number of visits.
      * 
      * @return Return number of visits logged
@@ -223,6 +213,7 @@ public class CountryCollector implements Observable<Country> {
      * The country is considered valid if it's contained in this countryCollector's {@link #world}.
      * 
      * @param country The given country to check if valid
+     * 
      * @throws IllegalArgumentException If the given country is invalid
      */
     private void throwExceptionIfInvalidCountry(final Country country) throws IllegalArgumentException {
