@@ -38,7 +38,6 @@ public final class CustomBindings {
         ObservableList<T> backing = FXCollections.observableArrayList();
         SortedList<T> sorted = new SortedList<>(backing, comparator);
         backing.addAll(initialSet);
-
         observable.addListener(event -> {
             if (event.wasAdded()) {
                 backing.add(event.getElement());
@@ -46,7 +45,6 @@ public final class CustomBindings {
                 backing.remove(event.getElement());
             }
         });
-
         return sorted;
     }
 }

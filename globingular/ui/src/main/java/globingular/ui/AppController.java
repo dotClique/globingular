@@ -3,8 +3,13 @@ package globingular.ui;
 import globingular.core.Country;
 import globingular.core.CountryCollector;
 import globingular.core.CountryStatistics;
+import globingular.core.Observable;
+import globingular.core.Visit;
 import globingular.core.World;
 import globingular.persistence.PersistenceHandler;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.SortedList;
 import javafx.concurrent.Worker;
 import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
@@ -31,6 +36,7 @@ import java.net.URL;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.ResourceBundle;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.List;
 import java.util.Map;
@@ -196,9 +202,9 @@ public class AppController implements Initializable {
 
         countryCollector.addListener(event -> {
             if (event.wasAdded()) {
-                this.setVisitedOnMap(event.getElement());
-            } else if (event.wasRemoved()) {
-                this.setNotVisitedOnMap(event.getElement());
+                this.setVisitedOnMap(event.getElement().getCountry());
+            } else if (event.wasRemoved() && !countryCollector.isVisited(event.getElement().getCountry())) {
+                this.setNotVisitedOnMap(event.getElement().getCountry());
             }
             updateStatistics();
         });
@@ -427,8 +433,8 @@ public class AppController implements Initializable {
      * Unset the attribute "visited" for the given countries' map representations, removing custom css styling.
      */
     private void initializeCountriesList() {
-
-        countriesList.itemsProperty().set(CustomBindings.createSortedListView(countryCollector.getVisitedCountries(),
+        // TODO: What to do about this?
+        countriesList.itemsProperty().set(createSortedListView(countryCollector.getVisitedCountries(),
                 countryCollector, Comparator.comparing(Country::getShortName)));
         countriesList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         countriesList.setCellFactory(countryListView -> new ListCell<>() {
@@ -450,5 +456,31 @@ public class AppController implements Initializable {
     private Element getCountryMapElement(final Country country) {
         return (Element) webEngine
                 .executeScript(MAP_ELEMENT_NAME + ".getElementById('" + country.getCountryCode() + "')");
+    }
+
+    /**
+     * Create a readonly sorted-list view of the target property.
+     * Takes a separate initialSet and observable parameter, usually
+     * refering to the same data. As the observable only notifies
+     * about changes, the initialSet is required for setup.
+     *
+     * @param initialSet The set to initialize the set with
+     * @param observable The observable to synchronize with
+     * @param comparator The Comparator used to sort the list
+     * @return A new sorted-list view of the target property
+     */
+    private static ObservableList<Country> createSortedListView(final Set<Country> initialSet,
+            final Observable<Visit> observable, final Comparator<Country> comparator) {
+        ObservableList<Country> backing = FXCollections.observableArrayList();
+        SortedList<Country> sorted = new SortedList<>(backing, comparator);
+        backing.addAll(initialSet);
+        observable.addListener(event -> {
+            if (event.wasAdded()) {
+                backing.add(event.getElement().getCountry()); // TODO: What to do about this?
+            } else if (event.wasRemoved()) {
+                backing.remove(event.getElement().getCountry()); // TODO: What to do about this?
+            }
+        });
+        return sorted;
     }
 }

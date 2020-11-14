@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
  * </p>
  */
 
-public class CountryCollector implements Observable<Country> {
+public class CountryCollector implements Observable<Visit> {
 
     /**
      * Main set, containing all country-visits.
@@ -37,7 +37,7 @@ public class CountryCollector implements Observable<Country> {
     /**
      * Collection holding all added listeners.
      */
-    private final Collection<Listener<Country>> listeners;
+    private final Collection<Listener<Visit>> listeners;
 
     /**
      * Create a new CountryCollector using the provided World as its source of existing countries.
@@ -96,16 +96,10 @@ public class CountryCollector implements Observable<Country> {
         throwExceptionIfInvalidCountry(visit.getCountry());
         // Add the given Visit to visits
         this.visits.add(visit);
-        // Notify listeners with updated/added depending on which it is
-        if (this.visitedCountries.contains(visit.getCountry())) {
-            // Notify listeners about update
-            this.notifyListeners(new ChangeEvent<>(ChangeEvent.Status.UPDATED, visit.getCountry()));
-        } else {
-            // Keep visitedCountries up to date
-            this.visitedCountries.add(visit.getCountry());
-            // Notify listeners about addition
-            this.notifyListeners(new ChangeEvent<>(ChangeEvent.Status.ADDED, visit.getCountry()));
-        }
+        // Keep visitedCountries up to date
+        this.visitedCountries.add(visit.getCountry());
+        // Notify listeners about addition
+        this.notifyListeners(new ChangeEvent<>(ChangeEvent.Status.ADDED, visit));
     }
 
     /**
@@ -124,8 +118,8 @@ public class CountryCollector implements Observable<Country> {
         this.visits.removeAll(arr);
         // Keep visitedCountries up to date
         this.visitedCountries.remove(country);
-        // Notify listeners about removal
-        this.notifyListeners(new ChangeEvent<>(ChangeEvent.Status.REMOVED, country));
+        // Notify listeners about removal of each visit
+        arr.forEach(v -> this.notifyListeners(new ChangeEvent<>(ChangeEvent.Status.REMOVED, v)));
     }
 
     /**
@@ -142,14 +136,8 @@ public class CountryCollector implements Observable<Country> {
         if (this.visits.stream().noneMatch(v -> v.getCountry() == visit.getCountry())) {
             this.visitedCountries.remove(visit.getCountry());
         }
-        // Check if it was the last entry for the country. If it was, notify its removal, else notify its update.
-        if (this.isVisited(visit.getCountry())) {
-            // Notify listeners about update
-            this.notifyListeners(new ChangeEvent<>(ChangeEvent.Status.UPDATED, visit.getCountry()));
-        } else {
-            // Notify listeners about removal
-            this.notifyListeners(new ChangeEvent<>(ChangeEvent.Status.REMOVED, visit.getCountry()));
-        }
+        // Notify listeners about removal
+        this.notifyListeners(new ChangeEvent<>(ChangeEvent.Status.REMOVED, visit));
     }
 
     /**
@@ -245,7 +233,7 @@ public class CountryCollector implements Observable<Country> {
      * Allows for listening to changes in visited countries.
      */
     @Override
-    public void addListener(final Listener<Country> listener) {
+    public void addListener(final Listener<Visit> listener) {
         // Return true if already registered, or if successfully added.
         this.listeners.add(listener);
     }
@@ -255,7 +243,7 @@ public class CountryCollector implements Observable<Country> {
      * The given listener will no longer be notified about changes in visited countries.
      */
     @Override
-    public void removeListener(final Listener<Country> listener) {
+    public void removeListener(final Listener<Visit> listener) {
         // Return true if listener successfully removed, or isn't registered in the first place.
         this.listeners.remove(listener);
     }
@@ -265,7 +253,7 @@ public class CountryCollector implements Observable<Country> {
      * 
      * @param event A ChangeEvent to pass to listeners
      */
-    private void notifyListeners(final ChangeEvent<Country> event) {
+    private void notifyListeners(final ChangeEvent<Visit> event) {
         // Notify all listeners
         this.listeners.forEach(l -> l.notifyListener(event));
     }
