@@ -47,9 +47,9 @@ public class CountryCollectorDeserializer extends JsonDeserializer<CountryCollec
             // If World is present as a node in the JSON, use it!
             World tmpWorld = node.get("World").traverse(p.getCodec()).readValueAs(World.class);
 
-            PersistenceHandler persitencHandler = (PersistenceHandler)
+            PersistenceHandler persistenceHandler = (PersistenceHandler)
                     injectedMap.get(PersistenceHandler.INJECTED_MAP_PERSISTENCE);
-            world = persitencHandler.getDefaultWorldOr(tmpWorld.getWorldName(), tmpWorld);
+            world = persistenceHandler.getDefaultWorldOr(tmpWorld.getWorldName(), tmpWorld);
 
             injectedMap.put(PersistenceHandler.INJECTED_MAP_WORLD, world);
         }

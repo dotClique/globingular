@@ -24,7 +24,6 @@ public class CountryCollectorResourceTest {
 
     private static HttpServer server;
     private static WebTarget target;
-    PersistenceHandler persistenceHandler = new PersistenceHandler();
     ObjectMapper objectMapper = new GlobingularObjectMapperProvider().getContext(getClass());
 
     @BeforeAll
@@ -46,7 +45,7 @@ public class CountryCollectorResourceTest {
      * Test to see if a {@link CountryCollector} is sent back from the server.
      */
     @Test
-    public void testGetCountryCollector() throws JsonProcessingException {
+    public void testGetCountryCollector() {
         Response response = target.path("globingular").path("countryCollector")
                 .path("hablebable1").request().get();
 

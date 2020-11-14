@@ -87,7 +87,7 @@ public class PersistenceHandler {
      * Initialize a new PersistenceHandler with default parameters.
      */
     public PersistenceHandler() {
-        World world = loadMapWorld();
+        World world = loadWorld();
         defaultWorlds = new HashMap<>();
         defaultWorlds.put("Earth", world);
     }
