@@ -24,6 +24,7 @@
         <fast>false</fast>
 
         <!-- Adding -DenableTestRedirect=false to maven commands will disable redirecting output to file, showing the stacktrace in terminal -->
+        <!-- Note that if tests are run in parallel (using the <forkCount> option) the output will be interweaved -->
         <enableTestRedirect>true</enableTestRedirect>
     </properties>
 
@@ -375,7 +376,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.0.0-M5</version>
                 <configuration>
-                    <redirectTestOutputToFile>true</redirectTestOutputToFile>
+                    <redirectTestOutputToFile>${enableTestRedirect}</redirectTestOutputToFile>
                 </configuration>
             </plugin>
 
