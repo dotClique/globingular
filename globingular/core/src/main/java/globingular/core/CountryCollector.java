@@ -96,10 +96,16 @@ public class CountryCollector implements Observable<Country> {
         throwExceptionIfInvalidCountry(visit.getCountry());
         // Add the given Visit to visits
         this.visits.add(visit);
-        // Keep visitedCountries up to date
-        this.visitedCountries.add(visit.getCountry());
-        // Notify listeners
-        this.notifyListeners(new ChangeEvent<>(ChangeEvent.Status.ADDED, visit.getCountry()));
+        // Notify listeners with updated/added depending on which it is
+        if (this.visitedCountries.contains(visit.getCountry())) {
+            // Notify listeners about update
+            this.notifyListeners(new ChangeEvent<Country>(ChangeEvent.Status.UPDATED, visit.getCountry()));
+        } else {
+            // Keep visitedCountries up to date
+            this.visitedCountries.add(visit.getCountry());
+            // Notify listeners about addition
+            this.notifyListeners(new ChangeEvent<>(ChangeEvent.Status.ADDED, visit.getCountry()));
+        }
     }
 
     /**
@@ -118,7 +124,7 @@ public class CountryCollector implements Observable<Country> {
         this.visits.removeAll(arr);
         // Keep visitedCountries up to date
         this.visitedCountries.remove(country);
-        // Notify listeners
+        // Notify listeners about removal
         this.notifyListeners(new ChangeEvent<>(ChangeEvent.Status.REMOVED, country));
     }
 
@@ -136,8 +142,12 @@ public class CountryCollector implements Observable<Country> {
         if (this.visits.stream().noneMatch(v -> v.getCountry() == visit.getCountry())) {
             this.visitedCountries.remove(visit.getCountry());
         }
-        if (!this.isVisited(visit.getCountry())) {
-            // Notify listeners
+        // Check if it was the last entry for the country. If it was, notify it's removal, else notify it's update.
+        if (this.isVisited(visit.getCountry())) {
+            // Notify listeners about update
+            this.notifyListeners(new ChangeEvent<>(ChangeEvent.Status.UPDATED, visit.getCountry()));
+        } else {
+            // Notify listeners about removal
             this.notifyListeners(new ChangeEvent<>(ChangeEvent.Status.REMOVED, visit.getCountry()));
         }
     }
