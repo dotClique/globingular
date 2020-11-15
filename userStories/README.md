@@ -63,17 +63,7 @@ actor User
 User -> "~#countryInput: TextField" as countryInput: "Azer"
 User -> "~#suggestions: TextFields" as suggestions: *click*
 suggestions -> countryInput: "Azerbaijan"
-User -> "~#countryAdd: Button" as countryAdd: *click*
-countryAdd -> AppController: onCountryAdd()
-AppController -> countryInput: getText()
-return "Azerbaijan"
-AppController -> World: getCountryFromCode("AZ")
-return ~#Azerbaijan: Country
-AppController -> World: getCountryFromName("Azerbaijan")
-return null
-AppController -> CountryCollector: setVisited(#Azerbaijan: Country)
-CountryCollector -> AppController: *notifyListener: setColor(#Azerbaijan: Country, Colors.COUNTRY_VISITED)*
-AppController --> User: *Map updated with colored countries*
+
 ```
 
 
