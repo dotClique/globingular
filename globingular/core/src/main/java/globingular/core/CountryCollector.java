@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -113,13 +114,21 @@ public class CountryCollector implements Observable<Visit> {
         // Check to make sure the given Country is valid
         throwExceptionIfInvalidCountry(country);
         // Retrieve all visits to the given Country
-        Collection<Visit> arr = this.getVisitsToCountry(country);
-        // Remove all retrieved Visits from visits
-        this.visits.removeAll(arr);
-        // Keep visitedCountries up to date
-        this.visitedCountries.remove(country);
-        // Notify listeners about removal of each visit
-        arr.forEach(v -> this.notifyListeners(new ChangeEvent<>(ChangeEvent.Status.REMOVED, v)));
+        Iterator<Visit> iterator = this.getVisitsToCountry(country).iterator();
+        // Loop through all visits
+        while (iterator.hasNext()) {
+            // Retrieve visit
+            Visit visit = iterator.next();
+            // Remove retrieved visit
+            this.visits.remove(visit);
+            // Remove country before notifying listeners, if no more visits to remove
+            if (!iterator.hasNext()) {
+                // Keep visitedCountries up to date
+                this.visitedCountries.remove(country);
+            }
+            // Notify listeners about removal of visit
+            this.notifyListeners(new ChangeEvent<>(ChangeEvent.Status.REMOVED, visit));
+        }
     }
 
     /**
