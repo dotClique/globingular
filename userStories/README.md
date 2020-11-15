@@ -62,7 +62,7 @@ A user went to Azerbaijan, but doesn't know how to spell it. They enter the firs
 actor User
 User -> "~#countryInput: TextField" as countryInput: "Azer"
 User -> "~#suggestions: TextFields" as suggestions: *click*
-User -> "~#countryInput: TextField" as countryInput: "Azerbaijan"
+User -> "~#suggestions: TextFields" as countryInput: "Azerbaijan"
 User -> "~#countryAdd: Button" as countryAdd: *click*
 countryAdd -> AppController: onCountryAdd()
 AppController -> countryInput: getText()
