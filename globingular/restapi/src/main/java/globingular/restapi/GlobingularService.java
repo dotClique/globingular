@@ -4,11 +4,8 @@ import globingular.core.CountryCollector;
 import globingular.persistence.PersistenceHandler;
 import globingular.core.GlobingularModule;
 import jakarta.inject.Inject;
-import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.core.MediaType;
 
 /**
  * A service serving as the main handler for the API.
@@ -40,19 +37,6 @@ public class GlobingularService {
     }
 
     /**
-     * Retrieve the {@link GlobingularModule} being used.
-     * 
-     * @return The {@link GlobingularModule}-instance
-     */
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public GlobingularModule getGlobingularModule() {
-        // TODO: Need to implement a GlobingularModuleSerializer (and Deserializer), or remove this method.
-        // TODO: Exposing globingularModule to edits?
-        return this.globingularModule;
-    }
-
-    /**
      * Retrieve a {@link CountryCollectorResource} to handle all requests for the user.
      * Using {@code : (?i)} in {@code @Path} to enable case-insensitivity.
      * 
@@ -64,9 +48,9 @@ public class GlobingularService {
         // Only allow lowercase usernames
         String usernameLowercase = username.toLowerCase();
         // Get from cache if available
-        CountryCollector countryCollector = getGlobingularModule().getCountryCollector(usernameLowercase);
+        CountryCollector countryCollector = this.globingularModule.getCountryCollector(usernameLowercase);
         // If not in cache, load from persistence
-        if (countryCollector == null) {
+        if (countryCollector == null && persistenceHandler != null) {
             countryCollector = this.persistenceHandler.loadCountryCollector(usernameLowercase);
         }
         return new CountryCollectorResource(this.globingularModule, usernameLowercase, countryCollector,

@@ -41,7 +41,7 @@ public class GlobingularModule {
     public boolean putCountryCollector(final String username,
             final CountryCollector countryCollector) {
         this.countryCollectorsByUsername.put(username.toLowerCase(), countryCollector);
-        return true; // TODO: should this method just be void?
+        return !isUsernameAvailable(username);
     }
 
     /**
@@ -51,7 +51,7 @@ public class GlobingularModule {
      * @return True if this username is not in use
      */
     public boolean isUsernameAvailable(final String username) {
-        return this.countryCollectorsByUsername.containsKey(username.toLowerCase());
+        return !this.countryCollectorsByUsername.containsKey(username.toLowerCase());
     }
 
     /**

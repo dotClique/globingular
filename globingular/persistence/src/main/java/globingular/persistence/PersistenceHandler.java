@@ -85,7 +85,7 @@ public class PersistenceHandler {
      * Initialize a new PersistenceHandler with default parameters.
      */
     public PersistenceHandler() {
-        World world = loadWorld();
+        World world = loadDefaultWorld();
         defaultWorlds = new HashMap<>();
         defaultWorlds.put(DEFAULT_WORLD_NAME, world);
     }
@@ -207,7 +207,7 @@ public class PersistenceHandler {
      * 
      * @return Default World-instance.
      */
-    private World loadWorld() {
+    private World loadDefaultWorld() {
         World world = new World();
         try (InputStream in = getClass().getResourceAsStream(DEFAULT_WORLD)) {
             world = objectMapper.readValue(in, World.class);
