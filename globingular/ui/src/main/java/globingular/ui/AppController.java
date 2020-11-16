@@ -1,9 +1,6 @@
 package globingular.ui;
 
-import globingular.core.Country;
-import globingular.core.CountryCollector;
-import globingular.core.CountryStatistics;
-import globingular.core.World;
+import globingular.core.*;
 import globingular.persistence.PersistenceHandler;
 import javafx.collections.SetChangeListener;
 import javafx.concurrent.Worker;
@@ -11,12 +8,7 @@ import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
-import javafx.scene.control.SelectionMode;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.scene.layout.HBox;
@@ -130,6 +122,12 @@ public class AppController implements Initializable {
     private GridPane statisticsGrid;
 
     /**
+     * A GridPane where statistics will be added.
+     */
+    @FXML
+    private GridPane badgesGrid;
+
+    /**
      * The WebEngine for the world map.
      */
     private WebEngine webEngine;
@@ -160,6 +158,11 @@ public class AppController implements Initializable {
     private CountryStatistics countryStatistics;
 
     /**
+     * Manager of statistics about countries the user has visited.
+     */
+    private Badges badges;
+
+    /**
      * Font size for titles in statistics tab.
      */
     private static final int TITLE_FONT_SIZE = 26;
@@ -183,6 +186,8 @@ public class AppController implements Initializable {
         // Initialize a countryStatistics
         countryStatistics = new CountryStatistics(countryCollector);
 
+        badges = new Badges(countryCollector);
+
         // Get world-instance
         world = countryCollector.getWorld();
     }
@@ -205,6 +210,7 @@ public class AppController implements Initializable {
         countryCollector.visitedCountriesProperty()
                         .addListener((SetChangeListener<? super Country>) e -> {
                             updateStatistics();
+                            updateBadges();
                         });
 
         initializeCountriesList();
@@ -224,6 +230,7 @@ public class AppController implements Initializable {
                 setVisitedOnMapAll(countryCollector.getVisitedCountries());
             }
         }));
+        updateBadges();
         updateStatistics();
         configureAutoComplete();
     }
@@ -452,5 +459,48 @@ public class AppController implements Initializable {
     private Element getCountryMapElement(final Country country) {
         return (Element) webEngine
                 .executeScript(MAP_ELEMENT_NAME + ".getElementById('" + country.getCountryCode() + "')");
+    }
+
+    /**
+     * Update badges view in the UI.
+     */
+    private void updateBadges() {
+        badgesGrid.getChildren().clear();
+        int newRowIndex = 0;
+
+        Label title = createConfiguredLabel("Badges");
+        title.setFont(Font.font("System", TITLE_FONT_SIZE));
+        badgesGrid.add(title, 0, newRowIndex++);
+
+        for (Map.Entry<String, String> entry : badges.getBadgeData().entrySet()) {
+            badgesGrid.addRow(newRowIndex++, createConfiguredLabel(entry.getKey() + ": "),
+                    setProgressBar(entry.getValue()), setProgressIndicator(entry.getValue()));
+        }
+    }
+
+    /**
+     * Creates a progressbar.
+     *
+     * @param num A number between 0 and 1 to indicate progress.
+     * @return The progressbar
+     */
+    private ProgressBar setProgressBar(final String num) {
+        ProgressBar pb = new ProgressBar();
+        pb.setProgress(Double.parseDouble(num));
+
+        return pb;
+    }
+
+    /**
+     * Creates a pie chart to visualize progress. Displays percentage.
+     *
+     * @param num A number between 0 and 1 to indicate progress.
+     * @return The progressindicator.
+     */
+    private ProgressIndicator setProgressIndicator(final String num) {
+        ProgressIndicator pi = new ProgressIndicator();
+        pi.setProgress(Double.parseDouble(num));
+
+        return pi;
     }
 }
