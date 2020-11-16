@@ -137,13 +137,13 @@ public class PersistenceHandler {
     /**
      * Load a CountryCollector-state from file.
      *
-     * @param filename The filename to retrieve a countryCollector from.
+     * @param username The username to retrieve a countryCollector for (aka. filename).
      *                 If null is given, default filename is used.
      * @return         A CountryCollector instance containing data loaded from file.
      */
-    public CountryCollector loadCountryCollector(final String filename) {
+    public CountryCollector loadCountryCollector(final String username) {
         CountryCollector countryCollector = null;
-        File file = pathFromFilename(filename, DEFAULT_COLLECTOR_FILENAME).toFile();
+        File file = pathFromFilename(username, DEFAULT_COLLECTOR_FILENAME).toFile();
         if (file.isFile()) {
             try (InputStream in = new BufferedInputStream(new FileInputStream(file))) {
                 countryCollector = objectMapper.readValue(in, CountryCollector.class);
@@ -188,17 +188,17 @@ public class PersistenceHandler {
     /**
      * Set PersistenceHandler to autosave changes in a CountryCollector.
      * 
-     * @param filename         The filename to save as.
+     * @param username         The username to save state for (and use as filename).
      *                         If null is given, default filename is used.
      * @param countryCollector The CountryCollector to autosave
      * 
      * @throws IllegalArgumentException If filename is not alphanumeric
      */
-    public void setAutosave(final String filename, final CountryCollector countryCollector)
+    public void setAutosave(final String username, final CountryCollector countryCollector)
             throws IllegalArgumentException {
         countryCollector.addListener(event -> {
             // saveState uses default if filename is null, and throws IllegalArgumentException if invalid
-            this.saveState(filename, countryCollector);
+            this.saveState(username, countryCollector);
         });
     }
 
@@ -222,13 +222,13 @@ public class PersistenceHandler {
     /**
      * Save a CountryCollector instance to file.
      *
-     * @param filename         The filename to save as.
-     *                         If null is given, default filename is used.
+     * @param username         The username to save state for (and use as filename).
+     *                         If null is given, default filename is used instead.
      * @param countryCollector The CountryCollector instance to save
      * 
      * @throws IllegalArgumentException If filename is not alphanumeric
      */
-    public void saveState(final String filename, final CountryCollector countryCollector)
+    public void saveState(final String username, final CountryCollector countryCollector)
             throws IllegalArgumentException {
         try {
             Files.createDirectories(DATA_FOLDER);
@@ -236,7 +236,7 @@ public class PersistenceHandler {
             // Catch and print if exception
             e.printStackTrace();
         }
-        try (Writer out = Files.newBufferedWriter(pathFromFilename(filename, DEFAULT_COLLECTOR_FILENAME))) {
+        try (Writer out = Files.newBufferedWriter(pathFromFilename(username, DEFAULT_COLLECTOR_FILENAME))) {
             objectMapper.writerWithDefaultPrettyPrinter().writeValue(out, countryCollector);
         } catch (IOException e) {
             // Catch and print if exception
