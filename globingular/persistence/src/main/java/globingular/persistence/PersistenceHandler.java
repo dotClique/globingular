@@ -37,7 +37,7 @@ public class PersistenceHandler {
     /**
      * Define Path to the apps datafolder, used for saving app-state.
      */
-    private static final Path DATA_FOLDER = Paths.get(System.getProperty("user.home"), "temp", "globingular");
+    private static final Path DATA_FOLDER = Paths.get(System.getProperty("user.home"), "globingular");
     /**
      * Define Path to Json-file used for saving CountryCollector-state.
      */
