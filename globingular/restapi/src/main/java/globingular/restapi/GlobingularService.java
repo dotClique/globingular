@@ -61,13 +61,15 @@ public class GlobingularService {
      */
     @Path("/{countryCollector : (?i)countryCollector}/{username}")
     public CountryCollectorResource getCountryCollector(@PathParam("username") final String username) {
+        // Only allow lowercase usernames
+        String usernameLowercase = username.toLowerCase();
         // Get from cache if available
-        CountryCollector countryCollector = getGlobingularModule().getCountryCollector(username);
+        CountryCollector countryCollector = getGlobingularModule().getCountryCollector(usernameLowercase);
         // If not in cache, load from persistence
         if (countryCollector == null) {
-            countryCollector = this.persistenceHandler.loadCountryCollector(username);
+            countryCollector = this.persistenceHandler.loadCountryCollector(usernameLowercase);
         }
-        return new CountryCollectorResource(this.globingularModule, username, countryCollector,
+        return new CountryCollectorResource(this.globingularModule, usernameLowercase, countryCollector,
                 this.persistenceHandler);
     }
 }

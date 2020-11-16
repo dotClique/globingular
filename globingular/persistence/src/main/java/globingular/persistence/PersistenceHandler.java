@@ -41,7 +41,7 @@ public class PersistenceHandler {
     /**
      * Define Path to Json-file used for saving CountryCollector-state.
      */
-    private static final String DEFAULT_COLLECTOR_FILENAME = "countryCollector";
+    private static final String DEFAULT_COLLECTOR_FILENAME = "countrycollector";
 
     /**
      * Define which file to get standard world map {@link World} from.
@@ -246,19 +246,28 @@ public class PersistenceHandler {
 
     /**
      * Validates filename and returns a valid path to json-file.
+     * Filename is valid if alphanumeric.
      * 
      * @param filename        The filename to validate
      * @param defaultFilename The filename to return if the one given is null
-     * @return                A valid path to the given filename, or to defaultFilename if filename is null
+     * @return                A valid path to the given filename (in lowercase), or to defaultFilename if filename is null
      * 
      * @throws IllegalArgumentException If filename is invalid and not null.
+     *                                  Or if both filename and defaultFilename are null.
      */
     private static Path pathFromFilename(final String filename, final String defaultFilename)
             throws IllegalArgumentException {
-        // If filename is neither null or alphanumeric, then throw IllegalArgumentException
-        if (!(filename == null || filename.matches("[A-Za-z0-9]+"))) {
+        // If filename is null, try to use defaultFilename. If both are null, throw exception.
+        if (filename == null) {
+            if (defaultFilename == null) {
+                throw new IllegalArgumentException("Both filename and defaultFilename can't be null!");
+            }
+            return pathFromFilename(defaultFilename, null);
+        }
+        // If not alphanumeric, throw exception.
+        if (!filename.matches("[A-Za-z0-9]+")) {
             throw new IllegalArgumentException("Filename must be alphanumeric!");
         }
-        return DATA_FOLDER.resolve((filename != null ? filename : defaultFilename) + ".json");
+        return DATA_FOLDER.resolve(filename.toLowerCase() + ".json");
     }
 }

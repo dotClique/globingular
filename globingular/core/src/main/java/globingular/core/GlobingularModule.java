@@ -27,7 +27,7 @@ public class GlobingularModule {
      * @return The countryCollector for the provided username. Returns {@code null} if no such countryCollector exists
      */
     public CountryCollector getCountryCollector(final String username) {
-        return this.countryCollectorsByUsername.get(username);
+        return this.countryCollectorsByUsername.get(username.toLowerCase());
     }
 
     /**
@@ -40,7 +40,7 @@ public class GlobingularModule {
      */
     public boolean putCountryCollector(final String username,
             final CountryCollector countryCollector) {
-        this.countryCollectorsByUsername.put(username, countryCollector);
+        this.countryCollectorsByUsername.put(username.toLowerCase(), countryCollector);
         return true; // TODO: should this method just be void?
     }
 
@@ -51,6 +51,16 @@ public class GlobingularModule {
      * @return True if this username is not in use
      */
     public boolean isUsernameAvailable(final String username) {
-        return this.countryCollectorsByUsername.containsKey(username);
+        return this.countryCollectorsByUsername.containsKey(username.toLowerCase());
+    }
+
+    /**
+     * Check if the provided username is valid.
+     * 
+     * @param username The username to check validity of
+     * @return True if this username is valid (alphanumeric)
+     */
+    public boolean isUsernameValid(final String username) {
+        return username.matches("[A-Za-z0-9]+");
     }
 }
