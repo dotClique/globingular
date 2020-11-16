@@ -64,4 +64,19 @@ public class GlobingularModule {
     public boolean isUsernameAvailable(final String username) {
         return !this.countryCollectorsByUsername.containsKey(username);
     }
+
+    /**
+     * Retrieve username from keySet. This is to ensure no duplicates are created.
+     * 
+     * @param username the username to look up
+     * @return         the username from keySet that corresponds to the given one,
+     *                 or the given username if none match
+     */
+    private String getCorrectUsername(final String username) {
+        if (isUsernameAvailable(username)) {
+            return username;
+        }
+        return this.countryCollectorsByUsername.keySet().stream()
+                .filter(s -> s.toLowerCase() == username.toLowerCase()).findAny().orElse(username);
+    }
 }
