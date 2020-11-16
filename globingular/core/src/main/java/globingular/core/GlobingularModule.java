@@ -27,7 +27,7 @@ public class GlobingularModule {
      * @return The countryCollector for the provided username. Returns {@code null} if no such countryCollector exists
      */
     public CountryCollector getCountryCollector(final String username) {
-        return this.countryCollectorsByUsername.get(username);
+        return this.countryCollectorsByUsername.get(username.toLowerCase());
     }
 
     /**
@@ -40,8 +40,9 @@ public class GlobingularModule {
      */
     public boolean putCountryCollector(final String username,
             final CountryCollector countryCollector) {
-        this.countryCollectorsByUsername.put(username, countryCollector);
-        return !isUsernameAvailable(username);
+        String usernameLowercase = username.toLowerCase();
+        this.countryCollectorsByUsername.put(usernameLowercase, countryCollector);
+        return !isUsernameAvailable(usernameLowercase);
     }
 
     /**
@@ -51,8 +52,9 @@ public class GlobingularModule {
      * @return true if successfully removed, false otherwise
      */
     public boolean removeCountryCollector(final String username) {
-        this.countryCollectorsByUsername.remove(username);
-        return isUsernameAvailable(username);
+        String usernameLowercase = username.toLowerCase();
+        this.countryCollectorsByUsername.remove(usernameLowercase);
+        return isUsernameAvailable(usernameLowercase);
     }
 
     /**
@@ -62,21 +64,6 @@ public class GlobingularModule {
      * @return True if this username is not in use
      */
     public boolean isUsernameAvailable(final String username) {
-        return !this.countryCollectorsByUsername.containsKey(username);
-    }
-
-    /**
-     * Retrieve username from keySet. This is to ensure no duplicates are created.
-     * 
-     * @param username the username to look up
-     * @return         the username from keySet that corresponds to the given one,
-     *                 or the given username if none match
-     */
-    private String getCorrectUsername(final String username) {
-        if (isUsernameAvailable(username)) {
-            return username;
-        }
-        return this.countryCollectorsByUsername.keySet().stream()
-                .filter(s -> s.toLowerCase() == username.toLowerCase()).findAny().orElse(username);
+        return !this.countryCollectorsByUsername.containsKey(username.toLowerCase());
     }
 }

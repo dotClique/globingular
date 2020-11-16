@@ -51,7 +51,8 @@ public class GlobingularService {
      */
     @Path("/{countryCollector : (?i)countryCollector}/{username}")
     public CountryCollectorResource getCountryCollector(@PathParam("username") final String username) {
-        CountryCollector countryCollector = getGlobingularModule().getCountryCollector(username);
-        return new CountryCollectorResource(globingularModule, username, countryCollector);
+        String usernameLowercase = username.toLowerCase();
+        CountryCollector countryCollector = getGlobingularModule().getCountryCollector(usernameLowercase);
+        return new CountryCollectorResource(globingularModule, usernameLowercase, countryCollector);
     }
 }
