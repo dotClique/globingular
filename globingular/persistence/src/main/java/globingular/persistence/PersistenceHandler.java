@@ -250,7 +250,8 @@ public class PersistenceHandler {
      * 
      * @param filename        The filename to validate
      * @param defaultFilename The filename to return if the one given is null
-     * @return                A valid path to the given filename (in lowercase), or to defaultFilename if filename is null
+     * @return                A valid path to the given filename (in lowercase),
+     *                        or to defaultFilename if filename is null
      * 
      * @throws IllegalArgumentException If filename is invalid and not null.
      *                                  Or if both filename and defaultFilename are null.
