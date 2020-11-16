@@ -8,8 +8,10 @@ import globingular.core.World;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 
@@ -107,6 +109,32 @@ public class CountryCollectorResource {
     public boolean deleteCountryCollector() throws IllegalArgumentException {
         checkUsernameExists();
         return this.globingularModule.removeCountryCollector(username);
+    }
+
+    /**
+     * Rename this {@link #username} from to the given {@code newName}.
+     * Effectively it stores a new reference to the {@link #countryCollector}
+     * with the new username {@code newName} and then deletes the old reference.
+     * 
+     * @param newName the new name to rename {@link #username} to
+     * @return        true if successful, false otherwise
+     * 
+     * @throws IllegalArgumentException if username doesn't exist
+     *                                  or if the new username is already taken
+     */
+    @POST
+    @Path("rename/{newName}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public boolean renameCountryCollector(@PathParam("newName") final String newName) throws IllegalArgumentException {
+        checkUsernameExists();
+        if (!this.globingularModule.isUsernameAvailable(newName)) {
+            throw new IllegalArgumentException("The new username is already taken: " + newName);
+        }
+        this.globingularModule.putCountryCollector(newName, countryCollector);
+        this.globingularModule.removeCountryCollector(username);
+
+        return this.globingularModule.getCountryCollector(newName) == countryCollector
+                && this.globingularModule.isUsernameAvailable(username);
     }
 
     /**

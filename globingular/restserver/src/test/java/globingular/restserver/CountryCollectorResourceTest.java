@@ -252,4 +252,9 @@ public class CountryCollectorResourceTest {
         String responseMsg3 = response3.readEntity(String.class);
         assertEquals("false", responseMsg3);
     }
+
+    @Test
+    public void testRenameCountryCollector() {
+            // TODO: Not implemented!
+    }
 }
