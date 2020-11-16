@@ -56,21 +56,21 @@
                 <version>0.0.2-SNAPSHOT</version>
             </dependency>
 
-            <!-- Globingular core module -->
+            <!-- Globingular UI module -->
             <dependency>
                 <groupId>it1901.gr2002.globingular</groupId>
                 <artifactId>ui</artifactId>
                 <version>0.0.2-SNAPSHOT</version>
             </dependency>
 
-            <!-- Globingular persistence module -->
+            <!-- Globingular restserver module -->
             <dependency>
                 <groupId>it1901.gr2002.globingular</groupId>
                 <artifactId>restserver</artifactId>
                 <version>0.0.2-SNAPSHOT</version>
             </dependency>
 
-            <!-- Globingular core module -->
+            <!-- Globingular restapi module -->
             <dependency>
                 <groupId>it1901.gr2002.globingular</groupId>
                 <artifactId>restapi</artifactId>
