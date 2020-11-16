@@ -10,13 +10,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>restapi</artifactId>
-    <version>0.0.2-SNAPSHOT</version>
 
     <dependencies>
         <!-- Dependency injection annotations -->
         <dependency>
             <groupId>jakarta.inject</groupId>
             <artifactId>jakarta.inject-api</artifactId>
+            <version>2.0.0</version>
         </dependency>
 
         <!-- Java JAX-RS-API (standard for REST APIs) -->
@@ -28,6 +28,7 @@
         <dependency>
             <groupId>jakarta.xml.bind</groupId>
             <artifactId>jakarta.xml.bind-api</artifactId>
+            <version>3.0.0-RC3</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
