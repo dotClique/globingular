@@ -8,7 +8,6 @@ import globingular.core.World;
 
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Writer;
 import java.io.InputStream;
@@ -35,23 +34,20 @@ import java.util.Map;
 public class PersistenceHandler {
 
     /**
-     * Define Path to Json-file used for saving CountryCollector-state.
-     */
-    private static final Path FILE_COLLECTOR = Paths.get(System.getProperty("user.home"), "temp", "globingular",
-                                                         "countryCollector.json");
-
-    /**
      * Define Path to the apps datafolder, used for saving app-state.
      */
-    private static final Path DATA_FOLDER = FILE_COLLECTOR.getParent();
+    private static final Path DATA_FOLDER = Paths.get(System.getProperty("user.home"), "temp", "globingular");
+    /**
+     * Define Path to Json-file used for saving CountryCollector-state.
+     */
+    private static final String DEFAULT_COLLECTOR_FILENAME = "countryCollector.json";
 
     /**
      * Define which file to get standard world map {@link World} from.
      */
     private static final String FILE_MAP_WORLD = "/json/sampleWorld.json";
-
     /**
-     * Define which sample-file to use for CountryCollector.
+     * Define which sample-file to use for {@link CountryCollector}.
      */
     private static final String SAMPLE_COLLECTOR = "/json/sampleCollector.json";
 
@@ -64,7 +60,6 @@ public class PersistenceHandler {
      * Static key used for storing a reference to a {@link World} used for further deserialization.
      */
     public static final String INJECTED_MAP_WORLD = "_globingular_world";
-
     /**
      * Static key used for storing a reference to this {@link PersistenceHandler} in an InjectedMap.
      */
@@ -119,26 +114,40 @@ public class PersistenceHandler {
     }
 
     /**
-     * Load a CountryCollector-state from file.
+     * Load a default CountryCollector-state.
      *
-     * @return A CountryCollector instance containing data loaded from file
+     * @return A CountryCollector instance containing data loaded from sample file.
      */
     public CountryCollector loadCountryCollector() {
-        World world = loadWorld();
-
-        CountryCollector countryCollector = new CountryCollector(world);
-        try (InputStream in = new BufferedInputStream(new FileInputStream(FILE_COLLECTOR.toFile()))) {
+        CountryCollector countryCollector = new CountryCollector(getDefaultWorld("Earth"));
+        try (InputStream in = getClass().getResourceAsStream(SAMPLE_COLLECTOR)) {
             countryCollector = objectMapper.readValue(in, CountryCollector.class);
-        } catch (FileNotFoundException e) {
-            try (InputStream in = getClass().getResourceAsStream(SAMPLE_COLLECTOR)) {
-                countryCollector = objectMapper.readValue(in, CountryCollector.class);
-            } catch (IOException err) {
-                err.printStackTrace();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException err) {
+            // Catch an print if exception
+            err.printStackTrace();
         }
+        // TODO: What should be default behavior here? Should we have a getDefaultWorld() - with no arguments?
+        return countryCollector;
+    }
 
+    /**
+     * Load a CountryCollector-state from file.
+     *
+     * @param filename The filename to retrieve a countryCollector from.
+     *                 If null is given, default filename is used.
+     * @return         A CountryCollector instance containing data loaded from file.
+     */
+    public CountryCollector loadCountryCollector(final String filename) {
+        CountryCollector countryCollector = null;
+        if (DATA_FOLDER.resolve(filename).toFile().isFile()) {
+            try (InputStream in = new BufferedInputStream(new FileInputStream(
+                    DATA_FOLDER.resolve(filename != null ? filename : DEFAULT_COLLECTOR_FILENAME).toFile()))) {
+                countryCollector = objectMapper.readValue(in, CountryCollector.class);
+            } catch (IOException e) {
+                // Catch and print if exception
+                e.printStackTrace();
+            }
+        }
         return countryCollector;
     }
 
@@ -166,19 +175,23 @@ public class PersistenceHandler {
     /**
      * Set PersistenceHandler to autosave changes in a CountryCollector.
      * 
+     * @param filename         The filename to save as.
+     *                         If null is given, default filename is used.
      * @param countryCollector The CountryCollector to autosave
      */
-    public void setAutosave(final CountryCollector countryCollector) {
+    public void setAutosave(final String filename, final CountryCollector countryCollector) {
         countryCollector.addListener(event -> {
-            this.saveState(countryCollector);
+            this.saveState(filename != null ? filename : DEFAULT_COLLECTOR_FILENAME, countryCollector);
         });
     }
 
+    // TODO: JavaDoc?
     private World loadWorld() {
         World world = new World();
         try (InputStream in = getClass().getResourceAsStream(FILE_MAP_WORLD)) {
             world = objectMapper.readValue(in, World.class);
         } catch (IOException e) {
+            // Catch and print if exception
             e.printStackTrace();
         }
 
@@ -188,17 +201,23 @@ public class PersistenceHandler {
     /**
      * Save a CountryCollector instance to file.
      *
+     * @param filename         The filename to save as.
+     *                         If null is given, default filename is used.
      * @param countryCollector The CountryCollector instance to save
      */
-    private void saveState(final CountryCollector countryCollector) {
+    public void saveState(final String filename, final CountryCollector countryCollector) {
+        // TODO: Make sure the filename is sanitized!
         try {
             Files.createDirectories(DATA_FOLDER);
         } catch (IOException e) {
+            // Catch and print if exception
             e.printStackTrace();
         }
-        try (Writer out = Files.newBufferedWriter(FILE_COLLECTOR)) {
+        try (Writer out = Files.newBufferedWriter(
+                DATA_FOLDER.resolve(filename != null ? filename : DEFAULT_COLLECTOR_FILENAME))) {
             objectMapper.writerWithDefaultPrettyPrinter().writeValue(out, countryCollector);
         } catch (IOException e) {
+            // Catch and print if exception
             e.printStackTrace();
         }
     }

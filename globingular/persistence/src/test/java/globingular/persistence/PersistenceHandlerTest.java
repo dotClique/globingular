@@ -24,6 +24,6 @@ public class PersistenceHandlerTest {
     public void testAutosaveDoesNotCrash() {
         final PersistenceHandler p = new PersistenceHandler();
         CountryCollector cc = p.loadCountryCollector();
-        p.setAutosave(cc);
+        p.setAutosave(null, cc);
     }
 }

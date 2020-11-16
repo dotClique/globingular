@@ -1,6 +1,7 @@
 package globingular.restapi;
 
 import globingular.core.CountryCollector;
+import globingular.persistence.PersistenceHandler;
 import globingular.core.GlobingularModule;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
@@ -22,13 +23,20 @@ public class GlobingularService {
     private final GlobingularModule globingularModule;
 
     /**
+     * The service's {@link PersistenceHandler} instance, used for saving app-state.
+     */
+    private final PersistenceHandler persistenceHandler;
+
+    /**
      * Construct a new GlobingularService using the given {@link GlobingularModule} as app-state.
      *
      * @param globingularModule App-state. Injected if not given.
+     * @param persistenceHandler For saving app-state. Injected if not given.
      */
     @Inject
-    public GlobingularService(final GlobingularModule globingularModule) {
+    public GlobingularService(final GlobingularModule globingularModule, final PersistenceHandler persistenceHandler) {
         this.globingularModule = globingularModule;
+        this.persistenceHandler = persistenceHandler;
     }
 
     /**
@@ -39,6 +47,8 @@ public class GlobingularService {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public GlobingularModule getGlobingularModule() {
+        // TODO: Need to implement a GlobingularModuleSerializer (and Deserializer), or remove this method.
+        // TODO: Exposing globingularModule to edits?
         return this.globingularModule;
     }
 
@@ -51,7 +61,13 @@ public class GlobingularService {
      */
     @Path("/{countryCollector : (?i)countryCollector}/{username}")
     public CountryCollectorResource getCountryCollector(@PathParam("username") final String username) {
+        // Get from cache if available
         CountryCollector countryCollector = getGlobingularModule().getCountryCollector(username);
-        return new CountryCollectorResource(globingularModule, username, countryCollector);
+        // If not in cache, load from persistence
+        if (countryCollector == null) {
+            countryCollector = this.persistenceHandler.loadCountryCollector(username);
+        }
+        return new CountryCollectorResource(this.globingularModule, username, countryCollector,
+                this.persistenceHandler);
     }
 }

@@ -41,7 +41,7 @@ public class GlobingularModule {
     public boolean putCountryCollector(final String username,
             final CountryCollector countryCollector) {
         this.countryCollectorsByUsername.put(username, countryCollector);
-        return true;
+        return true; // TODO: should this method just be void?
     }
 
     /**
