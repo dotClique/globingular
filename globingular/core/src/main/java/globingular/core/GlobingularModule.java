@@ -41,7 +41,18 @@ public class GlobingularModule {
     public boolean putCountryCollector(final String username,
             final CountryCollector countryCollector) {
         this.countryCollectorsByUsername.put(username, countryCollector);
-        return true;
+        return !isUsernameAvailable(username);
+    }
+
+    /**
+     * Remove {@link CountryCollector} stored with given username.
+     * 
+     * @param username The username to remove CountryCollector for
+     * @return true if successfully removed, false otherwise
+     */
+    public boolean removeCountryCollector(final String username) {
+        this.countryCollectorsByUsername.remove(username);
+        return isUsernameAvailable(username);
     }
 
     /**
@@ -51,6 +62,6 @@ public class GlobingularModule {
      * @return True if this username is not in use
      */
     public boolean isUsernameAvailable(final String username) {
-        return this.countryCollectorsByUsername.containsKey(username);
+        return !this.countryCollectorsByUsername.containsKey(username);
     }
 }
