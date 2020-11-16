@@ -20,7 +20,6 @@
         <dependency>
             <groupId>it1901.gr2002.globingular</groupId>
             <artifactId>restapi</artifactId>
-            <version>0.0.2-SNAPSHOT</version>
         </dependency>
 
         <!-- Test with JUnit5 -->
