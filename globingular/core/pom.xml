@@ -10,13 +10,6 @@
     <artifactId>core</artifactId>
 
     <dependencies>
-        <!-- JavaFX -->
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-base</artifactId>
-            <version>14.0.1</version>
-        </dependency>
-
         <!-- Test with JUnit5 -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -34,7 +27,6 @@
             <version>2.0.2-beta</version>
             <scope>test</scope>
         </dependency>
-
     </dependencies>
 
     <build>

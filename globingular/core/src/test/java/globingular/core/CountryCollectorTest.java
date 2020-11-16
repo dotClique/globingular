@@ -1,12 +1,12 @@
 package globingular.core;
 
-import javafx.beans.property.ReadOnlySetProperty;
-import javafx.collections.ObservableList;
-import javafx.collections.ObservableSet;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -75,7 +75,7 @@ public class CountryCollectorTest {
         CountryCollector cc = new CountryCollector(world4);
         cc.registerVisit(country1);
         cc.registerVisit(country2);
-        assertEquals(2, cc.numberVisited());
+        assertEquals(2, cc.numberOfCountriesVisited());
         assertTrue(cc.isVisited(country2));
         assertTrue(cc.isVisited(country1));
         assertFalse(cc.isVisited(country3));
@@ -84,7 +84,7 @@ public class CountryCollectorTest {
     @Test
     public void testInitiallyEmpty() {
         CountryCollector cc = new CountryCollector(world4);
-        assertEquals(0, cc.numberVisited());
+        assertEquals(0, cc.numberOfCountriesVisited());
         assertEquals("[]", cc.toString());
     }
 
@@ -104,22 +104,22 @@ public class CountryCollectorTest {
         assertTrue(cc.isVisited(country3));
 
         // Test to make sure that arrival and departure is set to null
-        Collection<Visit> visits = cc.getCountryVisits(country3);
+        Collection<Visit> visits = cc.getVisitsToCountry(country3);
         assertTrue(visits.stream().anyMatch(v -> v.getArrival() == null && v .getDeparture() == null));
     }
 
     @Test
     public void testRegisterVisitWithCountryAndTimeRange() {
-        LocalDateTime dt = LocalDateTime.of(2020, 01, 01, 12, 0, 0);
-        LocalDateTime dt_2 = LocalDateTime.of(2020, 01, 31, 12, 0, 0);
+        LocalDateTime dt1 = LocalDateTime.of(2020, 01, 01, 12, 0, 0);
+        LocalDateTime dt2 = LocalDateTime.of(2020, 01, 31, 12, 0, 0);
 
         CountryCollector cc = new CountryCollector(world3);
         assertFalse(cc.isVisited(country3));
-        cc.registerVisit(country3, dt, dt_2);
+        cc.registerVisit(country3, dt1, dt2);
         assertTrue(cc.isVisited(country3));
 
-        Collection<Visit> visits = cc.getCountryVisits(country3);
-        assertTrue(visits.stream().anyMatch(v -> v.getArrival() == dt));
+        Collection<Visit> visits = cc.getVisitsToCountry(country3);
+        assertTrue(visits.stream().anyMatch(v -> v.getArrival() == dt1));
     }
 
     @Test
@@ -208,98 +208,28 @@ public class CountryCollectorTest {
         Collection<Visit> arr1 = cc.getVisitsToCountry(country2);
         assertTrue(arr1.stream().allMatch(v -> v.getCountry() == country2),
                 "The returned collection didn't only contain visits with the correct country");
-        
+
         Collection<Visit> arr2 = cc.getVisits().stream().filter(v -> v.getCountry() == country2).collect(Collectors.toList());
         assertTrue(arr1.equals(arr2), "The returned collection doesn't contain all the visits to the given country");
     }
 
     @Test
-    public void testVisitsPropertyIsReadOnly() {
-        CountryCollector cc = new CountryCollector(world1);
-        try {
-            cc.visitsProperty().add(visit0);
-            fail("Returned set is writable");
-        } catch (UnsupportedOperationException ignored) {
-        }
-    }
-
-    @Test
-    public void testGetVisitsIsReadOnly() {
+    public void testGetVisitsIsUnmodifiable() {
         CountryCollector cc = new CountryCollector(world1);
         try {
             cc.getVisits().add(visit0);
-            fail("Returned set is writable");
+            fail("Returned set is modifiable");
         } catch (UnsupportedOperationException ignored) {
         }
     }
 
     @Test
-    public void testVisitsPropertyIsSynchronized() {
-        CountryCollector cc = new CountryCollector(world1);
-        ReadOnlySetProperty<Visit> testSync = cc.visitsProperty();
-        cc.registerVisit(country0);
-        assertEquals(1, testSync.size());
-    }
-
-    @Test
-    public void testGetVisitsIsSynchronized() {
-        CountryCollector cc = new CountryCollector(world1);
-        ObservableSet<Visit> testSync = cc.getVisits();
-        cc.registerVisit(country0);
-        assertEquals(1, testSync.size());
-    }
-
-    @Test
-    public void testVisitedCountriesPropertyIsReadOnly() {
-        CountryCollector cc = new CountryCollector(world1);
-        try {
-            cc.visitedCountriesProperty().add(country0);
-            fail("Returned set is writable");
-        } catch (UnsupportedOperationException ignored) {
-        }
-    }
-
-    @Test
-    public void testGetVisitedCountriesIsReadOnly() {
+    public void testGetVisitedCountriesIsUnmodifiable() {
         CountryCollector cc = new CountryCollector(world1);
         try {
             cc.getVisitedCountries().add(country0);
-            fail("Returned set is writable");
+            fail("Returned set is modifiable");
         } catch (UnsupportedOperationException ignored) {
         }
-    }
-
-    @Test
-    public void testGetVisitedCountriesSortedIsReadOnly() {
-        CountryCollector cc = new CountryCollector(world1);
-        try {
-            cc.getVisitedCountriesSorted().add(country0);
-            fail("Returned list is writable");
-        } catch (UnsupportedOperationException ignored) {
-        }
-    }
-
-    @Test
-    public void testVisitedCountriesPropertyIsSynchronized() {
-        CountryCollector cc = new CountryCollector(world1);
-        ReadOnlySetProperty<Country> testSync = cc.visitedCountriesProperty();
-        cc.registerVisit(country0);
-        assertEquals(1, testSync.size());
-    }
-
-    @Test
-    public void testGetVisitedCountriesSortedIsSynchronized() {
-        CountryCollector cc = new CountryCollector(world1);
-        ObservableList<Country> testSync = cc.getVisitedCountriesSorted();
-        cc.registerVisit(country0);
-        assertEquals(1, testSync.size());
-    }
-
-    @Test
-    public void testGetVisitedCountriesIsSynchronized() {
-        CountryCollector cc = new CountryCollector(world1);
-        ObservableSet<Country> testSync = cc.getVisitedCountries();
-        cc.registerVisit(country0);
-        assertEquals(1, testSync.size());
     }
 }
