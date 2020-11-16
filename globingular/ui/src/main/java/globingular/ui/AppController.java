@@ -3,8 +3,6 @@ package globingular.ui;
 import globingular.core.Country;
 import globingular.core.CountryCollector;
 import globingular.core.CountryStatistics;
-import globingular.core.Observable;
-import globingular.core.Visit;
 import globingular.core.World;
 import globingular.persistence.PersistenceHandler;
 import javafx.collections.FXCollections;
@@ -36,7 +34,6 @@ import java.net.URL;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.ResourceBundle;
-import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.List;
 import java.util.Map;
@@ -433,9 +430,7 @@ public class AppController implements Initializable {
      * Unset the attribute "visited" for the given countries' map representations, removing custom css styling.
      */
     private void initializeCountriesList() {
-        // TODO: What to do about this?
-        countriesList.itemsProperty().set(createSortedListView(countryCollector.getVisitedCountries(),
-                countryCollector, Comparator.comparing(Country::getShortName)));
+        countriesList.itemsProperty().set(createSortedVisitedCountriesList(countryCollector));
         countriesList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         countriesList.setCellFactory(countryListView -> new ListCell<>() {
             @Override
@@ -459,26 +454,20 @@ public class AppController implements Initializable {
     }
 
     /**
-     * Create a readonly sorted-list view of the target property.
-     * Takes a separate initialSet and observable parameter, usually
-     * refering to the same data. As the observable only notifies
-     * about changes, the initialSet is required for setup.
+     * Create a readonly sorted-list view for the countries visited.
      *
-     * @param initialSet The set to initialize the set with
-     * @param observable The observable to synchronize with
-     * @param comparator The Comparator used to sort the list
-     * @return A new sorted-list view of the target property
+     * @param countryCollector The countryCollector to synchronize with
+     * @return A new sorted-list view for the countries visited
      */
-    private static ObservableList<Country> createSortedListView(final Set<Country> initialSet,
-            final Observable<Visit> observable, final Comparator<Country> comparator) {
+    private static ObservableList<Country> createSortedVisitedCountriesList(final CountryCollector countryCollector) {
         ObservableList<Country> backing = FXCollections.observableArrayList();
-        SortedList<Country> sorted = new SortedList<>(backing, comparator);
-        backing.addAll(initialSet);
-        observable.addListener(event -> {
+        SortedList<Country> sorted = new SortedList<>(backing, Comparator.comparing(Country::getShortName));
+        backing.addAll(countryCollector.getVisitedCountries());
+        countryCollector.addListener(event -> {
             if (event.wasAdded()) {
-                backing.add(event.getElement().getCountry()); // TODO: What to do about this?
+                backing.add(event.getElement().getCountry());
             } else if (event.wasRemoved()) {
-                backing.remove(event.getElement().getCountry()); // TODO: What to do about this?
+                backing.remove(event.getElement().getCountry());
             }
         });
         return sorted;
