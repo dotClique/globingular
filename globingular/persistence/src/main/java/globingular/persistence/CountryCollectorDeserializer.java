@@ -41,23 +41,24 @@ public class CountryCollectorDeserializer extends JsonDeserializer<CountryCollec
         @SuppressWarnings("unchecked")
         Map<String, Object> injectedMap = (Map<String, Object>)
                 ctxt.findInjectableValue(PersistenceHandler.INJECTED_MAP, null, null);
-        if (injectedMap.containsKey(PersistenceHandler.INJECTED_MAP_WORLD)) {
-            world = (World) injectedMap.get(PersistenceHandler.INJECTED_MAP_WORLD);
-        } else {
-            // If World is present as a node in the JSON, use it!
-            World tmpWorld = node.get("World").traverse(p.getCodec()).readValueAs(World.class);
 
-            PersistenceHandler persistenceHandler = (PersistenceHandler)
-                    injectedMap.get(PersistenceHandler.INJECTED_MAP_PERSISTENCE);
-            world = persistenceHandler.getDefaultWorldOr(tmpWorld.getWorldName(), tmpWorld);
+        // Retrieve World from Json
+        World tmpWorld = node.get("World").traverse(p.getCodec()).readValueAs(World.class);
 
-            injectedMap.put(PersistenceHandler.INJECTED_MAP_WORLD, world);
-        }
+        // Check if tmpWorld is a defaultWorld, in which case retrieve server-version from persistenceHandler
+        PersistenceHandler persistenceHandler = (PersistenceHandler)
+                injectedMap.get(PersistenceHandler.INJECTED_MAP_PERSISTENCE);
+        world = persistenceHandler.getDefaultWorldOr(tmpWorld.getWorldName(), tmpWorld);
 
-        CountryCollector countryCollector = new CountryCollector(world);
-
+        // Insert world into injectedMap for use in further deserialization
+        injectedMap.put(PersistenceHandler.INJECTED_MAP_WORLD, world);
+        // Parse all visits, using the injected world
         Visit[] visits = node.get("Visits").traverse(p.getCodec()).readValueAs(Visit[].class);
+        // Remove world from injectedMap to prevent leaking into future requests
+        injectedMap.remove(PersistenceHandler.INJECTED_MAP_WORLD);
 
+        // Create CountryCollector with the parsed World, and register visits
+        CountryCollector countryCollector = new CountryCollector(world);
         for (Visit visit : visits) {
             countryCollector.registerVisit(visit);
         }
