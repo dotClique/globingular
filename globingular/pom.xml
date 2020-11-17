@@ -27,6 +27,10 @@
         <enableTestRedirect>true</enableTestRedirect>
 
         <jakarta.ws.rs.api.version>3.0.0-M1</jakarta.ws.rs.api.version>
+        <surefire.version>3.0.0-M5</surefire.version>
+        <checkstyle.version>3.1.1</checkstyle.version>
+        <spotbugs.version>4.0.4</spotbugs.version>
+        <jacoco.version>0.8.5</jacoco.version>
     </properties>
 
     <!-- Actual location for GitLab Pages instance, relativizes any absolute site links -->
@@ -96,7 +100,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>3.0.0-M5</version>
+                    <version>${surefire.version}</version>
                     <configuration>
                         <redirectTestOutputToFile>${enableTestRedirect}</redirectTestOutputToFile>
                         <skip>${fast}</skip>
@@ -107,7 +111,7 @@
                 <plugin>
                     <groupId>com.github.spotbugs</groupId>
                     <artifactId>spotbugs-maven-plugin</artifactId>
-                    <version>4.0.4</version>
+                    <version>${spotbugs.version}</version>
                     <executions>
                         <execution>
                             <id>check</id>
@@ -126,7 +130,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-checkstyle-plugin</artifactId>
-                    <version>3.1.1</version>
+                    <version>${checkstyle.version}</version>
                     <configuration>
                         <configLocation>../checkstyle.xml</configLocation>
                         <skip>${fast}</skip>
@@ -147,7 +151,7 @@
                 <plugin>
                     <groupId>org.jacoco</groupId>
                     <artifactId>jacoco-maven-plugin</artifactId>
-                    <version>0.8.5</version>
+                    <version>${jacoco.version}</version>
                     <configuration>
                         <skip>${fast}</skip>
                     </configuration>
@@ -217,7 +221,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.0.0-M5</version>
+                <version>${surefire.version}</version>
                 <configuration>
                     <redirectTestOutputToFile>${enableTestRedirect}</redirectTestOutputToFile>
                 </configuration>
@@ -227,7 +231,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-report-plugin</artifactId>
-                <version>3.0.0-M5</version>
+                <version>${surefire.version}</version>
                 <reportSets>
                     <reportSet>
                         <id>report-test-aggregate</id>
@@ -248,7 +252,7 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.5</version>
+                <version>${jacoco.version}</version>
                 <!-- Generate Jacoco-reports for each sub-module by inheritance -->
                 <reportSets>
                     <reportSet>
@@ -265,14 +269,14 @@
             <plugin>
                 <groupId>com.github.spotbugs</groupId>
                 <artifactId>spotbugs-maven-plugin</artifactId>
-                <version>4.0.4</version>
+                <version>${spotbugs.version}</version>
             </plugin>
 
             <!-- Maven Checkstyle for code quality check-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>3.1.1</version>
+                <version>${checkstyle.version}</version>
                 <configuration>
                     <configLocation>../checkstyle.xml</configLocation>
                 </configuration>
