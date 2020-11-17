@@ -27,7 +27,6 @@
         <enableTestRedirect>true</enableTestRedirect>
 
         <jakarta.ws.rs.api.version>3.0.0-M1</jakarta.ws.rs.api.version>
-        <parent.version>0.0.2-SNAPSHOT</parent.version>
     </properties>
 
     <!-- Actual location for GitLab Pages instance, relativizes any absolute site links -->
