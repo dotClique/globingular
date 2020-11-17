@@ -19,6 +19,7 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.scene.layout.HBox;
@@ -502,5 +503,18 @@ public class AppController implements Initializable {
             }
         });
         return sorted;
+    }
+
+    /**
+     * Called when the user clicks the InputField to change user.
+     * @param mouseEvent The click-event.
+     */
+    @FXML
+    private void onClickUserInputField(final MouseEvent mouseEvent) {
+        // Attempt to change user if event was doublelick
+        if (mouseEvent.getClickCount() == 2) {
+            onChangeUserRequested();
+        }
+
     }
 }
