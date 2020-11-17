@@ -36,12 +36,12 @@ public class GlobingularModule {
      * @param username The username to save the countryCollector as
      * @param countryCollector The countryCollector to save
      * present countryCollector for the provided username
-     * @return true if successfully saved, false otherwise
+     * @return true if successfully saved
      */
     public boolean putCountryCollector(final String username,
             final CountryCollector countryCollector) {
         this.countryCollectorsByUsername.put(username.toLowerCase(), countryCollector);
-        return !isUsernameAvailable(username);
+        return true;
     }
 
     /**
