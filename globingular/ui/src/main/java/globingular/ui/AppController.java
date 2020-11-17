@@ -115,6 +115,11 @@ public class AppController implements Initializable {
     @FXML
     private Button countryDel;
     /**
+     * TextField used to display and change current user.
+     */
+    @FXML
+    private TextField userInput;
+    /**
      * The WebView containing the world map.
      */
     @FXML
@@ -156,6 +161,10 @@ public class AppController implements Initializable {
      * The HTML Document containing the world map.
      */
     private Document document;
+    /**
+     * The current user.
+     */
+    private String currentUser;
 
     /**
      * Manager of statistics about countries the user has visited.
@@ -451,6 +460,28 @@ public class AppController implements Initializable {
     private Element getCountryMapElement(final Country country) {
         return (Element) webEngine
                 .executeScript(MAP_ELEMENT_NAME + ".getElementById('" + country.getCountryCode() + "')");
+    }
+
+    /**
+     * Handle the interaction when user is trying to change the active user.
+     */
+    @FXML
+    void onChangeUserRequested() {
+        // Branch on whether userInput is editable. If so, the user has input a username into it. If not, they want to.
+        if (userInput.isEditable()) {
+            String text = userInput.getText();
+            // Only change user if there's actually something typed
+            if (text != null && !text.equals("")) {
+                currentUser = text;
+            }
+            userInput.setEditable(false);
+            userInput.setText(currentUser);
+        } else {
+            userInput.setText(currentUser);
+            userInput.setEditable(true);
+            userInput.requestFocus();
+            userInput.selectAll();
+        }
     }
 
     /**
