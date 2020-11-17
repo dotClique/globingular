@@ -52,10 +52,9 @@ public class CountryCollectorDeserializer extends JsonDeserializer<CountryCollec
 
         // Insert world into injectedMap for use in further deserialization
         injectedMap.put(PersistenceHandler.INJECTED_MAP_WORLD, world);
+
         // Parse all visits, using the injected world
         Visit[] visits = node.get("Visits").traverse(p.getCodec()).readValueAs(Visit[].class);
-        // Remove world from injectedMap to prevent leaking into future requests
-        injectedMap.remove(PersistenceHandler.INJECTED_MAP_WORLD);
 
         // Create CountryCollector with the parsed World, and register visits
         CountryCollector countryCollector = new CountryCollector(world);

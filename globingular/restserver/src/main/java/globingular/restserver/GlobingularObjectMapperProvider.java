@@ -10,9 +10,9 @@ import jakarta.ws.rs.ext.ContextResolver;
  */
 public class GlobingularObjectMapperProvider implements ContextResolver<ObjectMapper> {
     /**
-     * {@link ObjectMapper} to return.
+     * {@link PersistenceHandler} used to retrieving {@link ObjectMapper}-instance used by server.
      */
-    private final ObjectMapper objectMapper = new PersistenceHandler().getObjectMapper();
+    private final PersistenceHandler persistenceHandler = new PersistenceHandler();
 
     /**
      * Custom {@link ObjectMapper} for use in (de)serialization of Globingular classes.
@@ -20,6 +20,6 @@ public class GlobingularObjectMapperProvider implements ContextResolver<ObjectMa
      */
     @Override
     public ObjectMapper getContext(final Class<?> aClass) {
-        return objectMapper;
+        return persistenceHandler.getObjectMapper();
     }
 }
