@@ -7,8 +7,8 @@ import globingular.core.CountryCollector;
 import globingular.core.World;
 
 import java.io.BufferedInputStream;
+import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Writer;
 import java.io.InputStream;
@@ -35,23 +35,24 @@ import java.util.Map;
 public class PersistenceHandler {
 
     /**
-     * Define Path to Json-file used for saving CountryCollector-state.
-     */
-    private static final Path FILE_COLLECTOR = Paths.get(System.getProperty("user.home"), "temp", "globingular",
-                                                         "countryCollector.json");
-
-    /**
      * Define Path to the apps datafolder, used for saving app-state.
      */
-    private static final Path DATA_FOLDER = FILE_COLLECTOR.getParent();
+    private static final Path DATA_FOLDER = Paths.get(System.getProperty("user.home"), "globingular");
+    /**
+     * Define Path to Json-file used for saving CountryCollector-state.
+     */
+    private static final String DEFAULT_COLLECTOR_FILENAME = "countrycollector";
 
     /**
      * Define which file to get standard world map {@link World} from.
      */
-    private static final String FILE_MAP_WORLD = "/json/sampleWorld.json";
-
+    private static final String DEFAULT_WORLD = "/json/sampleWorld.json";
     /**
-     * Define which sample-file to use for CountryCollector.
+     * Name of the default world defined in the apps resources.
+     */
+    private static final String DEFAULT_WORLD_NAME = "Earth";
+    /**
+     * Define which sample-file to use for {@link CountryCollector}.
      */
     private static final String SAMPLE_COLLECTOR = "/json/sampleCollector.json";
 
@@ -64,7 +65,6 @@ public class PersistenceHandler {
      * Static key used for storing a reference to a {@link World} used for further deserialization.
      */
     public static final String INJECTED_MAP_WORLD = "_globingular_world";
-
     /**
      * Static key used for storing a reference to this {@link PersistenceHandler} in an InjectedMap.
      */
@@ -85,9 +85,9 @@ public class PersistenceHandler {
      * Initialize a new PersistenceHandler with default parameters.
      */
     public PersistenceHandler() {
-        World world = loadWorld();
+        World world = loadDefaultWorld();
         defaultWorlds = new HashMap<>();
-        defaultWorlds.put("Earth", world);
+        defaultWorlds.put(DEFAULT_WORLD_NAME, world);
     }
 
     /**
@@ -119,27 +119,49 @@ public class PersistenceHandler {
     }
 
     /**
-     * Load a CountryCollector-state from file.
+     * Load a default CountryCollector-state.
      *
-     * @return A CountryCollector instance containing data loaded from file
+     * @return A CountryCollector instance containing data loaded from sample file.
      */
     public CountryCollector loadCountryCollector() {
-        World world = loadWorld();
-
-        CountryCollector countryCollector = new CountryCollector(world);
-        try (InputStream in = new BufferedInputStream(new FileInputStream(FILE_COLLECTOR.toFile()))) {
+        CountryCollector countryCollector = new CountryCollector(getDefaultWorld());
+        try (InputStream in = getClass().getResourceAsStream(SAMPLE_COLLECTOR)) {
             countryCollector = objectMapper.readValue(in, CountryCollector.class);
-        } catch (FileNotFoundException e) {
-            try (InputStream in = getClass().getResourceAsStream(SAMPLE_COLLECTOR)) {
-                countryCollector = objectMapper.readValue(in, CountryCollector.class);
-            } catch (IOException err) {
-                err.printStackTrace();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException err) {
+            // Catch an print if exception
+            err.printStackTrace();
         }
-
         return countryCollector;
+    }
+
+    /**
+     * Load a CountryCollector-state from file.
+     *
+     * @param username The username to retrieve a countryCollector for (aka. filename).
+     *                 If null is given, default filename is used.
+     * @return         A CountryCollector instance containing data loaded from file.
+     */
+    public CountryCollector loadCountryCollector(final String username) {
+        CountryCollector countryCollector = null;
+        File file = pathFromFilename(username, DEFAULT_COLLECTOR_FILENAME).toFile();
+        if (file.isFile()) {
+            try (InputStream in = new BufferedInputStream(new FileInputStream(file))) {
+                countryCollector = objectMapper.readValue(in, CountryCollector.class);
+            } catch (IOException e) {
+                // Catch and print if exception
+                e.printStackTrace();
+            }
+        }
+        return countryCollector;
+    }
+
+    /**
+     * Return a default world defined in the apps resources.
+     * 
+     * @return The default world-instance
+     */
+    public World getDefaultWorld() {
+        return this.getDefaultWorld(DEFAULT_WORLD_NAME);
     }
 
     /**
@@ -166,19 +188,31 @@ public class PersistenceHandler {
     /**
      * Set PersistenceHandler to autosave changes in a CountryCollector.
      * 
+     * @param username         The username to save state for (and use as filename).
+     *                         If null is given, default filename is used.
      * @param countryCollector The CountryCollector to autosave
+     * 
+     * @throws IllegalArgumentException If filename is not alphanumeric
      */
-    public void setAutosave(final CountryCollector countryCollector) {
+    public void setAutosave(final String username, final CountryCollector countryCollector)
+            throws IllegalArgumentException {
         countryCollector.addListener(event -> {
-            this.saveState(countryCollector);
+            // saveState uses default if filename is null, and throws IllegalArgumentException if invalid
+            this.saveState(username, countryCollector);
         });
     }
 
-    private World loadWorld() {
+    /**
+     * Load default {@link World} from file.
+     * 
+     * @return Default World-instance.
+     */
+    private World loadDefaultWorld() {
         World world = new World();
-        try (InputStream in = getClass().getResourceAsStream(FILE_MAP_WORLD)) {
+        try (InputStream in = getClass().getResourceAsStream(DEFAULT_WORLD)) {
             world = objectMapper.readValue(in, World.class);
         } catch (IOException e) {
+            // Catch and print if exception
             e.printStackTrace();
         }
 
@@ -188,18 +222,53 @@ public class PersistenceHandler {
     /**
      * Save a CountryCollector instance to file.
      *
+     * @param username         The username to save state for (and use as filename).
+     *                         If null is given, default filename is used instead.
      * @param countryCollector The CountryCollector instance to save
+     * 
+     * @throws IllegalArgumentException If filename is not alphanumeric
      */
-    private void saveState(final CountryCollector countryCollector) {
+    public void saveState(final String username, final CountryCollector countryCollector)
+            throws IllegalArgumentException {
         try {
             Files.createDirectories(DATA_FOLDER);
         } catch (IOException e) {
+            // Catch and print if exception
             e.printStackTrace();
         }
-        try (Writer out = Files.newBufferedWriter(FILE_COLLECTOR)) {
+        try (Writer out = Files.newBufferedWriter(pathFromFilename(username, DEFAULT_COLLECTOR_FILENAME))) {
             objectMapper.writerWithDefaultPrettyPrinter().writeValue(out, countryCollector);
         } catch (IOException e) {
+            // Catch and print if exception
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Validates filename and returns a valid path to json-file.
+     * Filename is valid if alphanumeric.
+     * 
+     * @param filename        The filename to validate
+     * @param defaultFilename The filename to return if the one given is null
+     * @return                A valid path to the given filename (in lowercase),
+     *                        or to defaultFilename if filename is null
+     * 
+     * @throws IllegalArgumentException If filename is invalid and not null.
+     *                                  Or if both filename and defaultFilename are null.
+     */
+    private static Path pathFromFilename(final String filename, final String defaultFilename)
+            throws IllegalArgumentException {
+        // If filename is null, try to use defaultFilename. If both are null, throw exception.
+        if (filename == null) {
+            if (defaultFilename == null) {
+                throw new IllegalArgumentException("Both filename and defaultFilename can't be null!");
+            }
+            return pathFromFilename(defaultFilename, null);
+        }
+        // If not alphanumeric, throw exception.
+        if (!filename.matches("[A-Za-z0-9]+")) {
+            throw new IllegalArgumentException("Filename must be alphanumeric!");
+        }
+        return DATA_FOLDER.resolve(filename.toLowerCase() + ".json");
     }
 }

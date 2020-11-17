@@ -1,13 +1,11 @@
 package globingular.restapi;
 
 import globingular.core.CountryCollector;
+import globingular.persistence.PersistenceHandler;
 import globingular.core.GlobingularModule;
 import jakarta.inject.Inject;
-import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.core.MediaType;
 
 /**
  * A service serving as the main handler for the API.
@@ -22,24 +20,20 @@ public class GlobingularService {
     private final GlobingularModule globingularModule;
 
     /**
+     * The service's {@link PersistenceHandler} instance, used for saving app-state.
+     */
+    private final PersistenceHandler persistenceHandler;
+
+    /**
      * Construct a new GlobingularService using the given {@link GlobingularModule} as app-state.
      *
      * @param globingularModule App-state. Injected if not given.
+     * @param persistenceHandler For saving app-state. Injected if not given.
      */
     @Inject
-    public GlobingularService(final GlobingularModule globingularModule) {
+    public GlobingularService(final GlobingularModule globingularModule, final PersistenceHandler persistenceHandler) {
         this.globingularModule = globingularModule;
-    }
-
-    /**
-     * Retrieve the {@link GlobingularModule} being used.
-     * 
-     * @return The {@link GlobingularModule}-instance
-     */
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public GlobingularModule getGlobingularModule() {
-        return this.globingularModule;
+        this.persistenceHandler = persistenceHandler;
     }
 
     /**
@@ -51,7 +45,15 @@ public class GlobingularService {
      */
     @Path("/{countryCollector : (?i)countryCollector}/{username}")
     public CountryCollectorResource getCountryCollector(@PathParam("username") final String username) {
-        CountryCollector countryCollector = getGlobingularModule().getCountryCollector(username);
-        return new CountryCollectorResource(globingularModule, username, countryCollector);
+        // Only allow lowercase usernames
+        String usernameLowercase = username.toLowerCase();
+        // Get from cache if available
+        CountryCollector countryCollector = this.globingularModule.getCountryCollector(usernameLowercase);
+        // If not in cache, load from persistence
+        if (countryCollector == null && persistenceHandler != null) {
+            countryCollector = this.persistenceHandler.loadCountryCollector(usernameLowercase);
+        }
+        return new CountryCollectorResource(this.globingularModule, usernameLowercase, countryCollector,
+                this.persistenceHandler);
     }
 }
