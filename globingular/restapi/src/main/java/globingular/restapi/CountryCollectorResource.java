@@ -4,7 +4,6 @@ import globingular.core.Country;
 import globingular.core.CountryCollector;
 import globingular.core.GlobingularModule;
 import globingular.core.Visit;
-import globingular.core.World;
 import globingular.persistence.PersistenceHandler;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
@@ -81,30 +80,12 @@ public class CountryCollectorResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public boolean putCountryCollector(final CountryCollector collector) {
+        if (collector == null) {
+            throw new IllegalArgumentException("CountryCollector can't be null");
+        }
         boolean result = this.globingularModule.putCountryCollector(username, collector);
         this.saveAppState(username, collector);
         return result;
-    }
-
-    /**
-     * Create a new {@link CountryCollector}
-     * and save using the current {@link #username}.
-     * Returns false if the username is already in use.
-     * 
-     * @return true if username available and new CountryCollector successfully saved, false otherwise
-     */
-    @PUT
-    @Produces(MediaType.APPLICATION_JSON)
-    public boolean putCountryCollector() {
-        // TODO: Should this throw an exception? Or just allow overwriting with empty?
-        if (this.globingularModule.isUsernameAvailable(username)) {
-            CountryCollector collector = new CountryCollector(new World("Earth"));
-            this.globingularModule.putCountryCollector(username, collector);
-            if (this.globingularModule.getCountryCollector(username) == collector) {
-                return true;
-            }
-        }
-        return false;
     }
 
     /**

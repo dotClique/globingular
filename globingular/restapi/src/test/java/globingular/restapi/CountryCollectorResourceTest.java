@@ -73,7 +73,7 @@ public class CountryCollectorResourceTest {
      */
     @Test
     public void testPutCountryCollectorForUnavailableUsername() {
-        assertEquals(false, ccr1.putCountryCollector());
+        assertEquals(false, ccr1.putCountryCollector(collector));
     }
 
     /**
