@@ -3,9 +3,13 @@ package globingular.restapi;
 import globingular.core.CountryCollector;
 import globingular.persistence.PersistenceHandler;
 import globingular.core.GlobingularModule;
+import globingular.core.World;
 import jakarta.inject.Inject;
+import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.MediaType;
 
 /**
  * A service serving as the main handler for the API.
@@ -55,5 +59,22 @@ public class GlobingularService {
         }
         return new CountryCollectorResource(this.globingularModule, usernameLowercase, countryCollector,
                 this.persistenceHandler);
+    }
+
+    /**
+     * Retrieve a default {@link World} from {@link #persistenceHandler}.
+     * Returns null if {@link #persistenceHandler} is null.
+     * 
+     * @param worldName the worldName to retrieve
+     * @return          the requested World if it exists, otherwise null
+     */
+    @GET
+    @Path("{worldName}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public World getWorld(@PathParam("worldName") final String worldName) {
+        if (persistenceHandler != null) {
+            return persistenceHandler.getDefaultWorld(worldName);
+        }
+        return null;
     }
 }
