@@ -5,6 +5,7 @@ import globingular.core.CountryCollector;
 import globingular.core.GlobingularModule;
 import globingular.core.Visit;
 import globingular.core.World;
+import globingular.persistence.PersistenceHandler;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
@@ -32,6 +33,10 @@ public class CountryCollectorResource {
      * The {@link CountryCollector} this instance works on.
      */
     private final CountryCollector countryCollector;
+    /**
+     * The {@link PersistenceHandler} to use to save app-state.
+     */
+    private final PersistenceHandler persistenceHandler;
 
     /**
      * Initialize a CountryCollectorResource with context.
@@ -39,12 +44,15 @@ public class CountryCollectorResource {
      * @param globingularModule The {@link GlobingularModule} to store changes in
      * @param username The username to store changes for
      * @param countryCollector The {@link CountryCollector} to change
+     * @param persistenceHandler The {@link PersistenceHandler} used to save app-state
      */
     public CountryCollectorResource(final GlobingularModule globingularModule,
-            final String username, final CountryCollector countryCollector) {
+            final String username, final CountryCollector countryCollector,
+            final PersistenceHandler persistenceHandler) {
         this.globingularModule = globingularModule;
         this.username = username;
         this.countryCollector = countryCollector;
+        this.persistenceHandler = persistenceHandler;
     }
 
     /**
@@ -73,7 +81,9 @@ public class CountryCollectorResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public boolean putCountryCollector(final CountryCollector collector) {
-        return this.globingularModule.putCountryCollector(username, collector);
+        boolean result = this.globingularModule.putCountryCollector(username, collector);
+        this.saveAppState(username, collector);
+        return result;
     }
 
     /**
@@ -195,6 +205,18 @@ public class CountryCollectorResource {
     private void checkUsernameExists() throws IllegalArgumentException {
         if (this.globingularModule.isUsernameAvailable(username)) {
             throw new IllegalArgumentException("The given username doesn't exist: " + username);
+        }
+    }
+
+    /**
+     * Saves the app-state for the active user.
+     * 
+     * @param name a
+     * @param collector a
+     */
+    private void saveAppState(final String name, final CountryCollector collector) {
+        if (this.persistenceHandler != null) {
+            this.persistenceHandler.saveState(name, collector);
         }
     }
 }

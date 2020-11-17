@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import globingular.core.CountryCollector;
 import globingular.core.GlobingularModule;
+import globingular.persistence.PersistenceHandler;
 
 public class CountryCollectorResourceTest {
 
@@ -17,6 +18,7 @@ public class CountryCollectorResourceTest {
     private String username2 ="hablebable2";
     private GlobingularModule module;
     private CountryCollector collector;
+    private PersistenceHandler persistence;
     private CountryCollectorResource ccr1;
     private CountryCollectorResource ccr2;
 
@@ -28,6 +30,7 @@ public class CountryCollectorResourceTest {
         // Mock init
         module = mock(GlobingularModule.class);
         collector = mock(CountryCollector.class);
+        persistence = null;
 
         // Mock define
         when(module.getCountryCollector(username1)).thenReturn(collector);
@@ -38,10 +41,10 @@ public class CountryCollectorResourceTest {
         when(module.putCountryCollector(username2, collector)).thenReturn(true);
 
         // Create CCR-instance with valid username-collector pair
-        ccr1 = new CountryCollectorResource(module, username1, collector);
+        ccr1 = new CountryCollectorResource(module, username1, collector, persistence);
 
         // Create CCR-instance with username without a collector
-        ccr2 = new CountryCollectorResource(module, username2, collector);
+        ccr2 = new CountryCollectorResource(module, username2, collector, persistence);
     }
 
     /**

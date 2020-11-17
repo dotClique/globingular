@@ -36,13 +36,13 @@ public class GlobingularModule {
      * @param username The username to save the countryCollector as
      * @param countryCollector The countryCollector to save
      * present countryCollector for the provided username
-     * @return true if successfully saved, false otherwise
+     * @return true if successfully saved
      */
     public boolean putCountryCollector(final String username,
             final CountryCollector countryCollector) {
         String usernameLowercase = username.toLowerCase();
         this.countryCollectorsByUsername.put(usernameLowercase, countryCollector);
-        return !isUsernameAvailable(usernameLowercase);
+        return true;
     }
 
     /**
@@ -54,7 +54,7 @@ public class GlobingularModule {
     public boolean removeCountryCollector(final String username) {
         String usernameLowercase = username.toLowerCase();
         this.countryCollectorsByUsername.remove(usernameLowercase);
-        return isUsernameAvailable(usernameLowercase);
+        return true;
     }
 
     /**
@@ -65,5 +65,15 @@ public class GlobingularModule {
      */
     public boolean isUsernameAvailable(final String username) {
         return !this.countryCollectorsByUsername.containsKey(username.toLowerCase());
+    }
+
+    /**
+     * Check if the provided username is valid.
+     * 
+     * @param username The username to check validity of
+     * @return True if this username is valid (alphanumeric)
+     */
+    public boolean isUsernameValid(final String username) {
+        return username.matches("[A-Za-z0-9]+");
     }
 }
