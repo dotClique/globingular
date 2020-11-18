@@ -13,8 +13,9 @@ import jakarta.ws.rs.core.MediaType;
 
 /**
  * A service serving as the main handler for the API.
+ * Using {@code : (?i)} in {@code @Path} to enable case-insensitivity.
  */
-@Path("/globingular")
+@Path("{globingular : (?i)globingular}")
 public class GlobingularService {
 
     /**
@@ -45,15 +46,20 @@ public class GlobingularService {
      * Using {@code : (?i)} in {@code @Path} to enable case-insensitivity.
      * 
      * @param username The username to make changes for
-     * @return A {@link CountryCollectorResource}-instance to handle these requests
+     * @return         A {@link CountryCollectorResource}-instance to handle these requests
      */
-    @Path("/{countryCollector : (?i)countryCollector}/{username}")
+    @Path("{countryCollector : (?i)countryCollector}/{username}")
     public CountryCollectorResource getCountryCollector(@PathParam("username") final String username) {
         // Only allow lowercase usernames
         String usernameLowercase = username.toLowerCase();
+        // Throw exception if username is invalid
+        if (!GlobingularModule.isUsernameValid(usernameLowercase)) {
+            throw new IllegalArgumentException("Username not valid: " + usernameLowercase);
+        }
+
         // Get from cache if available
         CountryCollector countryCollector = this.globingularModule.getCountryCollector(usernameLowercase);
-        // If not in cache, load from persistence
+        // If not in cache, try to load from persistence
         if (countryCollector == null && persistenceHandler != null) {
             countryCollector = this.persistenceHandler.loadCountryCollector(usernameLowercase);
         }
@@ -63,7 +69,8 @@ public class GlobingularService {
 
     /**
      * Retrieve a default {@link World} from {@link #persistenceHandler}.
-     * Returns null if {@link #persistenceHandler} is null.
+     * Returns null if {@link #persistenceHandler} is null or if the
+     * worldName isn't defined as a default world.
      * 
      * @param worldName the worldName to retrieve
      * @return          the requested World if it exists, otherwise null

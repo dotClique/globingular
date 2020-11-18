@@ -53,9 +53,9 @@ public class CountryCollectorResourceTest {
         Response response = target.path("globingular").path("countryCollector")
                 .path(username).request().get();
 
-        // 500 means Error, which is correct in this instance,
+        // 204 means No content, which is correct in this instance,
         // as the user "hablebable1" has no CountryCollector
-        assertEquals(500, response.getStatus());
+        assertEquals(204, response.getStatus());
     }
 
     @Test
@@ -66,17 +66,19 @@ public class CountryCollectorResourceTest {
         Country c2 = new Country("SE", "Sweden");
         World world = new World("testWorld", c1, c2);
         CountryCollector cc = new CountryCollector(world);
+        Response response;
+        String request, responseMsg;
 
-        String s1 = objectMapper.writeValueAsString(cc);
+        request = objectMapper.writeValueAsString(cc);
 
-        Response response = target.path("globingular").path("countryCollector")
-                .path(username).request().put(Entity.entity(s1, MediaType.APPLICATION_JSON));
+        response = target.path("globingular").path("countryCollector")
+                .path(username).request().put(Entity.entity(request, MediaType.APPLICATION_JSON));
 
         // 200 means success - Request completed without errors
         assertEquals(200, response.getStatus());
 
         // Here we get a boolean value, so we check that it's true
-        String responseMsg = response.readEntity(String.class);
+        responseMsg = response.readEntity(String.class);
         assertEquals("true", responseMsg);
     }
 
@@ -88,29 +90,31 @@ public class CountryCollectorResourceTest {
         Country c2 = new Country("SE", "Sweden");
         World world = new World("testWorld", c1, c2);
         CountryCollector cc = new CountryCollector(world);
+        Response response;
+        String request, responseMsg;
 
-        String s1 = objectMapper.writeValueAsString(cc);
+        request = objectMapper.writeValueAsString(cc);
 
-        Response response = target.path("globingular").path("countryCollector")
-                .path(username).request().put(Entity.entity(s1, MediaType.APPLICATION_JSON));
+        response = target.path("globingular").path("countryCollector")
+                .path(username).request().put(Entity.entity(request, MediaType.APPLICATION_JSON));
 
         // 200 means success - Request completed without errors
         assertEquals(200, response.getStatus());
 
         // Here we get a boolean value, so we check that it's true
-        String responseMsg = response.readEntity(String.class);
+        responseMsg = response.readEntity(String.class);
         assertEquals("true", responseMsg);
 
-        Response response2 = target.path("globingular").path("countryCollector")
+        response = target.path("globingular").path("countryCollector")
                 .path(username).request().get();
 
         // 200 means success - We retrieved data without errors
-        assertEquals(200, response2.getStatus());
+        assertEquals(200, response.getStatus());
 
         // Check that the retrieved countryCollector has the right world
-        String responseMsg2 = response2.readEntity(String.class);
-        CountryCollector countryCollector = objectMapper.readValue(responseMsg2, CountryCollector.class);
-        assertEquals("testWorld", countryCollector.getWorld().getWorldName());
+        responseMsg = response.readEntity(String.class);
+        CountryCollector ccTemp = objectMapper.readValue(responseMsg, CountryCollector.class);
+        assertEquals("testWorld", ccTemp.getWorld().getWorldName());
     }
 
     @Test
@@ -120,8 +124,12 @@ public class CountryCollectorResourceTest {
         Response response = target.path("globingular").path("countryCollector")
                 .path(username).request().delete();
 
-        // 500 means Error - There is nothing to delete for "hablebable4"
-        assertEquals(500, response.getStatus());
+        // 200 means Success - As there is nothing to delete for "hablebable4", it doesn't fail either
+        assertEquals(200, response.getStatus());
+
+        // Here we get a boolean value, so we check that it's true
+        String responseMsg = response.readEntity(String.class);
+        assertEquals("true", responseMsg);
     }
 
     @Test
@@ -132,24 +140,28 @@ public class CountryCollectorResourceTest {
         Country c2 = new Country("SE", "Sweden");
         World world = new World("testWorld", c1, c2);
         CountryCollector cc = new CountryCollector(world);
+        Response response;
+        String request, responseMsg;
 
-        String s1 = objectMapper.writeValueAsString(cc);
+        request = objectMapper.writeValueAsString(cc);
 
-        Response response1 = target.path("globingular").path("countryCollector")
-                .path(username).request().put(Entity.entity(s1, MediaType.APPLICATION_JSON));
-        assertEquals(200, response1.getStatus());
-        String responseMsg1 = response1.readEntity(String.class);
-        assertEquals("true", responseMsg1);
+        response = target.path("globingular").path("countryCollector")
+                .path(username).request().put(Entity.entity(request, MediaType.APPLICATION_JSON));
+        assertEquals(200, response.getStatus());
+        responseMsg = response.readEntity(String.class);
+        assertEquals("true", responseMsg);
 
-        Response response2 = target.path("globingular").path("countryCollector")
+        response = target.path("globingular").path("countryCollector")
                 .path(username).request().delete();
 
-        assertEquals(200, response2.getStatus());
+        assertEquals(200, response.getStatus());
+        responseMsg = response.readEntity(String.class);
+        assertEquals("true", responseMsg);
 
-        Response response3 = target.path("globingular").path("countryCollector")
+        response = target.path("globingular").path("countryCollector")
                 .path(username).request().get();
 
-        assertEquals(500, response3.getStatus());
+        assertEquals(204, response.getStatus());
     }
 
     @Test

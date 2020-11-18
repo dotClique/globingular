@@ -1,7 +1,7 @@
 package globingular.restapi;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -23,7 +23,7 @@ public class CountryCollectorResourceTest {
     private CountryCollectorResource ccr2;
 
     /**
-     * Sets up mocking of Core-classes
+     * Sets up mocking of Core-classes.
      */
     @BeforeEach
     public void start() {
@@ -44,7 +44,7 @@ public class CountryCollectorResourceTest {
         ccr1 = new CountryCollectorResource(module, username1, collector, persistence);
 
         // Create CCR-instance with username without a collector
-        ccr2 = new CountryCollectorResource(module, username2, collector, persistence);
+        ccr2 = new CountryCollectorResource(module, username2, null, persistence);
     }
 
     /**
@@ -60,12 +60,7 @@ public class CountryCollectorResourceTest {
      */
     @Test
     public void testGetCountryCollectorForInvalidUsername() {
-        try {
-            ccr2.getCountryCollector();
-            fail("Should throw IllegalArgumentException");
-        } catch (IllegalArgumentException e) {
-            // Success
-        }
+        assertNull(ccr2.getCountryCollector());
     }
 
     /**
@@ -81,7 +76,6 @@ public class CountryCollectorResourceTest {
      */
     @Test
     public void testPutCountryCollectorForAvailableUsername() {
-        // TODO: Is this testable with mocking?
-        // assertEquals(true, ccr2.putCountryCollector());
+        assertEquals(true, ccr2.putCountryCollector(collector));
     }
 }
