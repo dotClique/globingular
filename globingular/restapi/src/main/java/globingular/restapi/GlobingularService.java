@@ -68,20 +68,14 @@ public class GlobingularService {
     }
 
     /**
-     * Retrieve a default {@link World} from {@link #persistenceHandler}.
-     * Returns null if {@link #persistenceHandler} is null or if the
-     * worldName isn't defined as a default world.
+     * Retrieve a {@link WorldResource} to handle requests regarding worlds.
+     * Using {@code : (?i)} in {@code @Path} to enable case-insensitivity.
      * 
-     * @param worldName the worldName to retrieve
-     * @return          the requested World if it exists, otherwise null
+     * @return A {@link WorldResource}-instance to handle these requests
      */
-    @GET
-    @Path("{worldName}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public World getWorld(@PathParam("worldName") final String worldName) {
-        if (persistenceHandler != null) {
-            return persistenceHandler.getDefaultWorld(worldName);
-        }
-        return null;
+    @Path("{world : (?i)world}")
+    public WorldResource getWorld() {
+        // Return a WorldResource to handle requests
+        return new WorldResource(persistenceHandler);
     }
 }
