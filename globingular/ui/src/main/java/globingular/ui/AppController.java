@@ -3,7 +3,11 @@ package globingular.ui;
 import globingular.core.Country;
 import globingular.core.CountryCollector;
 import globingular.core.CountryStatistics;
+import globingular.core.GlobingularDataAccess;
+import globingular.core.Listener;
+import globingular.core.Visit;
 import globingular.core.World;
+import globingular.persistence.LocalGlobingularDataAccess;
 import globingular.persistence.PersistenceHandler;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -89,6 +93,10 @@ public class AppController implements Initializable {
      * Also serves as the value of the attribute, if set.
      */
     private static final String MAP_VISITED_COUNTRY_ATTRIBUTE = "visited";
+    /**
+     * Username representing the local user.
+     * Contains a disallowed username-character so as to distinguish it from normal usernames.
+     */
     private static final String LOCAL_USER = "Local user";
 
     /**
@@ -150,7 +158,7 @@ public class AppController implements Initializable {
     /**
      * Manager of which countries have been visited.
      */
-    private final CountryCollector countryCollector;
+    private CountryCollector countryCollector;
     /**
      * Manager of which countries exist.
      */
@@ -167,13 +175,19 @@ public class AppController implements Initializable {
      * The current user.
      */
     private String currentUser;
+    /**
+     * The intermediary for accessing stored data.
+     */
+    private GlobingularDataAccess dataAccess;
 
     /**
      * Manager of statistics about countries the user has visited.
      */
     private CountryStatistics countryStatistics;
 
-    // TODO
+    /**
+     * Whether the FXML has been fully loaded.
+     */
     private boolean initialized = false;
     /**
      * Font size for titles in statistics tab.
@@ -185,6 +199,13 @@ public class AppController implements Initializable {
      */
     private static final int TEXT_LABEL_PADDING = 10;
 
+    // TODO: Find out if countryCollector is captured at creation time
+    /**
+     * The listener used for saving the {@link CountryCollector} when it is updated.
+     */
+    private final Listener<Visit> countryCollectorListenerForSaving =
+            e -> dataAccess.putCountryCollector(countryCollector);
+
     /**
      * Initialize fields which do not require FXML to be loaded.
      */
@@ -192,9 +213,10 @@ public class AppController implements Initializable {
         // Create a persistenceHandler
         persistence = new PersistenceHandler();
         // Use it to retrieve CountryCollector from file
-        countryCollector = persistence.loadCountryCollector();
+        dataAccess = new LocalGlobingularDataAccess(null, persistence);
+        countryCollector = dataAccess.getCountryCollector();
         // And register it for autosaving
-        persistence.setAutosave(null, countryCollector);
+        countryCollector.addListener(countryCollectorListenerForSaving);
 
         // Initialize a countryStatistics
         countryStatistics = new CountryStatistics(countryCollector);

@@ -2,6 +2,7 @@ package globingular.restapi;
 
 import globingular.core.CountryCollector;
 import globingular.core.GlobingularModule;
+import globingular.persistence.FileHandler;
 import globingular.persistence.PersistenceHandler;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
@@ -53,15 +54,15 @@ public class CountryCollectorResource {
      * and save using the current {@link #username}.
      * NB: Overwrites if there's already a value
      * 
-     * @param collector The {@link CountryCollector} to save
+     * @param newCountryCollector The {@link CountryCollector} to save at this username.
      * @return true if successfully saved, false otherwise
      */
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public boolean putCountryCollector(final CountryCollector collector) {
-        boolean result = this.globingularModule.putCountryCollector(username, collector);
-        this.saveAppState(username, collector);
+    public boolean putCountryCollector(final CountryCollector newCountryCollector) {
+        boolean result = this.globingularModule.putCountryCollector(username, newCountryCollector);
+        this.saveCountryCollector(username, newCountryCollector);
         return result;
     }
 
@@ -78,14 +79,15 @@ public class CountryCollectorResource {
     }
 
     /**
-     * Saves the app-state for the active user.
+     * Helper method to save the given CountryCollector at the given username.
+     * Doesn't use
      * 
-     * @param name a
-     * @param collector a
+     * @param usernameToSaveAt The username to save at.
+     * @param countryCollectorToSave The CountryCollector to save.
      */
-    private void saveAppState(final String name, final CountryCollector collector) {
+    private void saveCountryCollector(final String usernameToSaveAt, final CountryCollector countryCollectorToSave) {
         if (this.persistenceHandler != null) {
-            this.persistenceHandler.saveState(name, collector);
+            FileHandler.saveCountryCollector(persistenceHandler, usernameToSaveAt, countryCollectorToSave);
         }
     }
 }

@@ -1,6 +1,7 @@
 package globingular.restapi;
 
 import globingular.core.CountryCollector;
+import globingular.persistence.FileHandler;
 import globingular.persistence.PersistenceHandler;
 import globingular.core.GlobingularModule;
 import jakarta.inject.Inject;
@@ -51,7 +52,7 @@ public class GlobingularService {
         CountryCollector countryCollector = this.globingularModule.getCountryCollector(usernameLowercase);
         // If not in cache, load from persistence
         if (countryCollector == null && persistenceHandler != null) {
-            countryCollector = this.persistenceHandler.loadCountryCollector(usernameLowercase);
+            countryCollector = FileHandler.loadCountryCollector(persistenceHandler, usernameLowercase);
         }
         return new CountryCollectorResource(this.globingularModule, usernameLowercase, countryCollector,
                 this.persistenceHandler);

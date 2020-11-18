@@ -60,7 +60,7 @@ public class GlobingularModule {
      * @param username The username to check validity of
      * @return True if this username is valid (alphanumeric)
      */
-    public boolean isUsernameValid(final String username) {
+    public static boolean isUsernameValid(final String username) {
         return username.matches("[A-Za-z0-9]+");
     }
 }
