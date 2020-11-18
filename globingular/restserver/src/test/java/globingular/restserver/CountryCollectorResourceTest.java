@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import globingular.core.Country;
 import globingular.core.CountryCollector;
 import globingular.core.World;
-import globingular.persistence.PersistenceHandler;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;

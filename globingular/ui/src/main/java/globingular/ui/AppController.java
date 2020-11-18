@@ -1,14 +1,24 @@
 package globingular.ui;
 
-import globingular.core.*;
+import globingular.core.Country;
+import globingular.core.CountryCollector;
+import globingular.core.CountryStatistics;
+import globingular.core.World;
 import globingular.persistence.PersistenceHandler;
-import javafx.collections.SetChangeListener;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.SortedList;
 import javafx.concurrent.Worker;
 import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
+import javafx.scene.control.SelectionMode;
+import javafx.scene.control.TextField;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.scene.layout.HBox;
@@ -22,10 +32,11 @@ import org.controlsfx.control.textfield.TextFields;
 
 import java.net.URL;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
-import java.util.Map;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>The AppController class handles the interaction between the FXML-file and
@@ -122,12 +133,6 @@ public class AppController implements Initializable {
     private GridPane statisticsGrid;
 
     /**
-     * A GridPane where statistics will be added.
-     */
-    @FXML
-    private GridPane badgesGrid;
-
-    /**
      * The WebEngine for the world map.
      */
     private WebEngine webEngine;
@@ -158,11 +163,6 @@ public class AppController implements Initializable {
     private CountryStatistics countryStatistics;
 
     /**
-     * Manager of the badges about countries the user has visited.
-     */
-    private Badges badges;
-
-    /**
      * Font size for titles in statistics tab.
      */
     private static final int TITLE_FONT_SIZE = 26;
@@ -171,11 +171,6 @@ public class AppController implements Initializable {
      * Padding for labels in gridpane.
      */
     private static final int TEXT_LABEL_PADDING = 10;
-
-    /**
-     * Padding for progressindicator.
-     */
-    private static final int PROGRESSINDICATOR_PADDING = 5;
 
     /**
      * Initialize fields which do not require FXML to be loaded.
@@ -191,9 +186,6 @@ public class AppController implements Initializable {
         // Initialize a countryStatistics
         countryStatistics = new CountryStatistics(countryCollector);
 
-        // Initialize badges
-        badges = new Badges(countryCollector);
-
         // Get world-instance
         world = countryCollector.getWorld();
     }
@@ -205,19 +197,14 @@ public class AppController implements Initializable {
     public void initialize(final URL location, final ResourceBundle resources) {
         this.webEngine = webView.getEngine();
 
-        countryCollector.visitedCountriesProperty()
-                        .addListener((SetChangeListener<? super Country>) e -> {
-                            if (e.wasAdded()) {
-                                setVisitedOnMap(e.getElementAdded());
-                            } else {
-                                setNotVisitedOnMap(e.getElementRemoved());
-                            }
-                        });
-        countryCollector.visitedCountriesProperty()
-                        .addListener((SetChangeListener<? super Country>) e -> {
-                            updateStatistics();
-                            updateBadges();
-                        });
+        countryCollector.addListener(event -> {
+            if (event.wasAdded()) {
+                this.setVisitedOnMap(event.getElement().getCountry());
+            } else if (event.wasRemoved() && !countryCollector.isVisited(event.getElement().getCountry())) {
+                this.setNotVisitedOnMap(event.getElement().getCountry());
+            }
+            updateStatistics();
+        });
 
         initializeCountriesList();
 
@@ -236,7 +223,6 @@ public class AppController implements Initializable {
                 setVisitedOnMapAll(countryCollector.getVisitedCountries());
             }
         }));
-        updateBadges();
         updateStatistics();
         configureAutoComplete();
     }
@@ -386,7 +372,7 @@ public class AppController implements Initializable {
     }
 
     /**
-     * Set the attribute "visited" for the given countries' map representations, allowing custom css styling.
+     * Remove the attribute "visited" for the given countries' map representations, allowing custom css styling.
      *
      * @param countries Target countries
      */
@@ -444,7 +430,7 @@ public class AppController implements Initializable {
      * Unset the attribute "visited" for the given countries' map representations, removing custom css styling.
      */
     private void initializeCountriesList() {
-        countriesList.itemsProperty().set(countryCollector.getVisitedCountriesSorted());
+        countriesList.itemsProperty().set(createSortedVisitedCountriesList(countryCollector));
         countriesList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         countriesList.setCellFactory(countryListView -> new ListCell<>() {
             @Override
@@ -468,37 +454,22 @@ public class AppController implements Initializable {
     }
 
     /**
-     * Update badges view in the UI.
-     */
-    private void updateBadges() {
-        badgesGrid.getChildren().clear();
-        int newRowIndex = 0;
-
-        Label title = createConfiguredLabel("Badges");
-        title.setFont(Font.font("System", TITLE_FONT_SIZE));
-        badgesGrid.add(title, 0, newRowIndex++);
-
-        for (Map.Entry<String, String> entry : badges.getBadgeData().entrySet()) {
-            badgesGrid.addRow(newRowIndex++, createConfiguredLabel(entry.getKey() + ": "),
-                     setProgressIndicator(entry.getValue()));
-        }
-    }
-
-    /**
-     * Creates a pie chart to visualize progress. Displays percentage.
+     * Create a readonly sorted-list view for the countries visited.
      *
-     * @param num A number between 0 and 1 to indicate progress.
-     * @return The progressindicator.
+     * @param countryCollector The countryCollector to synchronize with
+     * @return A new sorted-list view for the countries visited
      */
-    private ProgressIndicator setProgressIndicator(final String num) {
-        ProgressIndicator pi = new ProgressIndicator();
-        pi.setProgress(Double.parseDouble(num));
-        pi.setStyle(" -fx-progress-color: #9cc495;");
-        pi.setPadding(new Insets(PROGRESSINDICATOR_PADDING));
-
-
-        return pi;
+    private static ObservableList<Country> createSortedVisitedCountriesList(final CountryCollector countryCollector) {
+        ObservableList<Country> backing = FXCollections.observableArrayList();
+        SortedList<Country> sorted = new SortedList<>(backing, Comparator.comparing(Country::getShortName));
+        backing.addAll(countryCollector.getVisitedCountries());
+        countryCollector.addListener(event -> {
+            if (event.wasAdded()) {
+                backing.add(event.getElement().getCountry());
+            } else if (event.wasRemoved()) {
+                backing.remove(event.getElement().getCountry());
+            }
+        });
+        return sorted;
     }
-
-
 }

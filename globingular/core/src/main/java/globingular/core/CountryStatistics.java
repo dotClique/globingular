@@ -34,7 +34,7 @@ public class CountryStatistics {
      * @return string representing the number of visited countries
      */
     public String getNumberOfVisitedCountries() {
-        return Integer.toString(this.countryCollector.numberVisited());
+        return Integer.toString(this.countryCollector.numberOfCountriesVisited());
     }
 
     /**
