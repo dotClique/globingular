@@ -75,7 +75,7 @@
                     <configuration>
                         <filesets>
                             <fileset>
-                                <directory>${user.home}/temp/globingular</directory>
+                                <directory>${user.home}/globingular</directory>
                                 <followSymlinks>false</followSymlinks>
                             </fileset>
                         </filesets>
