@@ -31,7 +31,8 @@
         <checkstyle.version>3.1.1</checkstyle.version>
         <spotbugs.version>4.0.4</spotbugs.version>
         <jacoco.version>0.8.5</jacoco.version>
-        <mockito.version>2.0.2-beta</mockito.version>
+        <mockito.version>3.6.0</mockito.version>
+        <junit.version>5.4.2</junit.version>
     </properties>
 
     <!-- Actual location for GitLab Pages instance, relativizes any absolute site links -->
@@ -53,13 +54,13 @@
             <dependency>
                 <groupId>org.junit.jupiter</groupId>
                 <artifactId>junit-jupiter-api</artifactId>
-                <version>5.4.2</version>
+                <version>${junit.version}</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.junit.jupiter</groupId>
                 <artifactId>junit-jupiter-engine</artifactId>
-                <version>5.4.2</version>
+                <version>${junit.version}</version>
                 <scope>test</scope>
             </dependency>
         </dependencies>
