@@ -2,16 +2,18 @@ package globingular.restapi;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.verifyZeroInteractions;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
 import globingular.core.CountryCollector;
 import globingular.core.GlobingularModule;
@@ -23,6 +25,7 @@ public class CountryCollectorResourceTest {
     private String usernameNewRenamed = usernameNew + "Renamed";
     private String usernameOld = "hablebableOld";
     private String usernameOldRenamed = usernameOld + "Renamed";
+    private String usernameTaken = "habebableTaken";
     private GlobingularModule gModule;
     private CountryCollector cCollector1;
     private CountryCollector cCollector2;
@@ -33,45 +36,39 @@ public class CountryCollectorResourceTest {
     @BeforeEach
     public void beforeEach() {
         // Mock init
-        gModule = mock(GlobingularModule.class);
-        cCollector1 = mock(CountryCollector.class);
-        cCollector2 = mock(CountryCollector.class);
-        pHandler = mock(PersistenceHandler.class);
+        gModule = mock(GlobingularModule.class, new RuntimeExceptionAnswer());
+        cCollector1 = mock(CountryCollector.class, new RuntimeExceptionAnswer());
+        cCollector2 = mock(CountryCollector.class, new RuntimeExceptionAnswer());
+        pHandler = mock(PersistenceHandler.class, new RuntimeExceptionAnswer());
 
         // Mock define
-        when(gModule.getCountryCollector(usernameNew)).thenReturn(cCollector1);
-        when(gModule.getCountryCollector(usernameOld)).thenReturn(null);
+        // Using doReturn in order to use RuntimeExceptionAnswer() to report stubs not mocked
+        doReturn(cCollector1).when(gModule).getCountryCollector(usernameNew);
+        doReturn(null).when(gModule).getCountryCollector(usernameOld);
 
-        when(gModule.isUsernameAvailable(usernameNew)).thenReturn(false);
-        when(gModule.isUsernameAvailable(usernameOld)).thenReturn(true);
+        doReturn(true).when(gModule).isUsernameAvailable(usernameNew);
+        doReturn(false).when(gModule).isUsernameAvailable(usernameOld);
 
-        when(gModule.putCountryCollector(usernameNew, cCollector1)).thenReturn(true);
-        when(gModule.putCountryCollector(usernameOld, cCollector1)).thenReturn(true);
-        when(gModule.putCountryCollector(usernameOld, cCollector2)).thenReturn(true);
+        // Using any() as all put and remove operations should complete
+        doReturn(true).when(gModule).putCountryCollector(anyString(), any());
+        doReturn(true).when(gModule).removeCountryCollector(any());
 
-        when(gModule.removeCountryCollector(usernameNew)).thenReturn(true);
-        when(gModule.removeCountryCollector(usernameOld)).thenReturn(true);
+        for (String s : new String[]{usernameNew, usernameNewRenamed, usernameOldRenamed}) {
+            doReturn(true).when(gModule).isUsernameAvailable(s);
+        }
+        for (String s : new String[]{usernameOld, usernameTaken}) {
+            doReturn(false).when(gModule).isUsernameAvailable(s);
+        }
 
-        when(gModule.isUsernameAvailable(usernameNew)).thenReturn(true);
-        when(gModule.isUsernameAvailable(usernameNewRenamed)).thenReturn(true);
-        when(gModule.isUsernameAvailable(usernameOld)).thenReturn(false);
-        when(gModule.isUsernameAvailable(usernameOldRenamed)).thenReturn(true);
+        doReturn(true).when(pHandler).saveState(any(String.class), any());
 
         ccrNewUser =  new CountryCollectorResource(gModule, usernameNew, null, pHandler);
         ccrOldUser =  new CountryCollectorResource(gModule, usernameOld, cCollector1, pHandler);
 
-        verifyZeroInteractions(gModule);
-        verifyZeroInteractions(cCollector1);
-        verifyZeroInteractions(cCollector2);
-        verifyZeroInteractions(pHandler);
-    }
-
-    @AfterEach
-    public void afterEach() {
-        verifyNoMoreInteractions(gModule);
-        verifyNoMoreInteractions(cCollector1);
-        verifyNoMoreInteractions(cCollector2);
-        verifyNoMoreInteractions(pHandler);
+        verifyNoInteractions(gModule);
+        verifyNoInteractions(cCollector1);
+        verifyNoInteractions(cCollector2);
+        verifyNoInteractions(pHandler);
     }
 
     private void internalTestSaveAppState(final String username, final CountryCollector countryCollector,
@@ -131,5 +128,33 @@ public class CountryCollectorResourceTest {
     public void testRenameCountryCollectorForNewUser() {
         assertEquals(false, ccrNewUser.renameCountryCollector(usernameNewRenamed));
         verify(gModule, times(1)).isUsernameAvailable(usernameNew);
+    }
+
+    @Test
+    public void testRenameCountryCollectorForOldUser() {
+        assertEquals(true, ccrOldUser.renameCountryCollector(usernameOldRenamed));
+        verify(gModule, times(1)).putCountryCollector(usernameOldRenamed, cCollector1);
+        verify(gModule, times(1)).removeCountryCollector(usernameOld);
+        internalTestSaveAppState(usernameOld, null, 1);
+        internalTestSaveAppState(usernameOldRenamed, cCollector1, 1);
+    }
+
+    @Test
+    public void testExceptionOnRenameCountryCollectorToUnavailableUsername() {
+        try {
+            ccrOldUser.renameCountryCollector(usernameTaken);
+            fail("Should have thrown Illegal Argument Exception");
+        } catch (IllegalArgumentException e) {
+            // Success
+        }
+    }
+
+    /**
+     * Custom error message for when a method is called on a Mocked instance, that is not stubbed (aka. not handled).
+     */
+    private static class RuntimeExceptionAnswer implements Answer<Object> {
+        public Object answer(final InvocationOnMock invocation) throws Throwable {
+            throw new RuntimeException(invocation.getMethod().getName() + " is not stubbed");
+        }
     }
 }
