@@ -89,7 +89,7 @@ public class Badges {
         map.put("South-America", getContinentBadge("SA").toString());
         map.put("Oceania", getContinentBadge("OC").toString());
         map.put("World Population", getWorldPopulationBadge().toString());
-        map.put("Countries visited", countriesVisited().toString());
+        map.put("World", countriesVisited().toString());
         return map;
     }
 

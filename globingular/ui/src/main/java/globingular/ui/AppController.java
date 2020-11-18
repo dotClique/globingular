@@ -158,7 +158,7 @@ public class AppController implements Initializable {
     private CountryStatistics countryStatistics;
 
     /**
-     * Manager of statistics about countries the user has visited.
+     * Manager of the badges about countries the user has visited.
      */
     private Badges badges;
 
@@ -171,6 +171,11 @@ public class AppController implements Initializable {
      * Padding for labels in gridpane.
      */
     private static final int TEXT_LABEL_PADDING = 10;
+
+    /**
+     * Padding for progressindicator.
+     */
+    private static final int PROGRESSINDICATOR_PADDING = 5;
 
     /**
      * Initialize fields which do not require FXML to be loaded.
@@ -186,6 +191,7 @@ public class AppController implements Initializable {
         // Initialize a countryStatistics
         countryStatistics = new CountryStatistics(countryCollector);
 
+        // Initialize badges
         badges = new Badges(countryCollector);
 
         // Get world-instance
@@ -474,21 +480,8 @@ public class AppController implements Initializable {
 
         for (Map.Entry<String, String> entry : badges.getBadgeData().entrySet()) {
             badgesGrid.addRow(newRowIndex++, createConfiguredLabel(entry.getKey() + ": "),
-                    setProgressBar(entry.getValue()), setProgressIndicator(entry.getValue()));
+                     setProgressIndicator(entry.getValue()));
         }
-    }
-
-    /**
-     * Creates a progressbar.
-     *
-     * @param num A number between 0 and 1 to indicate progress.
-     * @return The progressbar
-     */
-    private ProgressBar setProgressBar(final String num) {
-        ProgressBar pb = new ProgressBar();
-        pb.setProgress(Double.parseDouble(num));
-
-        return pb;
     }
 
     /**
@@ -500,7 +493,12 @@ public class AppController implements Initializable {
     private ProgressIndicator setProgressIndicator(final String num) {
         ProgressIndicator pi = new ProgressIndicator();
         pi.setProgress(Double.parseDouble(num));
+        pi.setStyle(" -fx-progress-color: #9cc495;");
+        pi.setPadding(new Insets(PROGRESSINDICATOR_PADDING));
+
 
         return pi;
     }
+
+
 }
