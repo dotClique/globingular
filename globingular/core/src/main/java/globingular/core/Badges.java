@@ -1,7 +1,5 @@
 package globingular.core;
 
-import javafx.collections.ObservableSet;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -31,8 +29,8 @@ public class Badges {
      *
      * @return number between 0 and 1, representing a percentage.
      */
-    public Double countriesVisited() {
-        int visited = this.collector.numberVisited();
+    public Double getCountriesVisitedBadge() {
+        int visited = this.collector.numberOfCountriesVisited();
         int world = this.collector.getWorld().getCountries().size();
 
         return (double) visited / world;
@@ -60,7 +58,7 @@ public class Badges {
      * @return number between 0 and 1, representing a percentage.
      */
     public Double getWorldPopulationBadge() {
-        ObservableSet<Country> visitedCountries = this.collector.getVisitedCountries();
+        Set<Country> visitedCountries = this.collector.getVisitedCountries();
         long visitedPopulation = 0;
         for (Country country : visitedCountries) {
            visitedPopulation += country.getPopulation();
@@ -77,7 +75,7 @@ public class Badges {
     /**
      * Map with all data.
      *
-     * @return A map with longs.
+     * @return A map with strings.
      */
     public Map<String, String> getBadgeData() {
         Map<String, String> map = new HashMap<>();
@@ -89,7 +87,7 @@ public class Badges {
         map.put("South-America", getContinentBadge("SA").toString());
         map.put("Oceania", getContinentBadge("OC").toString());
         map.put("World Population", getWorldPopulationBadge().toString());
-        map.put("World", countriesVisited().toString());
+        map.put("World", getCountriesVisitedBadge().toString());
         return map;
     }
 

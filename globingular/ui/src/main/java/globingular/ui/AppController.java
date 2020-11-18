@@ -1,9 +1,6 @@
 package globingular.ui;
 
-import globingular.core.Country;
-import globingular.core.CountryCollector;
-import globingular.core.CountryStatistics;
-import globingular.core.World;
+import globingular.core.*;
 import globingular.persistence.PersistenceHandler;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -13,18 +10,14 @@ import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
-import javafx.scene.control.SelectionMode;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.GridPane;
 import javafx.geometry.Insets;
 import javafx.scene.text.Font;
+import org.controlsfx.control.Notifications;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.events.EventTarget;
@@ -133,6 +126,12 @@ public class AppController implements Initializable {
     private GridPane statisticsGrid;
 
     /**
+     * A GridPane where badges will be added.
+     */
+    @FXML
+    private GridPane badgesGrid;
+
+    /**
      * The WebEngine for the world map.
      */
     private WebEngine webEngine;
@@ -163,6 +162,11 @@ public class AppController implements Initializable {
     private CountryStatistics countryStatistics;
 
     /**
+     * Manager of statistics about countries the user has visited.
+     */
+    private Badges badges;
+
+    /**
      * Font size for titles in statistics tab.
      */
     private static final int TITLE_FONT_SIZE = 26;
@@ -171,6 +175,12 @@ public class AppController implements Initializable {
      * Padding for labels in gridpane.
      */
     private static final int TEXT_LABEL_PADDING = 10;
+
+    /**
+     * Padding for progressindicator in gridpane.
+     */
+    private static final int PROGRESSINDICATOR_PADDING = 5;
+
 
     /**
      * Initialize fields which do not require FXML to be loaded.
@@ -185,6 +195,9 @@ public class AppController implements Initializable {
 
         // Initialize a countryStatistics
         countryStatistics = new CountryStatistics(countryCollector);
+
+        // Initialize badges
+        badges = new Badges(countryCollector);
 
         // Get world-instance
         world = countryCollector.getWorld();
@@ -204,6 +217,9 @@ public class AppController implements Initializable {
                 this.setNotVisitedOnMap(event.getElement().getCountry());
             }
             updateStatistics();
+            updateBadges();
+            showNotification();
+
         });
 
         initializeCountriesList();
@@ -224,6 +240,7 @@ public class AppController implements Initializable {
             }
         }));
         updateStatistics();
+        updateBadges();
         configureAutoComplete();
     }
 
@@ -471,5 +488,55 @@ public class AppController implements Initializable {
             }
         });
         return sorted;
+    }
+
+
+    /**
+     * Update badges view in the UI.
+     */
+    private void updateBadges() {
+        badgesGrid.getChildren().clear();
+        int newRowIndex = 0;
+
+        Label title = createConfiguredLabel("Badges");
+        title.setFont(Font.font("System", TITLE_FONT_SIZE));
+        badgesGrid.add(title, 0, newRowIndex++);
+
+        for (Map.Entry<String, String> entry : badges.getBadgeData().entrySet()) {
+            badgesGrid.addRow(newRowIndex++, createConfiguredLabel(entry.getKey() + ": "),
+                    setProgressIndicator(entry.getValue()));
+        }
+    }
+
+    /**
+     * Creates a pie chart to visualize progress. Displays percentage.
+     *
+     * @param num A number between 0 and 1 to indicate progress.
+     * @return The progressindicator.
+     */
+    private ProgressIndicator setProgressIndicator(final String num) {
+        ProgressIndicator pi = new ProgressIndicator();
+        pi.setProgress(Double.parseDouble(num));
+        pi.setStyle(" -fx-progress-color: #9cc495;");
+        pi.setPadding(new Insets(PROGRESSINDICATOR_PADDING));
+
+
+        return pi;
+    }
+
+
+    /**
+     * Creates notification for when a badge is awarded.
+     */
+    private void showNotification() {
+        for (Map.Entry<String, String> entry : badges.getBadgeData().entrySet()) {
+            if (Double.parseDouble(entry.getValue()) == 1.0) {
+                Notifications.create()
+                        .title("Congratulations!")
+                        .text("You have completed the " + entry.getKey() + " badge!")
+                        .showInformation();
+            }
+        }
+
     }
 }
