@@ -1,10 +1,15 @@
 package globingular.restapi;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -14,68 +19,117 @@ import globingular.persistence.PersistenceHandler;
 
 public class CountryCollectorResourceTest {
 
-    private String username1 ="hablebable1";
-    private String username2 ="hablebable2";
-    private GlobingularModule module;
-    private CountryCollector collector;
-    private PersistenceHandler persistence;
-    private CountryCollectorResource ccr1;
-    private CountryCollectorResource ccr2;
+    private String usernameNew = "hablebableNew";
+    private String usernameNewRenamed = usernameNew + "Renamed";
+    private String usernameOld = "hablebableOld";
+    private String usernameOldRenamed = usernameOld + "Renamed";
+    private GlobingularModule gModule;
+    private CountryCollector cCollector1;
+    private CountryCollector cCollector2;
+    private PersistenceHandler pHandler;
+    private CountryCollectorResource ccrNewUser;
+    private CountryCollectorResource ccrOldUser;
 
-    /**
-     * Sets up mocking of Core-classes.
-     */
     @BeforeEach
-    public void start() {
+    public void beforeEach() {
         // Mock init
-        module = mock(GlobingularModule.class);
-        collector = mock(CountryCollector.class);
-        persistence = null;
+        gModule = mock(GlobingularModule.class);
+        cCollector1 = mock(CountryCollector.class);
+        cCollector2 = mock(CountryCollector.class);
+        pHandler = mock(PersistenceHandler.class);
 
         // Mock define
-        when(module.getCountryCollector(username1)).thenReturn(collector);
-        when(module.isUsernameAvailable(username1)).thenReturn(false);
+        when(gModule.getCountryCollector(usernameNew)).thenReturn(cCollector1);
+        when(gModule.getCountryCollector(usernameOld)).thenReturn(null);
 
-        when(module.getCountryCollector(username2)).thenReturn(null);
-        when(module.isUsernameAvailable(username2)).thenReturn(true);
-        when(module.putCountryCollector(username2, collector)).thenReturn(true);
+        when(gModule.isUsernameAvailable(usernameNew)).thenReturn(false);
+        when(gModule.isUsernameAvailable(usernameOld)).thenReturn(true);
 
-        // Create CCR-instance with valid username-collector pair
-        ccr1 = new CountryCollectorResource(module, username1, collector, persistence);
+        when(gModule.putCountryCollector(usernameNew, cCollector1)).thenReturn(true);
+        when(gModule.putCountryCollector(usernameOld, cCollector1)).thenReturn(true);
+        when(gModule.putCountryCollector(usernameOld, cCollector2)).thenReturn(true);
 
-        // Create CCR-instance with username without a collector
-        ccr2 = new CountryCollectorResource(module, username2, null, persistence);
+        when(gModule.removeCountryCollector(usernameNew)).thenReturn(true);
+        when(gModule.removeCountryCollector(usernameOld)).thenReturn(true);
+
+        when(gModule.isUsernameAvailable(usernameNew)).thenReturn(true);
+        when(gModule.isUsernameAvailable(usernameNewRenamed)).thenReturn(true);
+        when(gModule.isUsernameAvailable(usernameOld)).thenReturn(false);
+        when(gModule.isUsernameAvailable(usernameOldRenamed)).thenReturn(true);
+
+        ccrNewUser =  new CountryCollectorResource(gModule, usernameNew, null, pHandler);
+        ccrOldUser =  new CountryCollectorResource(gModule, usernameOld, cCollector1, pHandler);
+
+        verifyZeroInteractions(gModule);
+        verifyZeroInteractions(cCollector1);
+        verifyZeroInteractions(cCollector2);
+        verifyZeroInteractions(pHandler);
     }
 
-    /**
-     * Tests that a simple get-call works for a valid username.
-     */
-    @Test
-    public void testGetCountryCollectorForValidUsername() {
-        assertEquals(collector, ccr1.getCountryCollector());
+    @AfterEach
+    public void afterEach() {
+        verifyNoMoreInteractions(gModule);
+        verifyNoMoreInteractions(cCollector1);
+        verifyNoMoreInteractions(cCollector2);
+        verifyNoMoreInteractions(pHandler);
     }
 
-    /**
-     * Tests that exception is thrown when asking for a nonexisting user.
-     */
-    @Test
-    public void testGetCountryCollectorForInvalidUsername() {
-        assertNull(ccr2.getCountryCollector());
+    private void internalTestSaveAppState(final String username, final CountryCollector countryCollector,
+            final int times) {
+        verify(pHandler, times(times)).saveState(username, countryCollector);
     }
 
-    /**
-     * Tests that a user won't be overwritten with an empty CC-instance.
-     */
     @Test
-    public void testPutCountryCollectorForUnavailableUsername() {
-        assertEquals(false, ccr1.putCountryCollector(collector));
+    public void testPutCountryCollectorForNewUser() {
+        assertEquals(true, ccrNewUser.putCountryCollector(cCollector1));
+        verify(gModule, times(1)).putCountryCollector(usernameNew, cCollector1);
+        internalTestSaveAppState(usernameNew, cCollector1, 1);
     }
 
-    /**
-     * Tests that an empty CC-instance can be saved when the username is available.
-     */
     @Test
-    public void testPutCountryCollectorForAvailableUsername() {
-        assertEquals(true, ccr2.putCountryCollector(collector));
+    public void testPutCountryCollectorForOldUser() {
+        assertEquals(true, ccrOldUser.putCountryCollector(cCollector2));
+        verify(gModule, times(1)).putCountryCollector(usernameOld, cCollector2);
+        internalTestSaveAppState(usernameOld, cCollector2, 1);
+    }
+
+    @Test
+    public void testExceptionOnPutCountryCollectorWithNullForNewUser() {
+        try {
+            ccrNewUser.putCountryCollector(null);
+            fail("Should have thrown Illegal Argument Exception");
+        } catch (IllegalArgumentException e) {
+            // Success
+        }
+    }
+
+    @Test
+    public void testExceptionOnPutCountryCollectorWithNullForOldUser() {
+        try {
+            ccrOldUser.putCountryCollector(null);
+            fail("Should have thrown Illegal Argument Exception");
+        } catch (IllegalArgumentException e) {
+            // Success
+        }
+    }
+
+    @Test
+    public void testDeleteCountryCollectorForNewUser() {
+        assertEquals(true, ccrNewUser.deleteCountryCollector());
+        verify(gModule, times(1)).removeCountryCollector(usernameNew);
+        internalTestSaveAppState(usernameNew, null, 1);
+    }
+
+    @Test
+    public void testDeleteCountryCollectorForOldUser() {
+        assertEquals(true, ccrOldUser.deleteCountryCollector());
+        verify(gModule, times(1)).removeCountryCollector(usernameOld);
+        internalTestSaveAppState(usernameOld, null, 1);
+    }
+
+    @Test
+    public void testRenameCountryCollectorForNewUser() {
+        assertEquals(false, ccrNewUser.renameCountryCollector(usernameNewRenamed));
+        verify(gModule, times(1)).isUsernameAvailable(usernameNew);
     }
 }
