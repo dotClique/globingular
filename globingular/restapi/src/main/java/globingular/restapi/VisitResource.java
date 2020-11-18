@@ -66,7 +66,7 @@ public class VisitResource {
      * Using a {@link PUT} instead of {@link jakarta.ws.rs.DELETE}
      * 
      * @param visit The visit to remove
-     * @return      True if successfully removed, false otherwise
+     * @return      True if removed or non-existent
      * 
      * @throws IllegalArgumentException If username doesn't exist
      */

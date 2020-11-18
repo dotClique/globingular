@@ -12,13 +12,12 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import globingular.core.World;
-import globingular.persistence.PersistenceHandler;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.Response;
 
-public class GlobingularServiceTest {
+public class WorldResourceTest {
 
     private static HttpServer server;
     private static WebTarget target;
@@ -41,7 +40,7 @@ public class GlobingularServiceTest {
 
     @Test
     public void testGetWorld() throws JsonMappingException, JsonProcessingException {
-        Response response = target.path("globingular").path("Earth").request().get();
+        Response response = target.path("globingular").path("world").path("Earth").request().get();
 
         assertEquals(200, response.getStatus());
 

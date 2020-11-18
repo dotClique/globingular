@@ -143,7 +143,7 @@ public class CountryCollector implements Observable<Visit> {
      * Remove the given visit from the log.
      * 
      * @param visit The visit-object to remove
-     * @return      True, if the visit was removed
+     * @return      True if the visit was removed or was not registered
      * 
      * @throws IllegalArgumentException If the given country does not exist in this instance's world
      */

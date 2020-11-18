@@ -124,7 +124,7 @@ public class CountryCollectorResource {
             // If newName is taken, throw exception
             throw new IllegalArgumentException("The new username is already taken: " + newName);
         }
-        
+
         boolean resultPut = this.globingularModule.putCountryCollector(newName, countryCollector);
         boolean resultRemove = this.globingularModule.removeCountryCollector(username);
 

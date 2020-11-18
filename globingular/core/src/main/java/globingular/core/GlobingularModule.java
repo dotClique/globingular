@@ -48,7 +48,7 @@ public class GlobingularModule {
      * Remove {@link CountryCollector} stored with given username.
      * 
      * @param username The username to remove CountryCollector for
-     * @return true if successfully removed, false otherwise
+     * @return true if successfully removed
      */
     public boolean removeCountryCollector(final String username) {
         this.countryCollectorsByUsername.remove(username.toLowerCase());

@@ -3,13 +3,9 @@ package globingular.restapi;
 import globingular.core.CountryCollector;
 import globingular.persistence.PersistenceHandler;
 import globingular.core.GlobingularModule;
-import globingular.core.World;
 import jakarta.inject.Inject;
-import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.core.MediaType;
 
 /**
  * A service serving as the main handler for the API.

@@ -145,6 +145,6 @@ public class VisitResourceTest {
 
         // Check boolean return value
         responseMsg = response.readEntity(String.class);
-        assertEquals("false", responseMsg);
+        assertEquals("true", responseMsg);
     }
 }
