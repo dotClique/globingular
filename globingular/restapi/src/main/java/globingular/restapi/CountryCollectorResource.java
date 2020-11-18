@@ -96,7 +96,6 @@ public class CountryCollectorResource {
     @DELETE
     @Produces(MediaType.APPLICATION_JSON)
     public boolean deleteCountryCollector() {
-        // TODO: Go through all methods and reconsider the use of exceptions
         boolean result = this.globingularModule.removeCountryCollector(username);
         this.saveAppState(username, null);
         return result;
@@ -125,12 +124,14 @@ public class CountryCollectorResource {
             // If newName is taken, throw exception
             throw new IllegalArgumentException("The new username is already taken: " + newName);
         }
-        this.globingularModule.putCountryCollector(newName, countryCollector);
-        this.globingularModule.removeCountryCollector(username);
+        
+        boolean resultPut = this.globingularModule.putCountryCollector(newName, countryCollector);
+        boolean resultRemove = this.globingularModule.removeCountryCollector(username);
 
-        // TODO: Save state
+        this.saveAppState(username, null);
+        this.saveAppState(newName, countryCollector);
 
-        return false;
+        return resultPut && resultRemove;
     }
 
     /**
