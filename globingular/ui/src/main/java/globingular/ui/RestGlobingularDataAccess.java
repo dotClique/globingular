@@ -34,6 +34,10 @@ public class RestGlobingularDataAccess implements GlobingularDataAccess {
      * The HTTP status code signifying success but no content.
      */
     public static final int HTTP_STATUS_CODE_NO_CONTENT = 204;
+    /**
+     * The HTTP status code signifying success with content.
+     */
+    public static final int HTTP_STATUS_CODE_SUCCESS = 200;
 
     /**
      * The base URI of the REST server (including port).
@@ -126,7 +130,15 @@ public class RestGlobingularDataAccess implements GlobingularDataAccess {
 
             final HttpResponse<InputStream> httpResponse =
                     client.send(request, HttpResponse.BodyHandlers.ofInputStream());
-            return persistenceHandler.getObjectMapper().readValue(httpResponse.body(), Boolean.class);
+            if (httpResponse.statusCode() == HTTP_STATUS_CODE_SUCCESS) {
+                return persistenceHandler.getObjectMapper().readValue(httpResponse.body(), Boolean.class);
+            } else {
+                System.err.println("Failed to PUT countryCollector, received HTTP status code: "
+                        + httpResponse.statusCode() + ". CountryCollector was:");
+                System.err.println(collector);
+                System.err.println("Username was: \"" + username + "\"");
+                return false;
+            }
         } catch (IOException | InterruptedException | URISyntaxException e) {
             e.printStackTrace();
             return false;
