@@ -89,6 +89,7 @@ public class AppController implements Initializable {
      * Also serves as the value of the attribute, if set.
      */
     private static final String MAP_VISITED_COUNTRY_ATTRIBUTE = "visited";
+    private static final String LOCAL_USER = "Local user";
 
     /**
      * The root of the FXML document.
@@ -172,6 +173,8 @@ public class AppController implements Initializable {
      */
     private CountryStatistics countryStatistics;
 
+    // TODO
+    private boolean initialized = false;
     /**
      * Font size for titles in statistics tab.
      */
@@ -198,6 +201,7 @@ public class AppController implements Initializable {
 
         // Get world-instance
         world = countryCollector.getWorld();
+        changeUser(LOCAL_USER);
     }
 
     /**
@@ -205,6 +209,7 @@ public class AppController implements Initializable {
      */
     @Override
     public void initialize(final URL location, final ResourceBundle resources) {
+        userInput.setText(LOCAL_USER);
         this.webEngine = webView.getEngine();
 
         countryCollector.addListener(event -> {
@@ -235,6 +240,7 @@ public class AppController implements Initializable {
         }));
         updateStatistics();
         configureAutoComplete();
+        initialized = true;
     }
 
     /**
@@ -486,6 +492,26 @@ public class AppController implements Initializable {
     }
 
     /**
+     * Change the current user.
+     *
+     * @param toUser The user to change to. If blank or {@link #LOCAL_USER}, use unnamed local user instead.
+     */
+    private void changeUser(final String toUser) {
+        if (!toUser.equalsIgnoreCase(currentUser)) {
+            currentUser = toUser;
+            // If no user is requested, use unnamed local user
+            if (toUser.isBlank() || toUser.equalsIgnoreCase(LOCAL_USER)) {
+                currentUser = LOCAL_USER;
+
+                // Only change text if the FXML has initialized; if not, it will be done upon initialization anyway
+                if (initialized) {
+                    userInput.setText(LOCAL_USER);
+                }
+            }
+        }
+    }
+
+    /**
      * Create a readonly sorted-list view for the countries visited.
      *
      * @param countryCollector The countryCollector to synchronize with
@@ -506,15 +532,14 @@ public class AppController implements Initializable {
     }
 
     /**
-     * Called when the user clicks the InputField to change user.
+     * Called when the user clicks the field to change user.
      * @param mouseEvent The click-event.
      */
     @FXML
-    private void onClickUserInputField(final MouseEvent mouseEvent) {
+    private void onClickUserField(final MouseEvent mouseEvent) {
         // Attempt to change user if event was doublelick
         if (mouseEvent.getClickCount() == 2) {
             onChangeUserRequested();
         }
-
     }
 }
