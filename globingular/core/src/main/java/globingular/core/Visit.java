@@ -134,4 +134,23 @@ public class Visit {
         }
         return true;
     }
+
+    /**
+     * Create a new Visit using corresponding {@link Country}-instance from the given {@link World}.
+     * 
+     * @param visit The visit to use as basis for the new one
+     * @param world The world to retrieve the new country from
+     * @return      A Visit with the correct Country-instance from the given World.
+     *              Returns {@code null} if the country doesn't exist in the given World.
+     */
+    public static Visit newVisitFromWorld(final Visit visit, final World world) {
+        // Retrieve a valid Country from the given World
+        Country country = world.getCountryFromCode(visit.getCountry().getCountryCode());
+        if (country == null) {
+            // If a Country-instance is not found, it means the countryCode was invalid for this World
+            return null;
+        }
+        // Create a new Visit with the correct Country-instance
+        return new Visit(country, visit.getArrival(), visit.getDeparture());
+    }
 }

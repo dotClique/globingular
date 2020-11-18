@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import globingular.core.Country;
 import globingular.core.CountryCollector;
+import globingular.core.Visit;
 import globingular.core.World;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
@@ -19,7 +20,9 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class CountryCollectorResourceTest {
+import java.time.LocalDateTime;
+
+public class VisitResourceTest {
 
     private static HttpServer server;
     private static WebTarget target;
@@ -40,48 +43,9 @@ public class CountryCollectorResourceTest {
         server.shutdownNow();
     }
 
-    /**
-     * Test to see if a {@link CountryCollector} is sent back from the server.
-     */
     @Test
-    public void testGetCountryCollector() {
-        String username = "hablebable1";
-
-        Response response = target.path("globingular").path("countryCollector")
-                .path(username).request().get();
-
-        // 204 means No content, which is correct in this instance,
-        // as the user "hablebable1" has no CountryCollector
-        assertEquals(204, response.getStatus());
-    }
-
-    @Test
-    public void testPutCountryCollector() throws JsonProcessingException {
-        String username = "hablebable2";
-
-        Country c1 = new Country("NO", "Norway");
-        Country c2 = new Country("SE", "Sweden");
-        World world = new World("testWorld", c1, c2);
-        CountryCollector cc = new CountryCollector(world);
-        Response response;
-        String request, responseMsg;
-
-        request = objectMapper.writeValueAsString(cc);
-
-        response = target.path("globingular").path("countryCollector")
-                .path(username).request().put(Entity.entity(request, MediaType.APPLICATION_JSON));
-
-        // 200 means success - Request completed without errors
-        assertEquals(200, response.getStatus());
-
-        // Here we get a boolean value, so we check that it's true
-        responseMsg = response.readEntity(String.class);
-        assertEquals("true", responseMsg);
-    }
-
-    @Test
-    public void testPutAndGetCountryCollector() throws JsonProcessingException {
-        String username = "hablebable3";
+    public void testRegisterVisit() throws JsonProcessingException {
+        String username = "hablebable6";
 
         Country c1 = new Country("NO", "Norway");
         Country c2 = new Country("SE", "Sweden");
@@ -102,36 +66,40 @@ public class CountryCollectorResourceTest {
         responseMsg = response.readEntity(String.class);
         assertEquals("true", responseMsg);
 
+        // Visit with time values
+        Visit v1 = new Visit(c1, LocalDateTime.now(), LocalDateTime.now());
+        request = objectMapper.writeValueAsString(v1);
+
         response = target.path("globingular").path("countryCollector")
-                .path(username).request().get();
+                .path(username).path("visit").path("register").request()
+                .put(Entity.entity(request, MediaType.APPLICATION_JSON));
 
-        // 200 means success - We retrieved data without errors
+        // Success
         assertEquals(200, response.getStatus());
 
-        // Check that the retrieved countryCollector has the right world
+        // Check boolean return value
         responseMsg = response.readEntity(String.class);
-        CountryCollector ccTemp = objectMapper.readValue(responseMsg, CountryCollector.class);
-        assertEquals("testWorld", ccTemp.getWorld().getWorldName());
-    }
+        assertEquals("true", responseMsg);
 
-    @Test
-    public void testDeleteCountryCollector() {
-        String username = "hablebable4";
+        // Visit with null values
+        Visit v2 = new Visit(c2, null, null);
+        request = objectMapper.writeValueAsString(v2);
 
-        Response response = target.path("globingular").path("countryCollector")
-                .path(username).request().delete();
+        response = target.path("globingular").path("countryCollector")
+                .path(username).path("visit").path("register").request()
+                .put(Entity.entity(request, MediaType.APPLICATION_JSON));
 
-        // 200 means Success - As there is nothing to delete for "hablebable4", it doesn't fail either
+        // Success
         assertEquals(200, response.getStatus());
 
-        // Here we get a boolean value, so we check that it's true
-        String responseMsg = response.readEntity(String.class);
+        // Check boolean return value
+        responseMsg = response.readEntity(String.class);
         assertEquals("true", responseMsg);
     }
 
     @Test
-    public void testPutAndDeleteAndGetCountryCollector() throws JsonProcessingException {
-        String username = "hablebable5";
+    public void testRemoveVisit() throws JsonProcessingException {
+        String username = "hablebable7";
 
         Country c1 = new Country("NO", "Norway");
         Country c2 = new Country("SE", "Sweden");
@@ -144,25 +112,39 @@ public class CountryCollectorResourceTest {
 
         response = target.path("globingular").path("countryCollector")
                 .path(username).request().put(Entity.entity(request, MediaType.APPLICATION_JSON));
+
+        // 200 means success - Request completed without errors
         assertEquals(200, response.getStatus());
+
+        // Here we get a boolean value, so we check that it's true
         responseMsg = response.readEntity(String.class);
         assertEquals("true", responseMsg);
 
-        response = target.path("globingular").path("countryCollector")
-                .path(username).request().delete();
+        // Visit with time values
+        Visit v1 = new Visit(c1, LocalDateTime.now(), LocalDateTime.now());
+        request = objectMapper.writeValueAsString(v1);
 
+        response = target.path("globingular").path("countryCollector")
+                .path(username).path("visit").path("register").request()
+                .put(Entity.entity(request, MediaType.APPLICATION_JSON));
+
+        // Success
         assertEquals(200, response.getStatus());
+
+        // Check boolean return value
         responseMsg = response.readEntity(String.class);
         assertEquals("true", responseMsg);
 
+        // Remove again
         response = target.path("globingular").path("countryCollector")
-                .path(username).request().get();
+                .path(username).path("visit").path("remove").request()
+                .put(Entity.entity(request, MediaType.APPLICATION_JSON));
 
-        assertEquals(204, response.getStatus());
-    }
+        // Success
+        assertEquals(200, response.getStatus());
 
-    @Test
-    public void testRenameCountryCollector() {
-            // TODO: Not implemented!
+        // Check boolean return value
+        responseMsg = response.readEntity(String.class);
+        assertEquals("false", responseMsg);
     }
 }

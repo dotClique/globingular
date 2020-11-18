@@ -1,9 +1,7 @@
 package globingular.restapi;
 
-import globingular.core.Country;
 import globingular.core.CountryCollector;
 import globingular.core.GlobingularModule;
-import globingular.core.Visit;
 import globingular.persistence.PersistenceHandler;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
@@ -130,63 +128,27 @@ public class CountryCollectorResource {
         this.globingularModule.putCountryCollector(newName, countryCollector);
         this.globingularModule.removeCountryCollector(username);
 
+        // TODO: Save state
+
         return false;
     }
 
     /**
-     * Register a single Visit-instance for this {@link #countryCollector}.
+     * Retrieve a {@link VisitResource} to handle requests regarding visits.
      * Using {@code : (?i)} in {@code @Path} to enable case-insensitivity.
      * 
-     * @param visit The visit to register
-     * @return      True if successfully registered, otherwise false
-     */
-    @PUT
-    @Path("{visit : (?i)visit}/{register : (?i)register}")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public boolean registerVisit(final Visit visit) {
-        // We need to retrieve the correct Country-instance from this World
-        Country country = this.countryCollector.getWorld().getCountryFromCode(visit.getCountry().getCountryCode());
-        if (country == null) {
-            // If a Country-instance is not found, it means the countryCode was invalid for this World
-            throw new IllegalArgumentException("Unknown country " + visit.getCountry().getShortName()
-                    + " for this World");
-        }
-
-        // Create a new Visit with the correct Country-instance
-        Visit newVisit = new Visit(country, visit.getArrival(), visit.getDeparture());
-
-        // Register visit, save app-state and return
-        boolean result = this.countryCollector.registerVisit(newVisit);
-        saveAppState(username, countryCollector);
-        return result;
-    }
-
-    /**
-     * Remove a single {@link Visit}-instance from this {@link #countryCollector}.
-     * Using {@code : (?i)} in {@code @Path} to enable case-insensitivity.
-     * Using a {@link PUT} instead of {@link jakarta.ws.rs.DELETE}
-     * 
-     * @param visit The visit to remove
-     * @return      True if successfully removed, false otherwise
+     * @return A {@link VisitResource}-instance to handle these requests
      * 
      * @throws IllegalArgumentException If username doesn't exist
      */
-    @PUT
-    @Path("visit/{remove : (?i)remove}")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public boolean removeVisit(final Visit visit) {
-        // TODO: Change to countryCollector.removeVisit(visit)
-        // Remove visit, save app-state and return
-        for (Visit v : this.countryCollector.getVisits()) {
-            if (v.equals(visit)) {
-                boolean result = this.countryCollector.removeVisit(v);
-                saveAppState(username, countryCollector);
-                return result;
-            }
+    @Path("{visit : (?i)visit}")
+    public VisitResource getVisit() throws IllegalArgumentException {
+        // If username doesn't exist, throw exception
+        if (this.globingularModule.isUsernameAvailable(username)) {
+            throw new IllegalArgumentException("Username doesn't exist: " + username);
         }
-        return false;
+        // Return a VisitResource to handle requests
+        return new VisitResource(username, countryCollector, persistenceHandler);
     }
 
     /**
