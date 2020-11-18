@@ -16,7 +16,9 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 
 /**
- * CountryCollector resource. See {@link GlobingularService#getCountryCollector(String)}
+ * CountryCollector resource, handling requests for adding, changing
+ * and deleting user data regarding CountryCollectors.
+ * See {@link GlobingularService#getCountryCollector(String)}
  */
 public class CountryCollectorResource {
 

@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
  * <p>
  * An instance of the Visit class contains:
  * <ul>
- * <li>Methods for retrieving info about which country has been visited and
+ * <li>Methods for retrieving info about which country was visited and
  * when</li>
  * </ul>
  * </p>

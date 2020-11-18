@@ -31,6 +31,7 @@
         <checkstyle.version>3.1.1</checkstyle.version>
         <spotbugs.version>4.0.4</spotbugs.version>
         <jacoco.version>0.8.5</jacoco.version>
+        <mockito.version>2.0.2-beta</mockito.version>
     </properties>
 
     <!-- Actual location for GitLab Pages instance, relativizes any absolute site links -->

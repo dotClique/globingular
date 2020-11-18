@@ -40,8 +40,7 @@ public class GlobingularModule {
      */
     public boolean putCountryCollector(final String username,
             final CountryCollector countryCollector) {
-        String usernameLowercase = username.toLowerCase();
-        this.countryCollectorsByUsername.put(usernameLowercase, countryCollector);
+        this.countryCollectorsByUsername.put(username.toLowerCase(), countryCollector);
         return true;
     }
 
@@ -52,8 +51,7 @@ public class GlobingularModule {
      * @return true if successfully removed, false otherwise
      */
     public boolean removeCountryCollector(final String username) {
-        String usernameLowercase = username.toLowerCase();
-        this.countryCollectorsByUsername.remove(usernameLowercase);
+        this.countryCollectorsByUsername.remove(username.toLowerCase());
         return true;
     }
 
