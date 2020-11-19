@@ -104,8 +104,8 @@ public class CountryCollector implements Observable<Visit> {
         this.visitedCountries.add(visit.getCountry());
         // Notify listeners about addition
         this.notifyListeners(new ChangeEvent<>(ChangeEvent.Status.ADDED, visit));
-        // Returns true, as the element has been added
-        return true;
+        // Return true if success
+        return this.visits.contains(visit);
     }
 
     /**
@@ -135,8 +135,8 @@ public class CountryCollector implements Observable<Visit> {
             // Notify listeners about removal of visit
             this.notifyListeners(new ChangeEvent<>(ChangeEvent.Status.REMOVED, visit));
         }
-        // Return true, as the element was removed
-        return true;
+        // Return true if success
+        return this.visitedCountries.contains(country);
     }
 
     /**
@@ -158,8 +158,8 @@ public class CountryCollector implements Observable<Visit> {
         }
         // Notify listeners about removal
         this.notifyListeners(new ChangeEvent<>(ChangeEvent.Status.REMOVED, visit));
-        // Return true, as the element was removed
-        return true;
+        // Return true if success
+        return !this.visits.contains(visit);
     }
 
     /**

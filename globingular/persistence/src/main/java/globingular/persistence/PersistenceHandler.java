@@ -236,7 +236,7 @@ public class PersistenceHandler {
      */
     public boolean saveState(final String username, final CountryCollector countryCollector)
             throws IllegalArgumentException {
-        // Make sure necessary files exist before trying to write files
+        // Make sure necessary directories exist before trying to write files
         try {
             Files.createDirectories(DATA_FOLDER);
         } catch (IOException e) {
