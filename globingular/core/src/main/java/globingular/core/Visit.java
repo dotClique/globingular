@@ -43,6 +43,10 @@ public class Visit {
         this.country = country;
         this.arrival = arrival;
         this.departure = departure;
+        if (!isValidDateInterval(arrival, departure)) {
+            throw new IllegalArgumentException(
+                    "Both arrival and departure must be null, or arrival must not come before departure!");
+        }
     }
 
     /**
@@ -151,5 +155,16 @@ public class Visit {
         }
         // Create a new Visit with the correct Country-instance
         return new Visit(country, visit.getArrival(), visit.getDeparture());
+    }
+
+    /**
+     * Check whether the given date-interval is valid for construction of a Visit.
+     * @param arrival Arrival-time.
+     * @param departure Departure-time.
+     * @return Whether the date-interval is valid.
+     */
+    public static boolean isValidDateInterval(final LocalDate arrival, final LocalDate departure) {
+        return (arrival != null && departure != null && !departure.isBefore(arrival))
+                || (arrival == null && departure == null);
     }
 }
