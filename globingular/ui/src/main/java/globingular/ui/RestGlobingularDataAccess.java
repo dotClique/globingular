@@ -100,16 +100,14 @@ public class RestGlobingularDataAccess implements GlobingularDataAccess {
 
             // Check if the user didn't have anything stored. If so, return empty CountryCollector with default World
             if (httpResponse.statusCode() == HTTP_STATUS_CODE_NO_CONTENT) {
-                // TODO: use field provided in future merge request
-                return new CountryCollector(persistenceHandler.getDefaultWorld("Earth"));
+                return new CountryCollector(persistenceHandler.getPredominantDefaultWorld());
             }
 
             return persistenceHandler.getObjectMapper().readValue(httpResponse.body(), CountryCollector.class);
         } catch (IOException | InterruptedException | URISyntaxException e) {
             // Unexpected error, return empty CountryCollector with default World
             e.printStackTrace();
-            // TODO: use field provided in future merge request
-            return new CountryCollector(persistenceHandler.getDefaultWorld("Earth"));
+            return new CountryCollector(persistenceHandler.getPredominantDefaultWorld());
         }
     }
 
