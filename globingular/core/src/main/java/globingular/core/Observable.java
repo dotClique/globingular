@@ -13,7 +13,7 @@ public interface Observable<T> {
      *
      * @return The registered listeners.
      */
-    Collection<Listener<Visit>> getListeners();
+    Collection<Listener<T>> getListeners();
 
     /**
      * Add a new {@link Listener} to be notified.

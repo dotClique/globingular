@@ -9,7 +9,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 import java.time.LocalDateTime;
@@ -249,7 +248,7 @@ public class CountryCollectorTest {
         cc.addListener(listener);
         Visit visit = new Visit(country0, null, null);
         cc.registerVisit(visit);
-        verify(listener, times(1)).notifyListener(eq(new ChangeEvent<>(ChangeEvent.Status.ADDED, visit)));
+        verify(listener).notifyListener(eq(new ChangeEvent<>(ChangeEvent.Status.ADDED, visit)));
     }
 
     @Test
@@ -261,11 +260,11 @@ public class CountryCollectorTest {
         cc.addListener(listener);
         Visit visit = new Visit(country0, null, null);
         cc.registerVisit(visit);
-        verify(listener, times(1)).notifyListener(eq(new ChangeEvent<>(ChangeEvent.Status.ADDED, visit)));
+        verify(listener).notifyListener(eq(new ChangeEvent<>(ChangeEvent.Status.ADDED, visit)));
 
         cc.removeListener(listener);
         assertTrue(cc.getListeners().isEmpty());
         cc.removeVisit(visit);
-        verify(listener, times(1)).notifyListener(eq(new ChangeEvent<>(ChangeEvent.Status.ADDED, visit)));
+        verify(listener).notifyListener(eq(new ChangeEvent<>(ChangeEvent.Status.ADDED, visit)));
     }
 }

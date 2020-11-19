@@ -97,8 +97,7 @@ public final class FileHandler {
      * @throws IOException              If exception is thrown upon saving
      */
     public static boolean saveCountryCollector(final PersistenceHandler persistenceHandler, final String username,
-                                               final CountryCollector countryCollector)
-            throws IllegalArgumentException, IOException {
+            final CountryCollector countryCollector) throws IllegalArgumentException, IOException {
         // Make sure necessary directories exist before trying to write files
         // May throw IOException
         Files.createDirectories(DATA_FOLDER);
@@ -154,7 +153,7 @@ public final class FileHandler {
             return pathFromUsername(defaultFilename, null);
         }
         // If not valid, throw exception
-        if (!GlobingularModule.isUsernameValid(username)) {
+        if (!GlobingularModule.isUsernameValid(username.toLowerCase())) {
             throw new IllegalArgumentException("Filename must be alphanumeric: " + username);
         }
         return DATA_FOLDER.resolve(username.toLowerCase() + ".json");
