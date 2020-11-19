@@ -1,6 +1,6 @@
 package globingular.core;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 /**
  * <p>
@@ -26,21 +26,20 @@ public class Visit {
     /**
      * The time of arrival in the country.
      */
-    private final LocalDateTime arrival;
+    private final LocalDate arrival;
 
     /**
      * The time of departure from the country.
      */
-    private final LocalDateTime departure;
+    private final LocalDate departure;
 
     /**
      * Initiate a new visit to the given country at the given time.
-     * 
-     * @param country   The country that has been visited
+     *  @param country   The country that has been visited
      * @param arrival   The arrival time to log in the visit
      * @param departure The departure time to log in the visit
      */
-    public Visit(final Country country, final LocalDateTime arrival, final LocalDateTime departure) {
+    public Visit(final Country country, final LocalDate arrival, final LocalDate departure) {
         this.country = country;
         this.arrival = arrival;
         this.departure = departure;
@@ -58,18 +57,18 @@ public class Visit {
     /**
      * Retrieve the date and time of arrival to the country.
      * 
-     * @return A LocalDateTime of the arrival in the country
+     * @return A LocalDate of the arrival in the country
      */
-    public LocalDateTime getArrival() {
+    public LocalDate getArrival() {
         return this.arrival;
     }
 
     /**
      * Retrieve the date and time of departure from the country.
      * 
-     * @return A LocalDateTime of the departure from the country
+     * @return A LocalDate of the departure from the country
      */
-    public LocalDateTime getDeparture() {
+    public LocalDate getDeparture() {
         return this.departure;
     }
 
