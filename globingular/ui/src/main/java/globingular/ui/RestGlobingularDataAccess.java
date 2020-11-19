@@ -2,7 +2,6 @@ package globingular.ui;
 
 import com.fasterxml.jackson.databind.ObjectWriter;
 import globingular.core.CountryCollector;
-import globingular.core.GlobingularDataAccess;
 import globingular.persistence.PersistenceHandler;
 
 import java.io.IOException;

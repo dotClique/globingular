@@ -1,7 +1,8 @@
-package globingular.persistence;
+package globingular.ui;
 
 import globingular.core.CountryCollector;
-import globingular.core.GlobingularDataAccess;
+import globingular.persistence.FileHandler;
+import globingular.persistence.PersistenceHandler;
 
 /**
  * Local file-based implementation of {@link GlobingularDataAccess}.

@@ -1,4 +1,6 @@
-package globingular.core;
+package globingular.ui;
+
+import globingular.core.CountryCollector;
 
 /**
  * Abstraction for a data access layer for the application.
