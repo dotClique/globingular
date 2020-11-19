@@ -31,6 +31,8 @@ public class LocalGlobingularDataAccess implements GlobingularDataAccess {
 
     /**
      * {@inheritDoc}
+     * Loads from the local file system.
+     *
      */
     @Override
     public CountryCollector getCountryCollector() {
@@ -39,6 +41,7 @@ public class LocalGlobingularDataAccess implements GlobingularDataAccess {
 
     /**
      * {@inheritDoc}
+     * Saves to the local file system.
      */
     @Override
     public boolean putCountryCollector(final CountryCollector collector) {

@@ -81,6 +81,7 @@ public class RestGlobingularDataAccess implements GlobingularDataAccess {
 
     /**
      * {@inheritDoc}
+     * Loads from a REST-API.
      */
     @Override
     public CountryCollector getCountryCollector() {
@@ -114,6 +115,7 @@ public class RestGlobingularDataAccess implements GlobingularDataAccess {
 
     /**
      * {@inheritDoc}
+     * Puts to a REST-API.
      */
     @Override
     public boolean putCountryCollector(final CountryCollector collector) {
