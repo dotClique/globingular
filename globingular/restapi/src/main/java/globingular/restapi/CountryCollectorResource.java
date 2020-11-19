@@ -1,5 +1,7 @@
 package globingular.restapi;
 
+import java.io.IOException;
+
 import globingular.core.CountryCollector;
 import globingular.core.GlobingularModule;
 import globingular.persistence.PersistenceHandler;
@@ -75,11 +77,12 @@ public class CountryCollectorResource {
      * @return          True if successfully saved
      * 
      * @throws IllegalArgumentException If CountryCollector is null
+     * @throws IOException              If saving fails
      */
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public boolean putCountryCollector(final CountryCollector collector) throws IllegalArgumentException {
+    public boolean putCountryCollector(final CountryCollector collector) throws IllegalArgumentException, IOException {
         if (collector == null) {
             throw new IllegalArgumentException("CountryCollector can't be null");
         }
@@ -92,10 +95,12 @@ public class CountryCollectorResource {
      * Delete a {@link CountryCollector} saved for the current {@link #username}.
      * 
      * @return True if successfully deleted, or if there was nothing saved using that username in the first place
+     * 
+     * @throws IOException If saving fails
      */
     @DELETE
     @Produces(MediaType.APPLICATION_JSON)
-    public boolean deleteCountryCollector() {
+    public boolean deleteCountryCollector() throws IOException {
         boolean result = this.globingularModule.removeCountryCollector(username);
         this.saveAppState(username, null);
         return result;
@@ -111,11 +116,13 @@ public class CountryCollectorResource {
      * @return        True if successful, false if {@link #username} doesn't exist (no content to move)
      * 
      * @throws IllegalArgumentException If the new username is already taken
+     * @throws IOException              If saving fails
      */
     @POST
     @Path("{rename : (?i)rename}/{newName}")
     @Produces(MediaType.APPLICATION_JSON)
-    public boolean renameCountryCollector(@QueryParam("newName") final String newName) throws IllegalArgumentException {
+    public boolean renameCountryCollector(@QueryParam("newName") final String newName) throws IllegalArgumentException,
+            IOException {
         if (this.globingularModule.isUsernameAvailable(username)) {
             // If there's no user with that username, return false
             return false;
@@ -157,8 +164,10 @@ public class CountryCollectorResource {
      * 
      * @param user         The username to save as
      * @param collector    The countryCollector to save
+     * 
+     * @throws IOException If saving fails
      */
-    private void saveAppState(final String user, final CountryCollector collector) {
+    private void saveAppState(final String user, final CountryCollector collector) throws IOException {
         if (this.persistenceHandler != null) {
             this.persistenceHandler.saveState(user, collector);
         }

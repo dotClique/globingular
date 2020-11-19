@@ -181,7 +181,7 @@ public class AppController implements Initializable {
         // Use it to retrieve CountryCollector from file
         countryCollector = persistence.loadCountryCollector();
         // And register it for autosaving
-        persistence.setAutosave(null, countryCollector);
+        persistence.setAutosave(PersistenceHandler.DEFAULT_USERNAME, countryCollector);
 
         // Initialize a countryStatistics
         countryStatistics = new CountryStatistics(countryCollector);

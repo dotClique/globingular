@@ -15,6 +15,7 @@ import jakarta.ws.rs.core.Response;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -23,7 +24,16 @@ public class CountryCollectorResourceTest {
 
     private static HttpServer server;
     private static WebTarget target;
-    ObjectMapper objectMapper = new GlobingularObjectMapperProvider().getContext(getClass());
+    private ObjectMapper objectMapper = new GlobingularObjectMapperProvider().getContext(getClass());
+
+    private String username;
+    private String usernamePre = "hablebable";
+    private static int usernameCount = 0;
+    private Country c1, c2;
+    private World world;
+    private CountryCollector cc;
+    private Response response;
+    private String request, responseMsg;
 
     @BeforeAll
     public static void setUp() {
@@ -33,6 +43,16 @@ public class CountryCollectorResourceTest {
         Client c = ClientBuilder.newClient();
 
         target = c.target(Main.BASE_URI);
+    }
+
+    @BeforeEach
+    public void beforeEach() {
+        // Makes sure each call gets a new username
+        username = usernamePre + (usernameCount++);
+        c1 = new Country("NO", "Norway");
+        c2 = new Country("SE", "Sweden");
+        world = new World("testWorld", c1, c2);
+        cc = new CountryCollector(world);
     }
 
     @AfterAll
@@ -45,9 +65,8 @@ public class CountryCollectorResourceTest {
      */
     @Test
     public void testGetCountryCollector() {
-        String username = "hablebable1";
 
-        Response response = target.path("globingular").path("countryCollector")
+        response = target.path("globingular").path("countryCollector")
                 .path(username).request().get();
 
         // 204 means No content, which is correct in this instance,
@@ -57,14 +76,6 @@ public class CountryCollectorResourceTest {
 
     @Test
     public void testPutCountryCollector() throws JsonProcessingException {
-        String username = "hablebable2";
-
-        Country c1 = new Country("NO", "Norway");
-        Country c2 = new Country("SE", "Sweden");
-        World world = new World("testWorld", c1, c2);
-        CountryCollector cc = new CountryCollector(world);
-        Response response;
-        String request, responseMsg;
 
         request = objectMapper.writeValueAsString(cc);
 
@@ -81,14 +92,6 @@ public class CountryCollectorResourceTest {
 
     @Test
     public void testPutAndGetCountryCollector() throws JsonProcessingException {
-        String username = "hablebable3";
-
-        Country c1 = new Country("NO", "Norway");
-        Country c2 = new Country("SE", "Sweden");
-        World world = new World("testWorld", c1, c2);
-        CountryCollector cc = new CountryCollector(world);
-        Response response;
-        String request, responseMsg;
 
         request = objectMapper.writeValueAsString(cc);
 
@@ -116,9 +119,8 @@ public class CountryCollectorResourceTest {
 
     @Test
     public void testDeleteCountryCollector() {
-        String username = "hablebable4";
 
-        Response response = target.path("globingular").path("countryCollector")
+        response = target.path("globingular").path("countryCollector")
                 .path(username).request().delete();
 
         // 200 means Success - As there is nothing to delete for "hablebable4", it doesn't fail either
@@ -131,14 +133,6 @@ public class CountryCollectorResourceTest {
 
     @Test
     public void testPutAndDeleteAndGetCountryCollector() throws JsonProcessingException {
-        String username = "hablebable5";
-
-        Country c1 = new Country("NO", "Norway");
-        Country c2 = new Country("SE", "Sweden");
-        World world = new World("testWorld", c1, c2);
-        CountryCollector cc = new CountryCollector(world);
-        Response response;
-        String request, responseMsg;
 
         request = objectMapper.writeValueAsString(cc);
 
@@ -162,7 +156,12 @@ public class CountryCollectorResourceTest {
     }
 
     @Test
-    public void testRenameCountryCollector() {
-            // TODO: Not implemented!
+    public void testRenameCountryCollectorForNewUser() {
+
+        response = target.path("globingular").path("countryCollector")
+                .path(username).path("rename").path(username + "Renamed").request().post(null);
+        assertEquals(200, response.getStatus());
+        responseMsg = response.readEntity(String.class);
+        assertEquals("false", responseMsg);
     }
 }

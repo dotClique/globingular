@@ -7,6 +7,9 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
+
+import java.io.IOException;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 
@@ -34,7 +37,7 @@ public class CountryCollectorResourceTest {
     private CountryCollectorResource ccrOldUser;
 
     @BeforeEach
-    public void beforeEach() {
+    public void beforeEach() throws IllegalArgumentException, IOException {
         // Mock init
         gModule = mock(GlobingularModule.class, new RuntimeExceptionAnswer());
         cCollector1 = mock(CountryCollector.class, new RuntimeExceptionAnswer());
@@ -71,27 +74,38 @@ public class CountryCollectorResourceTest {
         verifyNoInteractions(pHandler);
     }
 
+    /**
+     * Helper method to avoid duplicating code too much.
+     * Verifies that {@link PersistenceHandler#saveState(String, CountryCollector)} has been called
+     * the given amount of times for the parameters username and countryCollector.
+     * 
+     * @param username                  The username to count for
+     * @param countryCollector          The countryCollector to count for
+     * @param times                     The amount of times to check, usually 1
+     * @throws IllegalArgumentException If username is invalid: {@link GlobingularModule#isUsernameValid(String)}
+     * @throws IOException              If saving fails (not really gonna happen, as it's a mocked instance)
+     */
     private void internalTestSaveAppState(final String username, final CountryCollector countryCollector,
-            final int times) {
+            final int times) throws IllegalArgumentException, IOException {
         verify(pHandler, times(times)).saveState(username, countryCollector);
     }
 
     @Test
-    public void testPutCountryCollectorForNewUser() {
+    public void testPutCountryCollectorForNewUser() throws IllegalArgumentException, IOException {
         assertEquals(true, ccrNewUser.putCountryCollector(cCollector1));
         verify(gModule, times(1)).putCountryCollector(usernameNew, cCollector1);
         internalTestSaveAppState(usernameNew, cCollector1, 1);
     }
 
     @Test
-    public void testPutCountryCollectorForOldUser() {
+    public void testPutCountryCollectorForOldUser() throws IllegalArgumentException, IOException {
         assertEquals(true, ccrOldUser.putCountryCollector(cCollector2));
         verify(gModule, times(1)).putCountryCollector(usernameOld, cCollector2);
         internalTestSaveAppState(usernameOld, cCollector2, 1);
     }
 
     @Test
-    public void testExceptionOnPutCountryCollectorWithNullForNewUser() {
+    public void testExceptionOnPutCountryCollectorWithNullForNewUser() throws IOException {
         try {
             ccrNewUser.putCountryCollector(null);
             fail("Should have thrown Illegal Argument Exception");
@@ -101,7 +115,7 @@ public class CountryCollectorResourceTest {
     }
 
     @Test
-    public void testExceptionOnPutCountryCollectorWithNullForOldUser() {
+    public void testExceptionOnPutCountryCollectorWithNullForOldUser() throws IOException {
         try {
             ccrOldUser.putCountryCollector(null);
             fail("Should have thrown Illegal Argument Exception");
@@ -111,27 +125,27 @@ public class CountryCollectorResourceTest {
     }
 
     @Test
-    public void testDeleteCountryCollectorForNewUser() {
+    public void testDeleteCountryCollectorForNewUser() throws IllegalArgumentException, IOException {
         assertEquals(true, ccrNewUser.deleteCountryCollector());
         verify(gModule, times(1)).removeCountryCollector(usernameNew);
         internalTestSaveAppState(usernameNew, null, 1);
     }
 
     @Test
-    public void testDeleteCountryCollectorForOldUser() {
+    public void testDeleteCountryCollectorForOldUser() throws IOException {
         assertEquals(true, ccrOldUser.deleteCountryCollector());
         verify(gModule, times(1)).removeCountryCollector(usernameOld);
         internalTestSaveAppState(usernameOld, null, 1);
     }
 
     @Test
-    public void testRenameCountryCollectorForNewUser() {
+    public void testRenameCountryCollectorForNewUser() throws IllegalArgumentException, IOException {
         assertEquals(false, ccrNewUser.renameCountryCollector(usernameNewRenamed));
         verify(gModule, times(1)).isUsernameAvailable(usernameNew);
     }
 
     @Test
-    public void testRenameCountryCollectorForOldUser() {
+    public void testRenameCountryCollectorForOldUser() throws IllegalArgumentException, IOException {
         assertEquals(true, ccrOldUser.renameCountryCollector(usernameOldRenamed));
         verify(gModule, times(1)).putCountryCollector(usernameOldRenamed, cCollector1);
         verify(gModule, times(1)).removeCountryCollector(usernameOld);
@@ -140,7 +154,7 @@ public class CountryCollectorResourceTest {
     }
 
     @Test
-    public void testExceptionOnRenameCountryCollectorToUnavailableUsername() {
+    public void testExceptionOnRenameCountryCollectorToUnavailableUsername() throws IOException {
         try {
             ccrOldUser.renameCountryCollector(usernameTaken);
             fail("Should have thrown Illegal Argument Exception");

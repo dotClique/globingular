@@ -1,5 +1,7 @@
 package globingular.restapi;
 
+import java.io.IOException;
+
 import globingular.core.CountryCollector;
 import globingular.core.Visit;
 import globingular.persistence.PersistenceHandler;
@@ -48,12 +50,14 @@ public class VisitResource {
      * 
      * @param visit The visit to register
      * @return      True if successfully registered, otherwise false
+     * 
+     * @throws IOException If saving fails
      */
     @PUT
     @Path("{register : (?i)register}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public boolean registerVisit(final Visit visit) {
+    public boolean registerVisit(final Visit visit) throws IOException {
         // Validate visit, register it, save app-state and return
         boolean result = this.countryCollector.registerVisit(validateAndReturnVisit(visit));
         saveAppState(username, countryCollector);
@@ -69,12 +73,13 @@ public class VisitResource {
      * @return      True if removed or non-existent
      * 
      * @throws IllegalArgumentException If username doesn't exist
+     * @throws IOException              If saving fails
      */
     @PUT
     @Path("{remove : (?i)remove}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public boolean removeVisit(final Visit visit) {
+    public boolean removeVisit(final Visit visit) throws IOException {
         // Validate visit, remove it, save app-state and return
         boolean result = this.countryCollector.removeVisit(validateAndReturnVisit(visit));
         saveAppState(username, countryCollector);
@@ -103,12 +108,13 @@ public class VisitResource {
     /**
      * Saves the app-state for the active user, if {@link #persistenceHandler} is defined.
      * 
-     * @param user      The username to save as
-     * @param collector The countryCollector to save
-     * @return          True if successfully saved, or persistenceHandler is null.
-     *                  False if error occurred. TODO: Should this throw exception instead?
+     * @param user         The username to save as
+     * @param collector    The countryCollector to save
+     * @return             True if successfully saved, or persistenceHandler is null.
+     * 
+     * @throws IOException If saving fails
      */
-    private boolean saveAppState(final String user, final CountryCollector collector) {
+    private boolean saveAppState(final String user, final CountryCollector collector) throws IOException {
         if (this.persistenceHandler != null) {
             return this.persistenceHandler.saveState(user, collector);
         }

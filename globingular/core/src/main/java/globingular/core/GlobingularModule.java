@@ -72,6 +72,9 @@ public class GlobingularModule {
      * @return True if this username is valid (lowercase alphanumeric)
      */
     public static boolean isUsernameValid(final String username) {
+        if (username == null) {
+            return false;
+        }
         return username.matches("[a-z0-9]+");
     }
 }

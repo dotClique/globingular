@@ -40,9 +40,10 @@ public class PersistenceHandler {
      */
     private static final Path DATA_FOLDER = Paths.get(System.getProperty("user.home"), "globingular");
     /**
-     * Define Path to Json-file used for saving CountryCollector-state.
+     * Define default username, used as path to Json-file used for saving CountryCollector-state.
+     * TODO: Should only be public as long as client side multi-user setup hasn't been implemented!
      */
-    private static final String DEFAULT_COLLECTOR_FILENAME = "countrycollector";
+    public static final String DEFAULT_USERNAME = "countrycollector";
 
     /**
      * Define which file to get standard world map {@link World} from.
@@ -144,7 +145,7 @@ public class PersistenceHandler {
      */
     public CountryCollector loadCountryCollector(final String username) {
         CountryCollector countryCollector = null;
-        File file = pathFromUsername(username, DEFAULT_COLLECTOR_FILENAME).toFile();
+        File file = pathFromUsername(username, DEFAULT_USERNAME).toFile();
         if (file.isFile()) {
             try (InputStream in = new BufferedInputStream(new FileInputStream(file))) {
                 countryCollector = objectMapper.readValue(in, CountryCollector.class);
@@ -193,15 +194,20 @@ public class PersistenceHandler {
      *                         If null is given, default filename is used.
      * @param countryCollector The CountryCollector to autosave
      * 
-     * @throws IllegalArgumentException If filename is not alphanumeric.
-     *                                  Will be thrown when listeners are notified, not upon initialization.
-     *                                  TODO: Should this be changed?
+     * @throws IllegalArgumentException If filename is invalid: {@link GlobingularModule#isUsernameValid(String)}.
      */
     public void setAutosave(final String username, final CountryCollector countryCollector)
             throws IllegalArgumentException {
-                countryCollector.addListener(event -> {
-            // saveState uses default if filename is null, and throws IllegalArgumentException if invalid
-            this.saveState(username, countryCollector);
+        if (!GlobingularModule.isUsernameValid(username)) {
+            throw new IllegalArgumentException("Invalid username: " + username);
+        }
+        countryCollector.addListener(event -> {
+            try {
+                this.saveState(username, countryCollector);
+            } catch (IOException e) {
+                // TODO: Like this the user will not be notified about the exception :/
+                e.printStackTrace();
+            }
         });
     }
 
@@ -233,28 +239,24 @@ public class PersistenceHandler {
      * @return                 True if successfully saved
      * 
      * @throws IllegalArgumentException If filename is not alphanumeric
+     * @throws IOException              If exception is thrown upon saving
      */
     public boolean saveState(final String username, final CountryCollector countryCollector)
-            throws IllegalArgumentException {
+            throws IllegalArgumentException, IOException {
         // Make sure necessary directories exist before trying to write files
-        try {
-            Files.createDirectories(DATA_FOLDER);
-        } catch (IOException e) {
-            // Catch and print if exception
-            e.printStackTrace();
-        }
+        // May throw IOException
+        Files.createDirectories(DATA_FOLDER);
         // If countryCollector is null, delete file
         if (countryCollector == null) {
             return deleteState(username);
         }
         // Try to save
-        try (Writer out = Files.newBufferedWriter(pathFromUsername(username, DEFAULT_COLLECTOR_FILENAME))) {
+        // Caught exception is thrown. Using try-with to ensure closing of writer.
+        try (Writer out = Files.newBufferedWriter(pathFromUsername(username, DEFAULT_USERNAME))) {
             objectMapper.writerWithDefaultPrettyPrinter().writeValue(out, countryCollector);
             return true;
         } catch (IOException e) {
-            // TODO: return false or throw?
-            // Failed to save
-            return false;
+            throw e;
         }
     }
 
@@ -267,7 +269,7 @@ public class PersistenceHandler {
      * @throws IllegalArgumentException If filename is not alphanumeric
      */
     public boolean deleteState(final String username) throws IllegalArgumentException {
-        File file = pathFromUsername(username, DEFAULT_COLLECTOR_FILENAME).toFile();
+        File file = pathFromUsername(username, DEFAULT_USERNAME).toFile();
         if (file.isFile()) {
             return file.delete();
         }
