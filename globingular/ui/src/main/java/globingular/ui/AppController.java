@@ -558,7 +558,7 @@ public class AppController implements Initializable {
                     userInput.setText(LOCAL_USER);
                 }
             } else {
-                dataAccess = new RestGlobingularDataAccess(currentUser.toLowerCase(), persistence);
+                dataAccess = new RestGlobingularDataAccess(App.BASE_URI, currentUser.toLowerCase(), persistence);
             }
             changeAppState(dataAccess.getCountryCollector());
         }

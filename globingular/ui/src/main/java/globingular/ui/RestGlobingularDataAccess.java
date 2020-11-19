@@ -39,10 +39,6 @@ public class RestGlobingularDataAccess implements GlobingularDataAccess {
     public static final int HTTP_STATUS_CODE_SUCCESS = 200;
 
     /**
-     * The base URI of the REST server (including port).
-     */
-    private static final String BASE_URI = "http://localhost:8081/";
-    /**
      * The path to the Globingular-service, relative to the base-URI.
      */
     private static final String GLOBINGULAR_SERVICE_PATH = "globingular/";
@@ -55,7 +51,10 @@ public class RestGlobingularDataAccess implements GlobingularDataAccess {
      * The user to access the world-map data for.
      */
     private final String username;
-
+    /**
+     * The base URI of the REST server (including port).
+     */
+    private final String baseUri;
     /**
      * {@link PersistenceHandler} to use for parsing.
      */
@@ -69,13 +68,15 @@ public class RestGlobingularDataAccess implements GlobingularDataAccess {
     /**
      * Construct a new data access for the world-map of the given user.
      *
+     * @param baseUri            The base URI of the REST server (including port).
      * @param username           The user to access the world-map data for.
      * @param persistenceHandler {@link PersistenceHandler} to use for parsing.
      */
-    public RestGlobingularDataAccess(final String username, final PersistenceHandler persistenceHandler) {
+    public RestGlobingularDataAccess(final String baseUri, final String username,
+                                     final PersistenceHandler persistenceHandler) {
+        this.baseUri = baseUri;
         this.username = username;
         this.persistenceHandler = persistenceHandler;
-
     }
 
     /**
@@ -86,7 +87,7 @@ public class RestGlobingularDataAccess implements GlobingularDataAccess {
     public CountryCollector getCountryCollector() {
         try {
             final HttpRequest request =
-                    HttpRequest.newBuilder(new URI(BASE_URI + GLOBINGULAR_SERVICE_PATH
+                    HttpRequest.newBuilder(new URI(baseUri + GLOBINGULAR_SERVICE_PATH
                             + COUNTRY_COLLECTOR_RESOURCE_PATH + username))
                                .header(CONTENT_TYPE_HEADER_NAME, MEDIA_TYPE_JSON)
                                .header(ACCEPT_HEADER_NAME, MEDIA_TYPE_JSON)
@@ -122,7 +123,7 @@ public class RestGlobingularDataAccess implements GlobingularDataAccess {
 
         try {
             final HttpRequest request =
-                    HttpRequest.newBuilder(new URI(BASE_URI + GLOBINGULAR_SERVICE_PATH
+                    HttpRequest.newBuilder(new URI(baseUri + GLOBINGULAR_SERVICE_PATH
                             + COUNTRY_COLLECTOR_RESOURCE_PATH + username))
                                .header(CONTENT_TYPE_HEADER_NAME, MEDIA_TYPE_JSON)
                                .header(ACCEPT_HEADER_NAME, MEDIA_TYPE_JSON)

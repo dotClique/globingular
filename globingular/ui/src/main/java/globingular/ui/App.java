@@ -21,11 +21,14 @@ public final class App extends Application {
      * Default window height.
      */
     public static final int WINDOW_HEIGHT = 600;
-
     /**
      * Default window width.
      */
     public static final int WINDOW_WIDTH = 1300;
+    /**
+     * The base URI of the REST server (including port).
+     */
+    static final String BASE_URI = "http://localhost:8081/";
 
     /**
      * Starts the application in this instance.
