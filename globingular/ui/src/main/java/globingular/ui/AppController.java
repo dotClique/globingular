@@ -6,6 +6,7 @@ import globingular.core.CountryStatistics;
 import globingular.core.GlobingularDataAccess;
 import globingular.core.Listener;
 import globingular.core.Visit;
+import globingular.core.GlobingularModule;
 import globingular.core.World;
 import globingular.persistence.LocalGlobingularDataAccess;
 import globingular.persistence.PersistenceHandler;
@@ -30,8 +31,10 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.GridPane;
 import javafx.geometry.Insets;
 import javafx.scene.text.Font;
+import org.controlsfx.control.textfield.AutoCompletionBinding;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.events.EventListener;
 import org.w3c.dom.events.EventTarget;
 import org.controlsfx.control.textfield.TextFields;
 
@@ -56,7 +59,6 @@ import java.util.Map;
  * </ul>
  * </p>
  */
-
 public class AppController implements Initializable {
 
     /**
@@ -154,7 +156,7 @@ public class AppController implements Initializable {
     /**
      * Responsible for persisting state across runs.
      */
-    private final PersistenceHandler persistence;
+    private final PersistenceHandler persistence = new PersistenceHandler();
     /**
      * Manager of which countries have been visited.
      */
@@ -162,7 +164,7 @@ public class AppController implements Initializable {
     /**
      * Manager of which countries exist.
      */
-    private final World world;
+    private World world;
     /**
      * Helper field containing whichever Country the input field currently resolves to, if any.
      */
@@ -179,16 +181,19 @@ public class AppController implements Initializable {
      * The intermediary for accessing stored data.
      */
     private GlobingularDataAccess dataAccess;
-
     /**
      * Manager of statistics about countries the user has visited.
      */
     private CountryStatistics countryStatistics;
-
+    /**
+     * Binding for autocompletion for {@link #countryInput}.
+     */
+    private AutoCompletionBinding<String> countryInputAutoCompletionBinding;
     /**
      * Whether the FXML has been fully loaded.
      */
     private boolean initialized = false;
+
     /**
      * Font size for titles in statistics tab.
      */
@@ -199,7 +204,30 @@ public class AppController implements Initializable {
      */
     private static final int TEXT_LABEL_PADDING = 10;
 
-    // TODO: Find out if countryCollector is captured at creation time
+    /**
+     * Listener responsible for toggling visitation state of a country when said country is clicked on the map.
+     */
+    private final EventListener mapListenerForTogglingCountryVisited = e -> {
+        Country country = world.getCountryFromCode(((Element) e.getCurrentTarget()).getAttribute("id"));
+        if (countryCollector.isVisited(country)) {
+            countryCollector.removeAllVisitsToCountry(country);
+        } else {
+            countryCollector.registerVisit(country);
+        }
+    };
+
+    /**
+     * Listener responsible for updating the map and statistics when something changes in {@link #countryCollector}.
+     */
+    private final Listener<Visit> countryCollectorListenerForMapAndStatistics = event -> {
+        if (event.wasAdded()) {
+            this.setVisitedOnMap(event.getElement().getCountry());
+        } else if (event.wasRemoved() && !countryCollector.isVisited(event.getElement().getCountry())) {
+            this.setNotVisitedOnMap(event.getElement().getCountry());
+        }
+        updateStatistics();
+    };
+
     /**
      * The listener used for saving the {@link CountryCollector} when it is updated.
      */
@@ -210,19 +238,8 @@ public class AppController implements Initializable {
      * Initialize fields which do not require FXML to be loaded.
      */
     public AppController() {
-        // Create a persistenceHandler
-        persistence = new PersistenceHandler();
-        // Use it to retrieve CountryCollector from file
-        dataAccess = new LocalGlobingularDataAccess(null, persistence);
-        countryCollector = dataAccess.getCountryCollector();
-        // And register it for autosaving
-        countryCollector.addListener(countryCollectorListenerForSaving);
-
-        // Initialize a countryStatistics
-        countryStatistics = new CountryStatistics(countryCollector);
-
-        // Get world-instance
-        world = countryCollector.getWorld();
+        // Change the user to the local user. Only does the pre-init-step of configuring app-state since the FXML hasn't
+        // been initialized when the constructor is called.
         changeUser(LOCAL_USER);
     }
 
@@ -234,18 +251,12 @@ public class AppController implements Initializable {
         userInput.setText(LOCAL_USER);
         this.webEngine = webView.getEngine();
 
-        countryCollector.addListener(event -> {
-            if (event.wasAdded()) {
-                this.setVisitedOnMap(event.getElement().getCountry());
-            } else if (event.wasRemoved() && !countryCollector.isVisited(event.getElement().getCountry())) {
-                this.setNotVisitedOnMap(event.getElement().getCountry());
-            }
-            updateStatistics();
-        });
+        postInitConfigureState(countryCollector);
 
         initializeCountriesList();
+        countryInput.textProperty().addListener(e -> onCountryInputChange());
+        userInput.textProperty().addListener(e -> onUserInputChange());
 
-        countryInput.textProperty().addListener(e -> onInputChange());
         root.getStylesheets().add(getClass().getResource("/fxml-css/App.css").toExternalForm());
 
         webEngine.load(getClass().getResource("/html/world.html").toExternalForm());
@@ -256,12 +267,9 @@ public class AppController implements Initializable {
                 this.document = webEngine.getDocument();
                 webEngine.executeScript("const " + MAP_ELEMENT_NAME + " = document.getElementById('" + MAP_ELEMENT_ID
                         + "').getSVGDocument();");
-                registerClickListenersOnExistingCountries();
-                setVisitedOnMapAll(countryCollector.getVisitedCountries());
+                postMapLoadConfigureState(countryCollector);
             }
         }));
-        updateStatistics();
-        configureAutoComplete();
         initialized = true;
     }
 
@@ -278,7 +286,7 @@ public class AppController implements Initializable {
      * Add the inputted country-code to list of visited countries.
      */
     @FXML
-    void onCountryAdd() {
+    private void onCountryAdd() {
         String input = countryInput.getText();
         if (!input.isBlank()) {
             Country countryByCode = world.getCountryFromCode(input.toUpperCase());
@@ -304,21 +312,15 @@ public class AppController implements Initializable {
             try {
                 final Element countryElement = getCountryMapElement(country);
                 if (countryElement == null) {
-                    System.out.println(
+                    System.err.println(
                             "Given country does not exist on map as id: " + country.getCountryCode());
                 } else {
                     ((EventTarget) countryElement).addEventListener("click",
-                            e -> {
-                                if (countryCollector.isVisited(country)) {
-                                    countryCollector.removeAllVisitsToCountry(country);
-                                } else {
-                                    countryCollector.registerVisit(country);
-                                }
-                            },
+                            mapListenerForTogglingCountryVisited,
                             true);
                 }
             } catch (ClassCastException e) {
-                System.out.println("Given country does not exist on map: " + country);
+                System.err.println("Given country does not exist on map: " + country);
             }
         }
     }
@@ -326,7 +328,7 @@ public class AppController implements Initializable {
     /**
      * Evaluate new state after a change in the country input element.
      */
-    private void onInputChange() {
+    private void onCountryInputChange() {
         String input = countryInput.getText();
         if (input.isBlank()) {
             countryInput.pseudoClassStateChanged(BLANK, true);
@@ -350,10 +352,22 @@ public class AppController implements Initializable {
     }
 
     /**
+     * Evaluate the validity of the user input element after a change in the input text.
+     */
+    private void onUserInputChange() {
+        String input = userInput.getText();
+        if (input.isBlank() || LOCAL_USER.equalsIgnoreCase(input)) {
+            userInput.pseudoClassStateChanged(INVALID, false);
+        } else {
+            userInput.pseudoClassStateChanged(INVALID, !GlobingularModule.isUsernameValid(input));
+        }
+    }
+
+    /**
      * Remove the inputted country-code from list of visited countries.
      */
     @FXML
-    void onCountryDel() {
+    private void onCountryDel() {
         String input = countryInput.getText();
         if (!input.isBlank()) {
             if (!countryInput.getPseudoClassStates().contains(INVALID)) {
@@ -381,7 +395,13 @@ public class AppController implements Initializable {
             return;
         }
 
-        getCountryMapElement(country).setAttribute(MAP_VISITED_COUNTRY_ATTRIBUTE, MAP_VISITED_COUNTRY_ATTRIBUTE);
+        Element countryMapElement = getCountryMapElement(country);
+        // Abort if the country isn't represented on the map
+        if (countryMapElement == null) {
+            return;
+        }
+
+        countryMapElement.setAttribute(MAP_VISITED_COUNTRY_ATTRIBUTE, MAP_VISITED_COUNTRY_ATTRIBUTE);
     }
 
     /**
@@ -395,7 +415,13 @@ public class AppController implements Initializable {
             return;
         }
 
-        getCountryMapElement(country).removeAttribute(MAP_VISITED_COUNTRY_ATTRIBUTE);
+        Element countryMapElement = getCountryMapElement(country);
+        // Abort if the country isn't represented on the map
+        if (countryMapElement == null) {
+            return;
+        }
+
+        countryMapElement.removeAttribute(MAP_VISITED_COUNTRY_ATTRIBUTE);
     }
 
     /**
@@ -461,14 +487,13 @@ public class AppController implements Initializable {
             .map(Country::getCountryCode)
             .collect(Collectors.toList()));
 
-        TextFields.bindAutoCompletion(countryInput, countryNamesAndCodes);
+        countryInputAutoCompletionBinding = TextFields.bindAutoCompletion(countryInput, countryNamesAndCodes);
     }
 
     /**
      * Unset the attribute "visited" for the given countries' map representations, removing custom css styling.
      */
     private void initializeCountriesList() {
-        countriesList.itemsProperty().set(createSortedVisitedCountriesList(countryCollector));
         countriesList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         countriesList.setCellFactory(countryListView -> new ListCell<>() {
             @Override
@@ -495,13 +520,13 @@ public class AppController implements Initializable {
      * Handle the interaction when user is trying to change the active user.
      */
     @FXML
-    void onChangeUserRequested() {
+    private void onChangeUserRequested() {
         // Branch on whether userInput is editable. If so, the user has input a username into it. If not, they want to.
         if (userInput.isEditable()) {
             String text = userInput.getText();
-            // Only change user if there's actually something typed
-            if (text != null && !text.equals("")) {
-                currentUser = text;
+            // Only change user if the input is valid
+            if (!userInput.getPseudoClassStates().contains(INVALID)) {
+                changeUser(text);
             }
             userInput.setEditable(false);
             userInput.setText(currentUser);
@@ -520,17 +545,124 @@ public class AppController implements Initializable {
      */
     private void changeUser(final String toUser) {
         if (!toUser.equalsIgnoreCase(currentUser)) {
+            // Only reset if there was a previous user
+            if (currentUser != null) {
+                clearAppState();
+            }
             currentUser = toUser;
             // If no user is requested, use unnamed local user
             if (toUser.isBlank() || toUser.equalsIgnoreCase(LOCAL_USER)) {
+                dataAccess = new LocalGlobingularDataAccess(null, persistence);
                 currentUser = LOCAL_USER;
 
                 // Only change text if the FXML has initialized; if not, it will be done upon initialization anyway
                 if (initialized) {
                     userInput.setText(LOCAL_USER);
                 }
+            } else {
+                dataAccess = new RestGlobingularDataAccess(currentUser.toLowerCase(), persistence);
+            }
+            changeAppState(dataAccess.getCountryCollector());
+        }
+    }
+
+    /**
+     * Reset the app-state so that a new {@link CountryCollector} can be loaded onto a clean slate.
+     */
+    private void clearAppState() {
+        resetMapCountryElements();
+        for (Listener<Visit> visitListener : countryCollector.getListeners()) {
+            countryCollector.removeListener(visitListener);
+        }
+        countryInputAutoCompletionBinding.dispose();
+        countryInput.clear();
+        countriesList.setItems(null);
+    }
+
+    /**
+     * Clear listeners and attributes for country map elements.
+     */
+    private void resetMapCountryElements() {
+        for (Country country : world.getCountries()) {
+            Element countryElement = getCountryMapElement(country);
+            // If the Country doesn't have an element on the map, there's nothing to reset.
+            if (countryElement != null) {
+                countryElement.removeAttribute(MAP_VISITED_COUNTRY_ATTRIBUTE);
+
+                ((EventTarget) countryElement).removeEventListener(
+                        "click",
+                        mapListenerForTogglingCountryVisited,
+                        true);
             }
         }
+    }
+
+    /**
+     * Re-orient the app-state around a new CountryCollector. Called when changing user.
+     * <p>
+     * Three-step method. Every step must be done, in order, to completely change the state.
+     * This method should be used for subsequent CountryCollector-replacement after the initial configuration.
+     * If the app hasn't gone through all loading-stages, only the possible steps will be done.
+     * When the {@link #initialize}-method is executed it will execute the post-init-step,
+     * and schedule the post-map-load-step for when the map has loaded.
+     * The scheduled steps configure the state for whichever CountryCollector
+     * was last configured using the pre-init-step when they execute.
+     * <p>
+     * Before calling this method, {@link #clearAppState()} should be called to cleanup the previous state.
+     *
+     * @param toCountryCollector The new CountryCollector.
+     */
+    private void changeAppState(final CountryCollector toCountryCollector) {
+        preInitConfigureState(toCountryCollector);
+
+        // This part must be called after the FXML has been loaded.
+        // this::initialize will run this block when it does,
+        // so if it hasn't loaded yet we don't need to do anything here.
+        if (initialized) {
+            postInitConfigureState(toCountryCollector);
+
+            // This part must be called after map has been loaded.
+            // this::initialize schedules this block to run when it has finished loading,
+            // so if it hasn't loaded yet we don't need to do anything here.
+            if (webEngine.getLoadWorker().getState() == Worker.State.SUCCEEDED) {
+                postMapLoadConfigureState(toCountryCollector);
+            }
+        }
+    }
+
+    /**
+     * Do the part of configuring app state that can be done before the FXML is initialized.
+     *
+     * @param toCountryCollector The new CountryCollector.
+     */
+    private void preInitConfigureState(final CountryCollector toCountryCollector) {
+        this.countryCollector = toCountryCollector;
+        toCountryCollector.addListener(countryCollectorListenerForSaving);
+        countryStatistics = new CountryStatistics(toCountryCollector);
+        world = toCountryCollector.getWorld();
+    }
+
+    /**
+     * Do the part of configuring app state that cannot be done before the FXML is initialized,
+     * but does not require that the map has finished loading.
+     *
+     * @param toCountryCollector The new CountryCollector.
+     */
+    private void postInitConfigureState(final CountryCollector toCountryCollector) {
+        configureAutoComplete();
+        countryCollector.addListener(countryCollectorListenerForMapAndStatistics);
+        updateStatistics();
+        countriesList.itemsProperty().set(createSortedVisitedCountriesList(toCountryCollector));
+    }
+
+    /**
+     * Do the part of configuring app state that cannot be done before the map has finished loading.
+     *
+     * @param toCountryCollector The new CountryCollector.
+     */
+    private void postMapLoadConfigureState(final CountryCollector toCountryCollector) {
+        registerClickListenersOnExistingCountries();
+        setVisitedOnMapAll(toCountryCollector.getVisitedCountries());
     }
 
     /**
