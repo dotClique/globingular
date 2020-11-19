@@ -268,7 +268,7 @@ public class PersistenceHandler {
      * 
      * @throws IllegalArgumentException If filename is not alphanumeric
      */
-    public boolean deleteState(final String username) throws IllegalArgumentException {
+    private boolean deleteState(final String username) throws IllegalArgumentException {
         File file = pathFromUsername(username, DEFAULT_USERNAME).toFile();
         if (file.isFile()) {
             return file.delete();
