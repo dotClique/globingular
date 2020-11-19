@@ -107,7 +107,8 @@ public class CountryCollectorResourceTest {
         response = target.path("globingular").path("countryCollector")
                 .path(username).request().put(Entity.entity(request, MediaType.APPLICATION_JSON));
 
-        assertEquals(500, response.getStatus());
+        // 400 means Bad request - Correct as countryCollector can't be null
+        assertEquals(400, response.getStatus());
     }
 
     @Test
@@ -236,6 +237,8 @@ public class CountryCollectorResourceTest {
 
         response = target.path("globingular").path("countryCollector")
                 .path(username).path("rename").path(username + "Taken").request().post(null);
-        assertEquals(500, response.getStatus());
+
+        // 400 means Bad request - Correct as username is already taken
+        assertEquals(400, response.getStatus());
     }
 }

@@ -12,8 +12,10 @@ import jakarta.ws.rs.POST;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 
 /**
  * {@link CountryCollector} resource, handling requests for adding, changing
@@ -51,7 +53,7 @@ public class CountryCollectorResource {
             final String username, final CountryCollector countryCollector,
             final PersistenceHandler persistenceHandler) {
         this.globingularModule = globingularModule;
-        this.username = username;
+        this.username = username.toLowerCase();
         this.countryCollector = countryCollector;
         this.persistenceHandler = persistenceHandler;
     }
@@ -76,15 +78,15 @@ public class CountryCollectorResource {
      * @param collector The {@link CountryCollector} to save
      * @return          True if successfully saved
      * 
-     * @throws IllegalArgumentException If CountryCollector is null
-     * @throws IOException              If saving fails
+     * @throws WebApplicationException If CountryCollector is null
+     * @throws IOException             If saving fails
      */
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public boolean putCountryCollector(final CountryCollector collector) throws IllegalArgumentException, IOException {
+    public boolean putCountryCollector(final CountryCollector collector) throws WebApplicationException, IOException {
         if (collector == null) {
-            throw new IllegalArgumentException("CountryCollector can't be null");
+            throw new WebApplicationException("CountryCollector can't be null", Response.Status.BAD_REQUEST);
         }
         boolean result = this.globingularModule.putCountryCollector(username, collector);
         this.saveAppState(username, collector);
@@ -115,17 +117,17 @@ public class CountryCollectorResource {
      * @param newName The new name to rename {@link #username} to
      * @return        True if successful, false if {@link #username} doesn't exist (no content to move)
      * 
-     * @throws IllegalArgumentException If the new username is already taken
-     * @throws IOException              If saving fails
+     * @throws WebApplicationException If the new username is already taken
+     * @throws IOException             If saving fails
      */
     @POST
     @Path("{rename : (?i)rename}/{newName}")
     @Produces(MediaType.APPLICATION_JSON)
     public boolean renameCountryCollector(@PathParam("newName") final String newName)
-            throws IllegalArgumentException, IOException {
+            throws WebApplicationException, IOException {
         if (newName == null) {
             // If newName is null, throw exception
-            throw new IllegalArgumentException("New username can't be null");
+            throw new WebApplicationException("New username can't be null", Response.Status.BAD_REQUEST);
         }
         final String newNameLowercase = newName.toLowerCase();
 
@@ -135,7 +137,8 @@ public class CountryCollectorResource {
         }
         if (!this.globingularModule.isUsernameAvailable(newNameLowercase)) {
             // If newName is taken, throw exception
-            throw new IllegalArgumentException("The new username is already taken: " + newNameLowercase);
+            throw new WebApplicationException("The new username is already taken: " + newNameLowercase,
+                    Response.Status.BAD_REQUEST);
         }
 
         boolean resultPut = this.globingularModule.putCountryCollector(newNameLowercase, countryCollector);
@@ -153,13 +156,13 @@ public class CountryCollectorResource {
      * 
      * @return A {@link VisitResource}-instance to handle these requests
      * 
-     * @throws IllegalArgumentException If username doesn't exist
+     * @throws WebApplicationException If username doesn't exist
      */
     @Path("{visit : (?i)visit}")
-    public VisitResource getVisit() throws IllegalArgumentException {
+    public VisitResource getVisit() throws WebApplicationException {
         // If username doesn't exist, throw exception
         if (this.globingularModule.isUsernameAvailable(username)) {
-            throw new IllegalArgumentException("Username doesn't exist: " + username);
+            throw new WebApplicationException("Username doesn't exist: " + username, Response.Status.BAD_REQUEST);
         }
         // Return a VisitResource to handle requests
         return new VisitResource(username, countryCollector, persistenceHandler);
