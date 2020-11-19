@@ -243,8 +243,8 @@ public class AppController implements Initializable {
     void onCountryAdd() {
         String input = countryInput.getText();
         if (!input.isBlank()) {
-            Country countryByCode = world.getCountryFromCode(input);
-            Country countryByName = world.getCountryFromName(input);
+            Country countryByCode = world.getCountryFromCode(input.toUpperCase());
+            Country countryByName = world.getCountryFromName(input.toLowerCase());
             if (countryByCode != null) {
                 countryCollector.registerVisit(countryByCode);
                 countryInput.clear();
@@ -294,8 +294,8 @@ public class AppController implements Initializable {
             countryInput.pseudoClassStateChanged(BLANK, true);
             countryInput.pseudoClassStateChanged(INVALID, false);
         } else {
-            Country countryByCode = world.getCountryFromCode(input);
-            Country countryByName = world.getCountryFromName(input);
+            Country countryByCode = world.getCountryFromCode(input.toUpperCase());
+            Country countryByName = world.getCountryFromName(input.toLowerCase());
 
             if (countryByCode != null) {
                 inputCountry = countryByCode;
