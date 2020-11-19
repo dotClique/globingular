@@ -1,6 +1,11 @@
 package globingular.ui;
 
-import globingular.core.*;
+
+import globingular.core.Country;
+import globingular.core.CountryCollector;
+import globingular.core.CountryStatistics;
+import globingular.core.World;
+import globingular.core.Badges;
 import globingular.persistence.PersistenceHandler;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -10,7 +15,13 @@ import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
+import javafx.scene.control.SelectionMode;
+import javafx.scene.control.TextField;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.scene.layout.HBox;
@@ -162,7 +173,7 @@ public class AppController implements Initializable {
     private CountryStatistics countryStatistics;
 
     /**
-     * Manager of statistics about countries the user has visited.
+     * Manager of badges about countries the user has visited.
      */
     private Badges badges;
 
@@ -504,7 +515,7 @@ public class AppController implements Initializable {
 
         for (Map.Entry<String, String> entry : badges.getBadgeData().entrySet()) {
             badgesGrid.addRow(newRowIndex++, createConfiguredLabel(entry.getKey() + ": "),
-                    setProgressIndicator(entry.getValue()));
+                    getProgressIndicator(entry.getValue()));
         }
     }
 
@@ -514,7 +525,7 @@ public class AppController implements Initializable {
      * @param num A number between 0 and 1 to indicate progress.
      * @return The progressindicator.
      */
-    private ProgressIndicator setProgressIndicator(final String num) {
+    private ProgressIndicator getProgressIndicator(final String num) {
         ProgressIndicator pi = new ProgressIndicator();
         pi.setProgress(Double.parseDouble(num));
         pi.setStyle(" -fx-progress-color: #9cc495;");
