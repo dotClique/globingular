@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import globingular.core.Country;
 import globingular.core.CountryCollector;
 import globingular.core.World;
+import globingular.persistence.PersistenceHandler;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
@@ -19,6 +20,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.io.File;
 
 public class CountryCollectorResourceTest {
 
@@ -58,6 +61,12 @@ public class CountryCollectorResourceTest {
     @AfterAll
     public static void tearDown() {
         server.shutdownNow();
+
+        File folder = PersistenceHandler.DATA_FOLDER.toFile();
+        for (File f : folder.listFiles()) {
+                f.delete();
+        }
+        folder.delete();
     }
 
     /**
@@ -88,6 +97,17 @@ public class CountryCollectorResourceTest {
         // Here we get a boolean value, so we check that it's true
         responseMsg = response.readEntity(String.class);
         assertEquals("true", responseMsg);
+    }
+
+    @Test
+    public void testPutCountryCollectorFailsOnNull() throws JsonProcessingException {
+
+        request = objectMapper.writeValueAsString(null);
+
+        response = target.path("globingular").path("countryCollector")
+                .path(username).request().put(Entity.entity(request, MediaType.APPLICATION_JSON));
+
+        assertEquals(500, response.getStatus());
     }
 
     @Test

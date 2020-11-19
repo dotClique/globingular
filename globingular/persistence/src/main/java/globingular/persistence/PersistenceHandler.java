@@ -37,8 +37,9 @@ public class PersistenceHandler {
 
     /**
      * Define Path to the apps datafolder, used for saving app-state.
+     * // TODO: Should we pass dataFolder as a parameter in constructor?
      */
-    private static final Path DATA_FOLDER = Paths.get(System.getProperty("user.home"), "globingular");
+    public static final Path DATA_FOLDER = Paths.get(System.getProperty("user.home"), "globingular");
     /**
      * Define default username, used as path to Json-file used for saving CountryCollector-state.
      * // TODO: Should only be public as long as client side multi-user setup hasn't been implemented!

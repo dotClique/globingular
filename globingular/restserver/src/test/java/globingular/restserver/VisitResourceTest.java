@@ -6,6 +6,7 @@ import globingular.core.Country;
 import globingular.core.CountryCollector;
 import globingular.core.Visit;
 import globingular.core.World;
+import globingular.persistence.PersistenceHandler;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
@@ -16,18 +17,28 @@ import jakarta.ws.rs.core.Response;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.io.File;
 import java.time.LocalDateTime;
 
 public class VisitResourceTest {
 
     private static HttpServer server;
     private static WebTarget target;
-    ObjectMapper objectMapper = new GlobingularObjectMapperProvider().getContext(getClass());
+    private ObjectMapper objectMapper = new GlobingularObjectMapperProvider().getContext(getClass());
 
+    private String username;
+    private String usernamePre = "hablebable";
+    private static int usernameCount = 0;
+    private Country c1, c2;
+    private World world;
+    private CountryCollector cc;
+    private Response response;
+    private String request, responseMsg;
     @BeforeAll
     public static void setUp() {
         // start the server
@@ -38,21 +49,31 @@ public class VisitResourceTest {
         target = c.target(Main.BASE_URI);
     }
 
+    @BeforeEach
+    public void beforeEach() {
+        // Makes sure each call gets a new username
+        username = usernamePre + (usernameCount++);
+        c1 = new Country("NO", "Norway");
+        c2 = new Country("SE", "Sweden");
+        world = new World("testWorld", c1, c2);
+        cc = new CountryCollector(world);
+
+        System.out.println(username);
+    }
+
     @AfterAll
     public static void tearDown() {
         server.shutdownNow();
+
+        File folder = PersistenceHandler.DATA_FOLDER.toFile();
+        for (File f : folder.listFiles()) {
+                f.delete();
+        }
+        folder.delete();
     }
 
     @Test
     public void testRegisterVisit() throws JsonProcessingException {
-        String username = "hablebable6";
-
-        Country c1 = new Country("NO", "Norway");
-        Country c2 = new Country("SE", "Sweden");
-        World world = new World("testWorld", c1, c2);
-        CountryCollector cc = new CountryCollector(world);
-        Response response;
-        String request, responseMsg;
 
         request = objectMapper.writeValueAsString(cc);
 
@@ -99,14 +120,6 @@ public class VisitResourceTest {
 
     @Test
     public void testRemoveVisit() throws JsonProcessingException {
-        String username = "hablebable7";
-
-        Country c1 = new Country("NO", "Norway");
-        Country c2 = new Country("SE", "Sweden");
-        World world = new World("testWorld", c1, c2);
-        CountryCollector cc = new CountryCollector(world);
-        Response response;
-        String request, responseMsg;
 
         request = objectMapper.writeValueAsString(cc);
 

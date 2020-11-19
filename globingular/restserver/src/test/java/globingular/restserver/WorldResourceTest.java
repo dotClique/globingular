@@ -21,7 +21,7 @@ public class WorldResourceTest {
 
     private static HttpServer server;
     private static WebTarget target;
-    ObjectMapper objectMapper = new GlobingularObjectMapperProvider().getContext(getClass());
+    private ObjectMapper objectMapper = new GlobingularObjectMapperProvider().getContext(getClass());
 
     @BeforeAll
     public static void setUp() {
