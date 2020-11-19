@@ -41,7 +41,7 @@ public class PersistenceHandler {
     private static final Path DATA_FOLDER = Paths.get(System.getProperty("user.home"), "globingular");
     /**
      * Define default username, used as path to Json-file used for saving CountryCollector-state.
-     * TODO: Should only be public as long as client side multi-user setup hasn't been implemented!
+     * // TODO: Should only be public as long as client side multi-user setup hasn't been implemented!
      */
     public static final String DEFAULT_USERNAME = "countrycollector";
 
