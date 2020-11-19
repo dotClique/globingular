@@ -184,4 +184,58 @@ public class CountryCollectorResourceTest {
         responseMsg = response.readEntity(String.class);
         assertEquals("false", responseMsg);
     }
+
+    @Test
+    public void testRenameCountryCollectorForOldUser() throws JsonProcessingException {
+
+        request = objectMapper.writeValueAsString(cc);
+
+        response = target.path("globingular").path("countryCollector")
+                .path(username).request().put(Entity.entity(request, MediaType.APPLICATION_JSON));
+
+        // 200 means success - Request completed without errors
+        assertEquals(200, response.getStatus());
+
+        // Here we get a boolean value, so we check that it's true
+        responseMsg = response.readEntity(String.class);
+        assertEquals("true", responseMsg);
+
+        response = target.path("globingular").path("countryCollector")
+                .path(username).path("rename").path(username + "Renamed").request().post(null);
+        assertEquals(200, response.getStatus());
+        responseMsg = response.readEntity(String.class);
+        assertEquals("true", responseMsg);
+    }
+
+    @Test
+    public void testRenameCountryCollectorForOldUserFailsWhenUsernameTaken() throws JsonProcessingException {
+
+        request = objectMapper.writeValueAsString(cc);
+
+        response = target.path("globingular").path("countryCollector")
+                .path(username).request().put(Entity.entity(request, MediaType.APPLICATION_JSON));
+
+        // 200 means success - Request completed without errors
+        assertEquals(200, response.getStatus());
+
+        // Here we get a boolean value, so we check that it's true
+        responseMsg = response.readEntity(String.class);
+        assertEquals("true", responseMsg);
+
+        request = objectMapper.writeValueAsString(cc);
+
+        response = target.path("globingular").path("countryCollector")
+                .path(username + "Taken").request().put(Entity.entity(request, MediaType.APPLICATION_JSON));
+
+        // 200 means success - Request completed without errors
+        assertEquals(200, response.getStatus());
+
+        // Here we get a boolean value, so we check that it's true
+        responseMsg = response.readEntity(String.class);
+        assertEquals("true", responseMsg);
+
+        response = target.path("globingular").path("countryCollector")
+                .path(username).path("rename").path(username + "Taken").request().post(null);
+        assertEquals(500, response.getStatus());
+    }
 }

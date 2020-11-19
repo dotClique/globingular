@@ -12,7 +12,7 @@ import jakarta.ws.rs.POST;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.QueryParam;
+import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.core.MediaType;
 
 /**
@@ -121,22 +121,28 @@ public class CountryCollectorResource {
     @POST
     @Path("{rename : (?i)rename}/{newName}")
     @Produces(MediaType.APPLICATION_JSON)
-    public boolean renameCountryCollector(@QueryParam("newName") final String newName) throws IllegalArgumentException,
-            IOException {
+    public boolean renameCountryCollector(@PathParam("newName") final String newName)
+            throws IllegalArgumentException, IOException {
+        if (newName == null) {
+            // If newName is null, throw exception
+            throw new IllegalArgumentException("New username can't be null");
+        }
+        final String newNameLowercase = newName.toLowerCase();
+
         if (this.globingularModule.isUsernameAvailable(username)) {
             // If there's no user with that username, return false
             return false;
         }
-        if (!this.globingularModule.isUsernameAvailable(newName)) {
+        if (!this.globingularModule.isUsernameAvailable(newNameLowercase)) {
             // If newName is taken, throw exception
-            throw new IllegalArgumentException("The new username is already taken: " + newName);
+            throw new IllegalArgumentException("The new username is already taken: " + newNameLowercase);
         }
 
-        boolean resultPut = this.globingularModule.putCountryCollector(newName, countryCollector);
+        boolean resultPut = this.globingularModule.putCountryCollector(newNameLowercase, countryCollector);
         boolean resultRemove = this.globingularModule.removeCountryCollector(username);
 
         this.saveAppState(username, null);
-        this.saveAppState(newName, countryCollector);
+        this.saveAppState(newNameLowercase, countryCollector);
 
         return resultPut && resultRemove;
     }

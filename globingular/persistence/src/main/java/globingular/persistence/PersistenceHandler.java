@@ -300,7 +300,7 @@ public class PersistenceHandler {
         }
         // If not valid, throw exception
         if (!GlobingularModule.isUsernameValid(username)) {
-            throw new IllegalArgumentException("Filename must be alphanumeric!");
+            throw new IllegalArgumentException("Filename must be alphanumeric: " + username);
         }
         return DATA_FOLDER.resolve(username.toLowerCase() + ".json");
     }
