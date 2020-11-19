@@ -105,8 +105,8 @@ public class World {
                         "Country cannot be added because it duplicates existing name \"" + duplicateName.getShortName()
                                 + "\" from Country with code \"" + duplicateName.getCountryCode() + "\"");
             }
-            countriesByCode.put(country.getCountryCode(), country);
-            countriesByName.put(country.getShortName(), country);
+            countriesByCode.put(country.getCountryCode().toUpperCase(), country);
+            countriesByName.put(country.getShortName().toLowerCase(), country);
         }
         this.countries = Set.of(countries);
     }

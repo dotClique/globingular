@@ -10,29 +10,52 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>restapi</artifactId>
-    <version>0.0.2-SNAPSHOT</version>
 
     <dependencies>
         <!-- Dependency injection annotations -->
         <dependency>
             <groupId>jakarta.inject</groupId>
             <artifactId>jakarta.inject-api</artifactId>
+            <version>2.0.0</version>
         </dependency>
 
         <!-- Java JAX-RS-API (standard for REST APIs) -->
         <dependency>
             <groupId>jakarta.ws.rs</groupId>
             <artifactId>jakarta.ws.rs-api</artifactId>
-            <scope>compile</scope>
+            <version>${jakarta.ws.rs.api.version}</version>
         </dependency>
         <dependency>
             <groupId>jakarta.xml.bind</groupId>
             <artifactId>jakarta.xml.bind-api</artifactId>
-            <scope>compile</scope>
+            <version>3.0.0-RC3</version>
         </dependency>
         <dependency>
             <groupId>it1901.gr2002.globingular</groupId>
             <artifactId>core</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>it1901.gr2002.globingular</groupId>
+            <artifactId>persistence</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+
+        <!-- Test with JUnit5 -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+        </dependency>
+
+        <!-- Mockito for test -->
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>${mockito.version}</version>
         </dependency>
     </dependencies>
 

@@ -17,7 +17,6 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <package>globingular.ui</package>
-        <jersey.version>3.0.0-M6</jersey.version>
         <restserver.main>globingular.restserver.Main</restserver.main>
 
         <!-- Adding -Dfast to maven commands will speed up the process by skipping tests, checkstyle and spotbugs -->
@@ -26,6 +25,14 @@
         <!-- Adding -DenableTestRedirect=false to maven commands will disable redirecting output to file, showing the stacktrace in terminal -->
         <!-- Note that if tests are run in parallel (using the <forkCount> option) the output will be interweaved -->
         <enableTestRedirect>true</enableTestRedirect>
+
+        <jakarta.ws.rs.api.version>3.0.0-M1</jakarta.ws.rs.api.version>
+        <surefire.version>3.0.0-M5</surefire.version>
+        <checkstyle.version>3.1.1</checkstyle.version>
+        <spotbugs.version>4.0.4</spotbugs.version>
+        <jacoco.version>0.8.5</jacoco.version>
+        <mockito.version>3.6.0</mockito.version>
+        <junit.version>5.4.2</junit.version>
     </properties>
 
     <!-- Actual location for GitLab Pages instance, relativizes any absolute site links -->
@@ -43,162 +50,18 @@
 
     <dependencyManagement>
         <dependencies>
-            <!-- Globingular core module -->
-            <dependency>
-                <groupId>it1901.gr2002.globingular</groupId>
-                <artifactId>core</artifactId>
-                <version>0.0.2-SNAPSHOT</version>
-            </dependency>
-
-            <!-- Globingular persistence module -->
-            <dependency>
-                <groupId>it1901.gr2002.globingular</groupId>
-                <artifactId>persistence</artifactId>
-                <version>0.0.2-SNAPSHOT</version>
-            </dependency>
-
-            <!-- Globingular core module -->
-            <dependency>
-                <groupId>it1901.gr2002.globingular</groupId>
-                <artifactId>ui</artifactId>
-                <version>0.0.2-SNAPSHOT</version>
-            </dependency>
-
-            <!-- Globingular persistence module -->
-            <dependency>
-                <groupId>it1901.gr2002.globingular</groupId>
-                <artifactId>restserver</artifactId>
-                <version>0.0.2-SNAPSHOT</version>
-            </dependency>
-
-            <!-- Globingular core module -->
-            <dependency>
-                <groupId>it1901.gr2002.globingular</groupId>
-                <artifactId>restapi</artifactId>
-                <version>0.0.2-SNAPSHOT</version>
-            </dependency>
-
             <!-- Test with JUnit5 -->
             <dependency>
                 <groupId>org.junit.jupiter</groupId>
                 <artifactId>junit-jupiter-api</artifactId>
-                <version>5.4.2</version>
+                <version>${junit.version}</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.junit.jupiter</groupId>
                 <artifactId>junit-jupiter-engine</artifactId>
-                <version>5.4.2</version>
+                <version>${junit.version}</version>
                 <scope>test</scope>
-            </dependency>
-
-            <!-- JSON with Jackson -->
-            <dependency>
-                <groupId>com.fasterxml.jackson.core</groupId>
-                <artifactId>jackson-core</artifactId>
-                <version>2.11.2</version>
-            </dependency>
-            <dependency>
-                <groupId>com.fasterxml.jackson.core</groupId>
-                <artifactId>jackson-databind</artifactId>
-                <version>2.11.2</version>
-            </dependency>
-
-            <!-- JavaFX -->
-            <dependency>
-                <groupId>org.openjfx</groupId>
-                <artifactId>javafx-fxml</artifactId>
-                <version>14.0.1</version>
-            </dependency>
-            <dependency>
-                <groupId>org.openjfx</groupId>
-                <artifactId>javafx-base</artifactId>
-                <version>14.0.1</version>
-            </dependency>
-            <dependency>
-                <groupId>org.openjfx</groupId>
-                <artifactId>javafx-graphics</artifactId>
-                <version>14.0.1</version>
-            </dependency>
-            <dependency>
-                <groupId>org.openjfx</groupId>
-                <artifactId>javafx-web</artifactId>
-                <version>14.0.1</version>
-            </dependency>
-
-            <!-- Test with TextFX -->
-            <dependency>
-                <groupId>org.testfx</groupId>
-                <artifactId>testfx-core</artifactId>
-                <version>4.0.16-alpha</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.testfx</groupId>
-                <artifactId>testfx-junit5</artifactId>
-                <version>4.0.16-alpha</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.testfx</groupId>
-                <artifactId>openjfx-monocle</artifactId>
-                <version>jdk-12.0.1+2</version>
-                <scope>test</scope>
-            </dependency>
-
-            <!-- Mockito for test -->
-            <dependency>
-                <groupId>org.mockito</groupId>
-                <artifactId>mockito-all</artifactId>
-                <version>2.0.2-beta</version>
-                <scope>test</scope>
-            </dependency>
-
-            <!-- JAX-RS Jersey -->
-            <dependency>
-                <groupId>org.glassfish.jersey.core</groupId>
-                <artifactId>jersey-server</artifactId>
-                <version>${jersey.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.glassfish.jersey.test-framework</groupId>
-                <artifactId>jersey-test-framework-util</artifactId>
-                <version>${jersey.version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.glassfish.jersey.inject</groupId>
-                <artifactId>jersey-hk2</artifactId>
-                <version>${jersey.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.glassfish.jersey.media</groupId>
-                <artifactId>jersey-media-json-jackson</artifactId>
-                <version>${jersey.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.glassfish.jersey.containers</groupId>
-                <artifactId>jersey-container-grizzly2-http</artifactId>
-                <version>${jersey.version}</version>
-            </dependency>
-
-            <!-- Java JAX-RS-API (standard for REST APIs) -->
-            <dependency>
-                <groupId>jakarta.ws.rs</groupId>
-                <artifactId>jakarta.ws.rs-api</artifactId>
-                <version>3.0.0-M1</version>
-            </dependency>
-            <dependency>
-                <groupId>jakarta.xml.bind</groupId>
-                <artifactId>jakarta.xml.bind-api</artifactId>
-                <version>3.0.0-RC3</version>
-            </dependency>
-
-            <!-- Dependency injection annotations -->
-            <dependency>
-                <groupId>jakarta.inject</groupId>
-                <artifactId>jakarta.inject-api</artifactId>
-                <version>2.0.0</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -213,7 +76,7 @@
                     <configuration>
                         <filesets>
                             <fileset>
-                                <directory>${user.home}/temp/globingular</directory>
+                                <directory>${user.home}/globingular</directory>
                                 <followSymlinks>false</followSymlinks>
                             </fileset>
                         </filesets>
@@ -233,20 +96,13 @@
                     </configuration>
                 </plugin>
 
-                <!-- Running REST-server-->
-                <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>exec-maven-plugin</artifactId>
-                    <version>1.2.1</version>
-                </plugin>
-
                 <!-- Running tests -->
                 <!-- WARNING: crashes if two resource directories in different modules have the same name, -->
                 <!-- e.g. if both persistence/src/main/resources/json and ui/src/main/resources/json exist -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>3.0.0-M5</version>
+                    <version>${surefire.version}</version>
                     <configuration>
                         <redirectTestOutputToFile>${enableTestRedirect}</redirectTestOutputToFile>
                         <skip>${fast}</skip>
@@ -257,7 +113,7 @@
                 <plugin>
                     <groupId>com.github.spotbugs</groupId>
                     <artifactId>spotbugs-maven-plugin</artifactId>
-                    <version>4.0.4</version>
+                    <version>${spotbugs.version}</version>
                     <executions>
                         <execution>
                             <id>check</id>
@@ -276,7 +132,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-checkstyle-plugin</artifactId>
-                    <version>3.1.1</version>
+                    <version>${checkstyle.version}</version>
                     <configuration>
                         <configLocation>../checkstyle.xml</configLocation>
                         <skip>${fast}</skip>
@@ -297,7 +153,7 @@
                 <plugin>
                     <groupId>org.jacoco</groupId>
                     <artifactId>jacoco-maven-plugin</artifactId>
-                    <version>0.8.5</version>
+                    <version>${jacoco.version}</version>
                     <configuration>
                         <skip>${fast}</skip>
                     </configuration>
@@ -342,13 +198,6 @@
                         </execution>
                     </executions>
                 </plugin>
-
-                <!-- Running JavaFX code -->
-                <plugin>
-                    <groupId>org.openjfx</groupId>
-                    <artifactId>javafx-maven-plugin</artifactId>
-                    <version>0.0.4</version>
-                </plugin>
             </plugins>
         </pluginManagement>
     </build>
@@ -374,7 +223,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.0.0-M5</version>
+                <version>${surefire.version}</version>
                 <configuration>
                     <redirectTestOutputToFile>${enableTestRedirect}</redirectTestOutputToFile>
                 </configuration>
@@ -384,7 +233,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-report-plugin</artifactId>
-                <version>3.0.0-M5</version>
+                <version>${surefire.version}</version>
                 <reportSets>
                     <reportSet>
                         <id>report-test-aggregate</id>
@@ -405,7 +254,7 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.5</version>
+                <version>${jacoco.version}</version>
                 <!-- Generate Jacoco-reports for each sub-module by inheritance -->
                 <reportSets>
                     <reportSet>
@@ -422,14 +271,14 @@
             <plugin>
                 <groupId>com.github.spotbugs</groupId>
                 <artifactId>spotbugs-maven-plugin</artifactId>
-                <version>4.0.4</version>
+                <version>${spotbugs.version}</version>
             </plugin>
 
             <!-- Maven Checkstyle for code quality check-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>3.1.1</version>
+                <version>${checkstyle.version}</version>
                 <configuration>
                     <configLocation>../checkstyle.xml</configLocation>
                 </configuration>

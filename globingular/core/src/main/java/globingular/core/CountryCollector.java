@@ -63,36 +63,39 @@ public class CountryCollector implements Observable<Visit> {
      * Register a country-visit. Assumes the arrival and departure was now as none is given.
      * 
      * @param country The Country to register visit to
+     * @return        True, if the visit was added
      * 
      * @throws IllegalArgumentException If Country does not exist in this instance's world
      * @throws IllegalArgumentException If Country has already been visited
      */
-    public void registerVisit(final Country country) {
-        this.registerVisit(country, null, null);
+    public boolean registerVisit(final Country country) {
+        return this.registerVisit(country, null, null);
     }
 
     /**
      * Register a country-visit.
      * 
-     * @param country The Country to register visit to
-     * @param arrival The time of arrival
+     * @param country   The Country to register visit to
+     * @param arrival   The time of arrival
      * @param departure The time of departure
+     * @return          True, if the visit was added
      * 
      * @throws IllegalArgumentException If Country does not exist in this instance's world
      * @throws IllegalArgumentException If Country has already been visited
      */
-    public void registerVisit(final Country country, final LocalDateTime arrival, final LocalDateTime departure) {
-        this.registerVisit(new Visit(country, arrival, departure));
+    public boolean registerVisit(final Country country, final LocalDateTime arrival, final LocalDateTime departure) {
+        return this.registerVisit(new Visit(country, arrival, departure));
     }
 
     /**
      * Register a country-visit.
      * 
      * @param visit The visit object to register
+     * @return      True, if the visit was added
      * 
      * @throws IllegalArgumentException If the given visited country does not exist in this instance's world
      */
-    public void registerVisit(final Visit visit) {
+    public boolean registerVisit(final Visit visit) {
         // Check to make sure the Visit includes a valid Country
         throwExceptionIfInvalidCountry(visit.getCountry());
         // Add the given Visit to visits
@@ -101,16 +104,19 @@ public class CountryCollector implements Observable<Visit> {
         this.visitedCountries.add(visit.getCountry());
         // Notify listeners about addition
         this.notifyListeners(new ChangeEvent<>(ChangeEvent.Status.ADDED, visit));
+        // Return true if success
+        return this.visits.contains(visit);
     }
 
     /**
      * Remove all visits to the given country from the log.
      * 
      * @param country The country to remove visits for
+     * @return        True, if the visit was removed
      * 
      * @throws IllegalArgumentException If the given country does not exist in this instance's world
      */
-    public void removeAllVisitsToCountry(final Country country) throws IllegalArgumentException {
+    public boolean removeAllVisitsToCountry(final Country country) throws IllegalArgumentException {
         // Check to make sure the given Country is valid
         throwExceptionIfInvalidCountry(country);
         // Retrieve all visits to the given Country
@@ -129,14 +135,19 @@ public class CountryCollector implements Observable<Visit> {
             // Notify listeners about removal of visit
             this.notifyListeners(new ChangeEvent<>(ChangeEvent.Status.REMOVED, visit));
         }
+        // Return true if success
+        return this.visitedCountries.contains(country);
     }
 
     /**
      * Remove the given visit from the log.
      * 
      * @param visit The visit-object to remove
+     * @return      True if the visit was removed or was not registered
+     * 
+     * @throws IllegalArgumentException If the given country does not exist in this instance's world
      */
-    public void removeVisit(final Visit visit) {
+    public boolean removeVisit(final Visit visit) throws IllegalArgumentException {
         // Check to make sure the given Visit contains a valid Country
         throwExceptionIfInvalidCountry(visit.getCountry());
         // Remove the given Visit from visits
@@ -147,6 +158,8 @@ public class CountryCollector implements Observable<Visit> {
         }
         // Notify listeners about removal
         this.notifyListeners(new ChangeEvent<>(ChangeEvent.Status.REMOVED, visit));
+        // Return true if success
+        return !this.visits.contains(visit);
     }
 
     /**
@@ -169,7 +182,6 @@ public class CountryCollector implements Observable<Visit> {
      * NB: Visits are immutable, so there's no leak here.
      * 
      * @param country The country to retrieve visits to
-     * 
      * @return A collection containing all (current) Visits to the given country
      */
     public Collection<Visit> getVisitsToCountry(final Country country) {
@@ -243,7 +255,6 @@ public class CountryCollector implements Observable<Visit> {
      */
     @Override
     public void addListener(final Listener<Visit> listener) {
-        // Return true if already registered, or if successfully added.
         this.listeners.add(listener);
     }
 
@@ -253,7 +264,6 @@ public class CountryCollector implements Observable<Visit> {
      */
     @Override
     public void removeListener(final Listener<Visit> listener) {
-        // Return true if listener successfully removed, or isn't registered in the first place.
         this.listeners.remove(listener);
     }
 
