@@ -32,21 +32,24 @@ public class VisitDeserializer extends JsonDeserializer<Visit> {
         ObjectNode node = p.readValueAsTree();
         final World world;
 
-        // Suppress warning, as we know this is fine
+        // Suppress warning. This should be fine, and if it's not we want it to throw an exception anyway.
         @SuppressWarnings("unchecked")
         Map<String, Object> injectedMap = (Map<String, Object>)
                 ctxt.findInjectableValue(PersistenceHandler.INJECTED_MAP, null, null);
         if (injectedMap.containsKey(PersistenceHandler.INJECTED_MAP_WORLD)) {
             world = (World) injectedMap.get(PersistenceHandler.INJECTED_MAP_WORLD);
         } else {
-            throw new IllegalStateException("Visit.class must be deserialized with an injected world.");
+            // If there's no world in injectedMap, the current deserialization is not part of a larger process,
+            // and so we will create a "dummy" country and leave it up to the retrieving code to verify and repair.
+            world = null;
         }
 
         String countryCode = node.get("countryCode").asText();
         JsonNode arrivalNode = node.get("arrival");
         JsonNode departureNode = node.get("departure");
 
-        Country country = world.getCountryFromCode(countryCode);
+        // If World is null, create a new "dummy" Country using countryCode as name
+        Country country = world == null ? new Country(countryCode, countryCode) : world.getCountryFromCode(countryCode);
         LocalDateTime arrival = arrivalNode.isNull() ? null : LocalDateTime.parse(arrivalNode.asText());
         LocalDateTime departure = departureNode.isNull() ? null : LocalDateTime.parse(departureNode.asText());
 

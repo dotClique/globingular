@@ -2,17 +2,15 @@ package globingular.core;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.mockito.Matchers;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -219,7 +217,7 @@ public class CountryCollectorTest {
 
         Collection<Visit> arr2 =
                 cc.getVisits().stream().filter(v -> v.getCountry() == country2).collect(Collectors.toList());
-        assertTrue(arr1.equals(arr2), "The returned collection doesn't contain all the visits to the given country");
+        assertEquals(arr2, arr1, "The returned collection doesn't contain all the visits to the given country");
     }
 
     @Test
@@ -251,7 +249,7 @@ public class CountryCollectorTest {
         cc.addListener(listener);
         Visit visit = new Visit(country0, null, null);
         cc.registerVisit(visit);
-        verify(listener, times(1)).notifyListener(Matchers.eq(new ChangeEvent<>(ChangeEvent.Status.ADDED, visit)));
+        verify(listener, times(1)).notifyListener(eq(new ChangeEvent<>(ChangeEvent.Status.ADDED, visit)));
     }
 
     @Test
@@ -263,11 +261,11 @@ public class CountryCollectorTest {
         cc.addListener(listener);
         Visit visit = new Visit(country0, null, null);
         cc.registerVisit(visit);
-        verify(listener, times(1)).notifyListener(Matchers.eq(new ChangeEvent<>(ChangeEvent.Status.ADDED, visit)));
+        verify(listener, times(1)).notifyListener(eq(new ChangeEvent<>(ChangeEvent.Status.ADDED, visit)));
 
         cc.removeListener(listener);
         assertTrue(cc.getListeners().isEmpty());
         cc.removeVisit(visit);
-        verify(listener, times(1)).notifyListener(Matchers.eq(new ChangeEvent<>(ChangeEvent.Status.ADDED, visit)));
+        verify(listener, times(1)).notifyListener(eq(new ChangeEvent<>(ChangeEvent.Status.ADDED, visit)));
     }
 }

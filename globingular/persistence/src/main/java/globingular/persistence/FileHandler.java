@@ -1,6 +1,7 @@
 package globingular.persistence;
 
 import globingular.core.CountryCollector;
+import globingular.core.GlobingularModule;
 import globingular.core.World;
 
 import java.io.BufferedInputStream;
@@ -21,11 +22,11 @@ public final class FileHandler {
     /**
      * Define Path to the apps datafolder, used for saving app-state.
      */
-    private static final Path DATA_FOLDER = Paths.get(System.getProperty("user.home"), "globingular");
+    public static final Path DATA_FOLDER = Paths.get(System.getProperty("user.home"), "globingular");
     /**
-     * Define Path to Json-file used for saving CountryCollector-state.
+     * Define default username, used as path to Json-file used for saving CountryCollector-state.
      */
-    private static final String DEFAULT_COLLECTOR_FILENAME = "countrycollector";
+    private static final String DEFAULT_USERNAME = "default";
     /**
      * Define which file to get standard world map {@link World} from.
      */
@@ -49,7 +50,7 @@ public final class FileHandler {
     public static CountryCollector loadCountryCollector(final PersistenceHandler persistenceHandler,
                                                         final String username) {
         CountryCollector countryCollector = null;
-        File file = pathFromFilename(username, DEFAULT_COLLECTOR_FILENAME).toFile();
+        File file = pathFromUsername(username, DEFAULT_USERNAME).toFile();
         if (file.isFile()) {
             try (InputStream in = new BufferedInputStream(new FileInputStream(file))) {
                 countryCollector = persistenceHandler.getObjectMapper().readValue(in, CountryCollector.class);
@@ -81,61 +82,81 @@ public final class FileHandler {
     }
 
     /**
-     * Save a CountryCollector instance to file.
+     * Save a {@link CountryCollector} instance to file.
+     * If countryCollector is null, will try to delete instead.
      *
-     * @param persistenceHandler the provider of {@link com.fasterxml.jackson.databind.ObjectMapper}s
+     * @param persistenceHandler The provider of {@link com.fasterxml.jackson.databind.ObjectMapper}s
      *                           and injected values to use for serialization.
      * @param username         The username to save state for (and use as filename).
      *                         If null is given, default filename is used instead.
-     * @param countryCollector The CountryCollector instance to save
+     * @param countryCollector The CountryCollector instance to save.
+     *                         Will delete file instead if countryCollector is null.
      * @return Whether the save succeeded
+     *
      * @throws IllegalArgumentException If filename is not alphanumeric
+     * @throws IOException              If exception is thrown upon saving
      */
     public static boolean saveCountryCollector(final PersistenceHandler persistenceHandler, final String username,
                                                final CountryCollector countryCollector)
-            throws IllegalArgumentException {
-        try {
-            Files.createDirectories(DATA_FOLDER);
-        } catch (IOException e) {
-            // Catch and print if exception
-            e.printStackTrace();
-            return false;
+            throws IllegalArgumentException, IOException {
+        // Make sure necessary directories exist before trying to write files
+        // May throw IOException
+        Files.createDirectories(DATA_FOLDER);
+        // If countryCollector is null, delete file
+        if (countryCollector == null) {
+            return deleteCountryCollector(username);
         }
-        try (Writer out = Files.newBufferedWriter(pathFromFilename(username, DEFAULT_COLLECTOR_FILENAME))) {
+        // Try to save
+        // Caught exception is thrown. Using try-with to ensure closing of writer.
+        try (Writer out = Files.newBufferedWriter(pathFromUsername(username, DEFAULT_USERNAME))) {
             persistenceHandler.getObjectMapper().writerWithDefaultPrettyPrinter().writeValue(out, countryCollector);
             return true;
         } catch (IOException e) {
-            // Catch and print if exception
-            e.printStackTrace();
-            return false;
+            throw e;
         }
     }
 
     /**
-     * Validates filename and returns a valid path to json-file.
-     * Filename is valid if alphanumeric.
+     * Delete saved {@link CountryCollector} for the given username.
      *
-     * @param filename        The filename to validate
-     * @param defaultFilename The filename to return if the one given is null
-     * @return                A valid path to the given filename (in lowercase),
-     *                        or to defaultFilename if filename is null
+     * @param username The username whose CountryCollector to delete
+     * @return         True if successfully deleted
      *
-     * @throws IllegalArgumentException If filename is invalid and not null.
-     *                                  Or if both filename and defaultFilename are null.
+     * @throws IllegalArgumentException If filename is not alphanumeric
      */
-    private static Path pathFromFilename(final String filename, final String defaultFilename)
+    private static boolean deleteCountryCollector(final String username) throws IllegalArgumentException {
+        File file = pathFromUsername(username, DEFAULT_USERNAME).toFile();
+        if (file.isFile()) {
+            return file.delete();
+        }
+        return false;
+    }
+
+    /**
+     * Validates username and returns a valid path to json-file, using username as filename.
+     * Validated by {@link GlobingularModule#isUsernameValid(String)}.
+     *
+     * @param username        The username to validate and use for saving
+     * @param defaultFilename The filename to use if the one given is null
+     * @return                A valid path using the given username (in lowercase),
+     *                        or using defaultFilename if username is null
+     *
+     * @throws IllegalArgumentException If username is invalid and not null.
+     *                                  Or if both username and defaultFilename are null.
+     */
+    private static Path pathFromUsername(final String username, final String defaultFilename)
             throws IllegalArgumentException {
-        // If filename is null, try to use defaultFilename. If both are null, throw exception.
-        if (filename == null) {
+        // If username is null, try to use defaultFilename. If both are null, throw exception.
+        if (username == null) {
             if (defaultFilename == null) {
-                throw new IllegalArgumentException("Both filename and defaultFilename can't be null!");
+                throw new IllegalArgumentException("Both username and defaultFilename can't be null!");
             }
-            return pathFromFilename(defaultFilename, null);
+            return pathFromUsername(defaultFilename, null);
         }
-        // If not alphanumeric, throw exception.
-        if (!filename.matches("[A-Za-z0-9]+")) {
-            throw new IllegalArgumentException("Filename must be alphanumeric!");
+        // If not valid, throw exception
+        if (!GlobingularModule.isUsernameValid(username)) {
+            throw new IllegalArgumentException("Filename must be alphanumeric: " + username);
         }
-        return DATA_FOLDER.resolve(filename.toLowerCase() + ".json");
+        return DATA_FOLDER.resolve(username.toLowerCase() + ".json");
     }
 }

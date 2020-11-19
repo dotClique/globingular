@@ -4,6 +4,8 @@ import globingular.core.CountryCollector;
 import globingular.persistence.FileHandler;
 import globingular.persistence.PersistenceHandler;
 
+import java.io.IOException;
+
 /**
  * Local file-based implementation of {@link GlobingularDataAccess}.
  */
@@ -51,6 +53,11 @@ public class LocalGlobingularDataAccess implements GlobingularDataAccess {
      */
     @Override
     public boolean putCountryCollector(final CountryCollector collector) {
-        return FileHandler.saveCountryCollector(persistenceHandler, username, collector);
+        try {
+            return FileHandler.saveCountryCollector(persistenceHandler, username, collector);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

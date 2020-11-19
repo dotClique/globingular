@@ -357,7 +357,7 @@ public class AppController implements Initializable {
         if (input.isBlank() || LOCAL_USER.equalsIgnoreCase(input)) {
             userInput.pseudoClassStateChanged(INVALID, false);
         } else {
-            userInput.pseudoClassStateChanged(INVALID, !GlobingularModule.isUsernameValid(input));
+            userInput.pseudoClassStateChanged(INVALID, !GlobingularModule.isUsernameValid(input.toLowerCase()));
         }
     }
 

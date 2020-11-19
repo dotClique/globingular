@@ -45,6 +45,17 @@ public class GlobingularModule {
     }
 
     /**
+     * Remove {@link CountryCollector} stored with given username.
+     *
+     * @param username The username to remove CountryCollector for
+     * @return true if successfully removed
+     */
+    public boolean removeCountryCollector(final String username) {
+        this.countryCollectorsByUsername.remove(username.toLowerCase());
+        return true;
+    }
+
+    /**
      * Check if the provided username is available.
      * 
      * @param username The username to check if is available
@@ -58,9 +69,12 @@ public class GlobingularModule {
      * Check if the provided username is valid.
      * 
      * @param username The username to check validity of
-     * @return True if this username is valid (alphanumeric)
+     * @return True if this username is valid (lowercase alphanumeric)
      */
     public static boolean isUsernameValid(final String username) {
-        return username.matches("[A-Za-z0-9]+");
+        if (username == null) {
+            return false;
+        }
+        return username.matches("[a-z0-9]+");
     }
 }
