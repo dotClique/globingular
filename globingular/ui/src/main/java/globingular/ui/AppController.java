@@ -5,7 +5,9 @@ import globingular.core.CountryCollector;
 import globingular.core.CountryStatistics;
 import globingular.core.World;
 import globingular.persistence.PersistenceHandler;
-import javafx.collections.SetChangeListener;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.SortedList;
 import javafx.concurrent.Worker;
 import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
@@ -30,10 +32,11 @@ import org.controlsfx.control.textfield.TextFields;
 
 import java.net.URL;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
-import java.util.Map;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>The AppController class handles the interaction between the FXML-file and
@@ -178,7 +181,7 @@ public class AppController implements Initializable {
         // Use it to retrieve CountryCollector from file
         countryCollector = persistence.loadCountryCollector();
         // And register it for autosaving
-        persistence.setAutosave(countryCollector);
+        persistence.setAutosave(PersistenceHandler.DEFAULT_USERNAME, countryCollector);
 
         // Initialize a countryStatistics
         countryStatistics = new CountryStatistics(countryCollector);
@@ -194,18 +197,14 @@ public class AppController implements Initializable {
     public void initialize(final URL location, final ResourceBundle resources) {
         this.webEngine = webView.getEngine();
 
-        countryCollector.visitedCountriesProperty()
-                        .addListener((SetChangeListener<? super Country>) e -> {
-                            if (e.wasAdded()) {
-                                setVisitedOnMap(e.getElementAdded());
-                            } else {
-                                setNotVisitedOnMap(e.getElementRemoved());
-                            }
-                        });
-        countryCollector.visitedCountriesProperty()
-                        .addListener((SetChangeListener<? super Country>) e -> {
-                            updateStatistics();
-                        });
+        countryCollector.addListener(event -> {
+            if (event.wasAdded()) {
+                this.setVisitedOnMap(event.getElement().getCountry());
+            } else if (event.wasRemoved() && !countryCollector.isVisited(event.getElement().getCountry())) {
+                this.setNotVisitedOnMap(event.getElement().getCountry());
+            }
+            updateStatistics();
+        });
 
         initializeCountriesList();
 
@@ -244,8 +243,8 @@ public class AppController implements Initializable {
     void onCountryAdd() {
         String input = countryInput.getText();
         if (!input.isBlank()) {
-            Country countryByCode = world.getCountryFromCode(input);
-            Country countryByName = world.getCountryFromName(input);
+            Country countryByCode = world.getCountryFromCode(input.toUpperCase());
+            Country countryByName = world.getCountryFromName(input.toLowerCase());
             if (countryByCode != null) {
                 countryCollector.registerVisit(countryByCode);
                 countryInput.clear();
@@ -295,8 +294,8 @@ public class AppController implements Initializable {
             countryInput.pseudoClassStateChanged(BLANK, true);
             countryInput.pseudoClassStateChanged(INVALID, false);
         } else {
-            Country countryByCode = world.getCountryFromCode(input);
-            Country countryByName = world.getCountryFromName(input);
+            Country countryByCode = world.getCountryFromCode(input.toUpperCase());
+            Country countryByName = world.getCountryFromName(input.toLowerCase());
 
             if (countryByCode != null) {
                 inputCountry = countryByCode;
@@ -373,7 +372,7 @@ public class AppController implements Initializable {
     }
 
     /**
-     * Set the attribute "visited" for the given countries' map representations, allowing custom css styling.
+     * Remove the attribute "visited" for the given countries' map representations, allowing custom css styling.
      *
      * @param countries Target countries
      */
@@ -431,7 +430,7 @@ public class AppController implements Initializable {
      * Unset the attribute "visited" for the given countries' map representations, removing custom css styling.
      */
     private void initializeCountriesList() {
-        countriesList.itemsProperty().set(countryCollector.getVisitedCountriesSorted());
+        countriesList.itemsProperty().set(createSortedVisitedCountriesList(countryCollector));
         countriesList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         countriesList.setCellFactory(countryListView -> new ListCell<>() {
             @Override
@@ -452,5 +451,25 @@ public class AppController implements Initializable {
     private Element getCountryMapElement(final Country country) {
         return (Element) webEngine
                 .executeScript(MAP_ELEMENT_NAME + ".getElementById('" + country.getCountryCode() + "')");
+    }
+
+    /**
+     * Create a readonly sorted-list view for the countries visited.
+     *
+     * @param countryCollector The countryCollector to synchronize with
+     * @return A new sorted-list view for the countries visited
+     */
+    private static ObservableList<Country> createSortedVisitedCountriesList(final CountryCollector countryCollector) {
+        ObservableList<Country> backing = FXCollections.observableArrayList();
+        SortedList<Country> sorted = new SortedList<>(backing, Comparator.comparing(Country::getShortName));
+        backing.addAll(countryCollector.getVisitedCountries());
+        countryCollector.addListener(event -> {
+            if (event.wasAdded()) {
+                backing.add(event.getElement().getCountry());
+            } else if (event.wasRemoved()) {
+                backing.remove(event.getElement().getCountry());
+            }
+        });
+        return sorted;
     }
 }

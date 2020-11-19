@@ -27,7 +27,7 @@ public class GlobingularModule {
      * @return The countryCollector for the provided username. Returns {@code null} if no such countryCollector exists
      */
     public CountryCollector getCountryCollector(final String username) {
-        return this.countryCollectorsByUsername.get(username);
+        return this.countryCollectorsByUsername.get(username.toLowerCase());
     }
 
     /**
@@ -36,11 +36,22 @@ public class GlobingularModule {
      * @param username The username to save the countryCollector as
      * @param countryCollector The countryCollector to save
      * present countryCollector for the provided username
-     * @return true if successfully saved, false otherwise
+     * @return true if successfully saved
      */
     public boolean putCountryCollector(final String username,
             final CountryCollector countryCollector) {
-        this.countryCollectorsByUsername.put(username, countryCollector);
+        this.countryCollectorsByUsername.put(username.toLowerCase(), countryCollector);
+        return true;
+    }
+
+    /**
+     * Remove {@link CountryCollector} stored with given username.
+     * 
+     * @param username The username to remove CountryCollector for
+     * @return true if successfully removed
+     */
+    public boolean removeCountryCollector(final String username) {
+        this.countryCollectorsByUsername.remove(username.toLowerCase());
         return true;
     }
 
@@ -51,6 +62,19 @@ public class GlobingularModule {
      * @return True if this username is not in use
      */
     public boolean isUsernameAvailable(final String username) {
-        return this.countryCollectorsByUsername.containsKey(username);
+        return !this.countryCollectorsByUsername.containsKey(username.toLowerCase());
+    }
+
+    /**
+     * Check if the provided username is valid.
+     * 
+     * @param username The username to check validity of
+     * @return True if this username is valid (lowercase alphanumeric)
+     */
+    public static boolean isUsernameValid(final String username) {
+        if (username == null) {
+            return false;
+        }
+        return username.matches("[a-z0-9]+");
     }
 }

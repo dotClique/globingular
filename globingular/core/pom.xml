@@ -10,12 +10,6 @@
     <artifactId>core</artifactId>
 
     <dependencies>
-        <!-- JavaFX -->
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-base</artifactId>
-        </dependency>
-
         <!-- Test with JUnit5 -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -29,9 +23,10 @@
         <!-- Mockito for test -->
         <dependency>
             <groupId>org.mockito</groupId>
-            <artifactId>mockito-all</artifactId>
+            <artifactId>mockito-core</artifactId>
+            <version>${mockito.version}</version>
+            <scope>test</scope>
         </dependency>
-
     </dependencies>
 
     <build>
