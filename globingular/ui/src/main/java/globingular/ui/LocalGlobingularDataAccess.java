@@ -33,11 +33,16 @@ public class LocalGlobingularDataAccess implements GlobingularDataAccess {
     /**
      * {@inheritDoc}
      * Loads from the local file system.
-     *
      */
     @Override
     public CountryCollector getCountryCollector() {
-        return FileHandler.loadCountryCollector(persistenceHandler, username);
+        final CountryCollector locallyStoredCountryCollector
+                = FileHandler.loadCountryCollector(persistenceHandler, username);
+        if (locallyStoredCountryCollector == null) {
+            // Return a new CountryCollector for the default world if there isn't one stored for this user
+            return new CountryCollector(persistenceHandler.getPredominantDefaultWorld());
+        }
+        return locallyStoredCountryCollector;
     }
 
     /**
