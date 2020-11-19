@@ -239,6 +239,15 @@ public class CountryCollector implements Observable<Visit> {
 
     /**
      * {@inheritDoc}
+     * Get listeners for changes in visited countries.
+     */
+    @Override
+    public Collection<Listener<Visit>> getListeners() {
+        // Return a new unmodifiable set containing the listeners.
+        return Set.copyOf(listeners);
+    }
+    /**
+     * {@inheritDoc}
      * Allows for listening to changes in visited countries.
      */
     @Override

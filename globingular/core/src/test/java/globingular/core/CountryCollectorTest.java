@@ -2,11 +2,17 @@ package globingular.core;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.mockito.Matchers;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -50,7 +56,9 @@ public class CountryCollectorTest {
         visit3 = new Visit(country3, LocalDateTime.now(), LocalDateTime.now());
         visit4 = new Visit(country4, LocalDateTime.now(), LocalDateTime.now());
 
-        visit0_2 = new Visit(country0, LocalDateTime.of(2020, 01, 01, 12, 0, 0), LocalDateTime.of(2020, 01, 31, 12, 0, 0));
+        visit0_2 = new Visit(country0,
+                LocalDateTime.of(2020, 1, 1, 12, 0, 0),
+                LocalDateTime.of(2020, 1, 31, 12, 0, 0));
     }
 
     @Test
@@ -105,7 +113,7 @@ public class CountryCollectorTest {
 
         // Test to make sure that arrival and departure is set to null
         Collection<Visit> visits = cc.getVisitsToCountry(country3);
-        assertTrue(visits.stream().anyMatch(v -> v.getArrival() == null && v .getDeparture() == null));
+        assertTrue(visits.stream().anyMatch(v -> v.getArrival() == null && v.getDeparture() == null));
     }
 
     @Test
@@ -209,7 +217,8 @@ public class CountryCollectorTest {
         assertTrue(arr1.stream().allMatch(v -> v.getCountry() == country2),
                 "The returned collection didn't only contain visits with the correct country");
 
-        Collection<Visit> arr2 = cc.getVisits().stream().filter(v -> v.getCountry() == country2).collect(Collectors.toList());
+        Collection<Visit> arr2 =
+                cc.getVisits().stream().filter(v -> v.getCountry() == country2).collect(Collectors.toList());
         assertTrue(arr1.equals(arr2), "The returned collection doesn't contain all the visits to the given country");
     }
 
@@ -231,5 +240,34 @@ public class CountryCollectorTest {
             fail("Returned set is modifiable");
         } catch (UnsupportedOperationException ignored) {
         }
+    }
+
+    @Test
+    public void testListenerIsProperlyNotified() {
+        CountryCollector cc = new CountryCollector(world1);
+        @SuppressWarnings("unchecked")
+        Listener<Visit> listener = (Listener<Visit>) mock(Listener.class);
+
+        cc.addListener(listener);
+        Visit visit = new Visit(country0, null, null);
+        cc.registerVisit(visit);
+        verify(listener, times(1)).notifyListener(Matchers.eq(new ChangeEvent<>(ChangeEvent.Status.ADDED, visit)));
+    }
+
+    @Test
+    public void testRemoveListener() {
+        CountryCollector cc = new CountryCollector(world1);
+        @SuppressWarnings("unchecked")
+        Listener<Visit> listener = (Listener<Visit>) mock(Listener.class);
+
+        cc.addListener(listener);
+        Visit visit = new Visit(country0, null, null);
+        cc.registerVisit(visit);
+        verify(listener, times(1)).notifyListener(Matchers.eq(new ChangeEvent<>(ChangeEvent.Status.ADDED, visit)));
+
+        cc.removeListener(listener);
+        assertTrue(cc.getListeners().isEmpty());
+        cc.removeVisit(visit);
+        verify(listener, times(1)).notifyListener(Matchers.eq(new ChangeEvent<>(ChangeEvent.Status.ADDED, visit)));
     }
 }
