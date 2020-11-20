@@ -17,11 +17,14 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
@@ -29,6 +32,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.GridPane;
 import javafx.geometry.Insets;
 import javafx.scene.text.Font;
+import javafx.stage.Popup;
 import org.controlsfx.control.textfield.AutoCompletionBinding;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -37,6 +41,8 @@ import org.w3c.dom.events.EventTarget;
 import org.controlsfx.control.textfield.TextFields;
 
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.ResourceBundle;
@@ -99,6 +105,31 @@ public class AppController implements Initializable {
      */
     private static final String LOCAL_USER = "Local user";
 
+    /**
+     * The ListView which shows visits in the visits-popup.
+     */
+    @FXML
+    private ListView<Visit> visitsPopupListView;
+    /**
+     * Root node of the visits-popup.
+     */
+    @FXML
+    private Parent visitsPopupRoot;
+    /**
+     * The label in the visits-popup showing the name of the {@link Country}.
+     */
+    @FXML
+    private Label visitsPopupCountryNameLabel;
+    /**
+     * Date-picker for the arrival-date of a {@link Visit} in the visits-popup.
+     */
+    @FXML
+    private DatePicker arrivalDatePicker;
+    /**
+     * Date-picker for the departure-date of a {@link Visit} in the visits-popup.
+     */
+    @FXML
+    private DatePicker departureDatePicker;
     /**
      * The root of the FXML document.
      */
@@ -168,6 +199,10 @@ public class AppController implements Initializable {
      */
     private Country inputCountry = null;
     /**
+     * The Country whose visits were most recently displayed (which may be currently).
+     */
+    private Country popupCountry;
+    /**
      * The HTML Document containing the world map.
      */
     private Document document;
@@ -203,16 +238,14 @@ public class AppController implements Initializable {
     private static final int TEXT_LABEL_PADDING = 10;
 
     /**
-     * Listener responsible for toggling visitation state of a country when said country is clicked on the map.
+     * The visits-popup, a semi-window which can be hidden and shown.
      */
-    private final EventListener mapListenerForTogglingCountryVisited = e -> {
-        Country country = world.getCountryFromCode(((Element) e.getCurrentTarget()).getAttribute("id"));
-        if (countryCollector.isVisited(country)) {
-            countryCollector.removeAllVisitsToCountry(country);
-        } else {
-            countryCollector.registerVisit(country);
-        }
-    };
+    private final Popup visitsPopup = new Popup();
+    /**
+     * Listener responsible for opening the visits-popup of a country when said country is clicked on the map.
+     */
+    private final EventListener mapListenerForOpeningVisitsPopup
+            = e -> popupVisits(world.getCountryFromCode(((Element) e.getCurrentTarget()).getAttribute("id")));
 
     /**
      * Listener responsible for updating the map and statistics when something changes in {@link #countryCollector}.
@@ -231,10 +264,16 @@ public class AppController implements Initializable {
      * The listener used for saving the {@link CountryCollector} when it is updated.
      */
     private final Listener<Visit> countryCollectorListenerForSaving =
-            e -> dataAccess.putCountryCollector(countryCollector);
+            e -> {
+                if (e.wasAdded()) {
+                    dataAccess.saveVisit(countryCollector, e.getElement());
+                } else if (e.wasRemoved()) {
+                    dataAccess.deleteVisit(countryCollector, e.getElement());
+                }
+            };
 
     /**
-     * Initialize fields which do not require FXML to be loaded.
+     * Do setup that doesn't need FXML to be loaded.
      */
     public AppController() {
         // Change the user to the local user. Only does the pre-init-step of configuring app-state since the FXML hasn't
@@ -252,11 +291,20 @@ public class AppController implements Initializable {
 
         postInitConfigureState(countryCollector);
 
+        webView.setContextMenuEnabled(false);
         initializeCountriesList();
+        setupVisitsPopup();
+
+        // Re-validate the visits-popup date-pickers for every typed character,
+        // instead of just on Enter-press.
+        departureDatePicker.getEditor().setOnKeyTyped(e -> validateVisitDates());
+        arrivalDatePicker.getEditor().setOnKeyTyped(e -> validateVisitDates());
+
         countryInput.textProperty().addListener(e -> onCountryInputChange());
         userInput.textProperty().addListener(e -> onUserInputChange());
 
         root.getStylesheets().add(getClass().getResource("/fxml-css/App.css").toExternalForm());
+        visitsPopupRoot.getStylesheets().add(getClass().getResource("/fxml-css/Popup.css").toExternalForm());
 
         webEngine.load(getClass().getResource("/html/world.html").toExternalForm());
 
@@ -315,7 +363,7 @@ public class AppController implements Initializable {
                             "Given country does not exist on map as id: " + country.getCountryCode());
                 } else {
                     ((EventTarget) countryElement).addEventListener("click",
-                            mapListenerForTogglingCountryVisited,
+                            mapListenerForOpeningVisitsPopup,
                             true);
                 }
             } catch (ClassCastException e) {
@@ -374,11 +422,7 @@ public class AppController implements Initializable {
             }
             countryCollector.removeAllVisitsToCountry(inputCountry);
         } else {
-            // Array conversion necessary to prevent the removal of items from foreach-target
-            for (Country country
-                    : countriesList.getSelectionModel().getSelectedItems().toArray(Country[]::new)) {
-                countryCollector.removeAllVisitsToCountry(country);
-            }
+            countryCollector.removeAllVisitsToCountry(countriesList.getSelectionModel().getSelectedItem());
         }
         countriesList.getSelectionModel().clearSelection();
     }
@@ -493,7 +537,6 @@ public class AppController implements Initializable {
      * Unset the attribute "visited" for the given countries' map representations, removing custom css styling.
      */
     private void initializeCountriesList() {
-        countriesList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         countriesList.setCellFactory(countryListView -> new ListCell<>() {
             @Override
             protected void updateItem(final Country item, final boolean empty) {
@@ -561,7 +604,14 @@ public class AppController implements Initializable {
             } else {
                 dataAccess = new RestGlobingularDataAccess(App.BASE_URI, currentUser.toLowerCase(), persistence);
             }
-            changeAppState(dataAccess.getCountryCollector());
+            // Retrieve CountryCollector from dataAccess
+            CountryCollector collector = dataAccess.getCountryCollector();
+            if (collector == null) {
+                // If retrieved CountryCollector is null, create a new instance and save it
+                collector = new CountryCollector(persistence.getPredominantDefaultWorld());
+                dataAccess.saveCountryCollector(collector);
+            }
+            changeAppState(collector);
         }
     }
 
@@ -590,7 +640,7 @@ public class AppController implements Initializable {
 
                 ((EventTarget) countryElement).removeEventListener(
                         "click",
-                        mapListenerForTogglingCountryVisited,
+                        mapListenerForOpeningVisitsPopup,
                         true);
             }
         }
@@ -672,7 +722,8 @@ public class AppController implements Initializable {
      */
     private static ObservableList<Country> createSortedVisitedCountriesList(final CountryCollector countryCollector) {
         ObservableList<Country> backing = FXCollections.observableArrayList();
-        SortedList<Country> sorted = new SortedList<>(backing, Comparator.comparing(Country::getShortName));
+        SortedList<Country> sorted
+                = new SortedList<>(backing, Comparator.comparing(Country::getShortName));
         backing.addAll(countryCollector.getVisitedCountries());
         countryCollector.addListener(event -> {
             final Country country = event.getElement().getCountry();
@@ -680,6 +731,33 @@ public class AppController implements Initializable {
                 backing.add(country);
             } else if (event.wasRemoved() && !countryCollector.isVisited(country)) {
                 backing.remove(country);
+            }
+        });
+        return sorted;
+    }
+
+    /**
+     * Create a readonly observable list of all visits to a certain Country, for use in bindings.
+     *
+     * @param targetCountryCollector The CountryCollector to get the visits from.
+     * @param filterCountry The Country to filter the visits on.
+     * @return A reaonly observable list of all visits to the filter Country.
+     */
+    private static ObservableList<Visit> createObservableVisitsToCountryList(
+            final CountryCollector targetCountryCollector, final Country filterCountry) {
+        ObservableList<Visit> backing = FXCollections.observableArrayList();
+        SortedList<Visit> sorted = new SortedList<>(backing,
+                Comparator.comparing(v -> v.getArrival() == null ? LocalDate.MIN : v.getArrival()));
+        backing.addAll(targetCountryCollector.getVisitsToCountry(filterCountry));
+        targetCountryCollector.addListener(event -> {
+            if (event.wasAdded()) {
+                if (event.getElement().getCountry() == filterCountry) {
+                    backing.add(event.getElement());
+                }
+            } else if (event.wasRemoved()) {
+                if (event.getElement().getCountry() == filterCountry) {
+                    backing.remove(event.getElement());
+                }
             }
         });
         return sorted;
@@ -695,5 +773,155 @@ public class AppController implements Initializable {
         if (mouseEvent.getClickCount() == 2) {
             onChangeUserRequested();
         }
+    }
+
+    /**
+     * Try to register a Visit using the visits-popup date-pickers and {@link Country}.
+     */
+    @FXML
+    private void requestRegisterVisit() {
+        LocalDate arrival = arrivalDatePicker.getValue();
+        LocalDate departure = departureDatePicker.getValue();
+        if (!arrivalDatePicker.getPseudoClassStates().contains(INVALID)
+                && !departureDatePicker.getPseudoClassStates().contains(INVALID)) {
+            countryCollector.registerVisit(popupCountry, arrival, departure);
+
+            // Reset the date pickers
+            arrivalDatePicker.getEditor().setText("");
+            departureDatePicker.getEditor().setText("");
+            validateVisitDates();
+        }
+    }
+
+    /**
+     * Attempt to remove one or more visit from the visits-popup.
+     */
+    @FXML
+    private void removeVisit() {
+        // Use the date-pickers if valid, list-view-selection if not
+        if (!arrivalDatePicker.getPseudoClassStates().contains(INVALID)
+                && !departureDatePicker.getPseudoClassStates().contains(INVALID)) {
+            // Use the date-pickers to remove a Visit with those dates.
+            countryCollector.removeVisit(
+                    new Visit(popupCountry, arrivalDatePicker.getValue(), departureDatePicker.getValue()));
+            arrivalDatePicker.getEditor().clear();
+            departureDatePicker.getEditor().clear();
+        } else {
+            // Remove all selected visits
+            for (Visit visit : visitsPopupListView.getSelectionModel().getSelectedItems().toArray(Visit[]::new)) {
+                countryCollector.removeVisit(visit);
+            }
+        }
+    }
+
+    /**
+     * Evaluate the validity of the two date input elements for Visit, possibly changin pseudoclass-states..
+     */
+    private void validateVisitDates() {
+        // Save information for restoring field-text later
+        int arrivalCaretPosition = arrivalDatePicker.getEditor().getCaretPosition();
+        String arrivalText = arrivalDatePicker.getEditor().getText();
+
+        // Try to convert the field-text to date. If it fails, mark the field as invalid.
+        // If it succeeds, mark as valid.
+        try {
+            arrivalDatePicker.setValue(
+                    arrivalDatePicker.getConverter().fromString(arrivalText));
+            arrivalDatePicker.pseudoClassStateChanged(INVALID, false);
+        } catch (DateTimeParseException e) {
+            if (arrivalDatePicker.getValue() != null) {
+                // Use stored information to restore the field-text to what the user typed
+                arrivalDatePicker.setValue(null);
+                arrivalDatePicker.getEditor().setText(arrivalText);
+                arrivalDatePicker.getEditor().positionCaret(arrivalCaretPosition);
+            }
+            arrivalDatePicker.pseudoClassStateChanged(INVALID, true);
+        }
+
+        // Save information for restoring field-text later
+        int departureCaretPosition = departureDatePicker.getEditor().getCaretPosition();
+        String departureText = departureDatePicker.getEditor().getText();
+
+        // Try to convert the field-text to date. If it fails, mark the field as invalid.
+        // If it succeeds, mark as valid only if the departure is valid for the given arrival, or the arrival is null.
+        try {
+            departureDatePicker.setValue(
+                    departureDatePicker.getConverter().fromString(departureText));
+            departureDatePicker.pseudoClassStateChanged(INVALID,
+                    arrivalDatePicker.getValue() != null && !Visit
+                            .isValidDateInterval(arrivalDatePicker.getValue(), departureDatePicker.getValue()));
+        } catch (DateTimeParseException e) {
+            if (departureDatePicker.getValue() != null) {
+                departureDatePicker.setValue(null);
+                // Use stored information to restore the field-text to what the user typed
+                departureDatePicker.getEditor().setText(departureText);
+                departureDatePicker.getEditor().positionCaret(departureCaretPosition);
+            }
+            departureDatePicker.pseudoClassStateChanged(INVALID, true);
+        }
+
+        // Mark the arrival field as invalid if the departure field is set, but not arrival.
+        arrivalDatePicker.pseudoClassStateChanged(INVALID,
+                arrivalDatePicker.getPseudoClassStates().contains(INVALID)
+                        || (arrivalDatePicker.getValue() == null && departureDatePicker.getValue() != null));
+    }
+
+    /**
+     * Pop-up the visits-popup for the given Country.
+     * @param country The Country to pop up for.
+     */
+    private void popupVisits(final Country country) {
+        popupCountry = country;
+        visitsPopup.show(root.getScene().getWindow());
+        visitsPopupCountryNameLabel.setText(country.getShortName());
+        visitsPopupListView.setItems(createObservableVisitsToCountryList(countryCollector, popupCountry));
+    }
+
+    /**
+     * Pop-up the visits-popup for the selected Country, if any.
+     */
+    @FXML
+    private void popupVisitsForSelectedCountry() {
+        if (inputCountry != null) {
+            popupVisits(inputCountry);
+        } else if (countriesList.getSelectionModel().getSelectedItem() != null) {
+            popupVisits(countriesList.getSelectionModel().getSelectedItem());
+        }
+    }
+
+    /**
+     * Set up the visits-popup before first show().
+     */
+    private void setupVisitsPopup() {
+        visitsPopup.setAutoHide(true);
+        visitsPopup.getContent().add(visitsPopupRoot);
+
+        // Hide the popup when ESC is pressed, bypassing child listeners
+        visitsPopup.addEventFilter(KeyEvent.KEY_PRESSED, e -> {
+            if (e.getCode() == KeyCode.ESCAPE) {
+                visitsPopup.hide();
+                e.consume();
+            }
+        });
+
+        // Set up the ListView in the popup
+        visitsPopupListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        visitsPopupListView.setCellFactory(countryListView -> new ListCell<>() {
+            @Override
+            protected void updateItem(final Visit item, final boolean empty) {
+                super.updateItem(item, empty);
+                if (item == null) {
+                    setText(null);
+                } else {
+                    if (item.getArrival() == null || item.getDeparture() == null) {
+                        setText("Date not specified");
+                    } else {
+                        final String arrivalText = arrivalDatePicker.getConverter().toString(item.getArrival());
+                        final String departureText = departureDatePicker.getConverter().toString(item.getDeparture());
+                        setText(String.format("%-10s          to          %-10s", arrivalText, departureText));
+                    }
+                }
+            }
+        });
     }
 }

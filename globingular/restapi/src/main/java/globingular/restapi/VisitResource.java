@@ -7,7 +7,7 @@ import globingular.core.Visit;
 import globingular.persistence.FileHandler;
 import globingular.persistence.PersistenceHandler;
 import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.PUT;
+import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
@@ -48,13 +48,15 @@ public class VisitResource {
     /**
      * Register a single Visit-instance for this {@link #countryCollector}.
      * Using {@code : (?i)} in {@code @Path} to enable case-insensitivity.
+     * Using {@link POST} instead of {@link jakarta.ws.rs.PUT} because multiple
+     * requests after each other may all perform actions on the server.
      * 
      * @param visit The visit to register
      * @return      True if successfully registered, otherwise false
      * 
      * @throws IOException If saving fails
      */
-    @PUT
+    @POST
     @Path("{register : (?i)register}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -73,7 +75,10 @@ public class VisitResource {
     /**
      * Remove a single {@link Visit}-instance from this {@link #countryCollector}.
      * Using {@code : (?i)} in {@code @Path} to enable case-insensitivity.
-     * Using a {@link PUT} instead of {@link jakarta.ws.rs.DELETE}
+     * Using {@link POST} instead of {@link jakarta.ws.rs.DELETE},
+     * as DELETE doesn't support sending message body required to remove the correct instance.
+     * Using {@link POST} instead of {@link jakarta.ws.rs.PUT} because multiple
+     * requests after each other may all perform actions on the server.
      * 
      * @param visit The visit to remove
      * @return      True if removed or non-existent
@@ -81,7 +86,7 @@ public class VisitResource {
      * @throws IllegalArgumentException If username doesn't exist
      * @throws IOException              If saving fails
      */
-    @PUT
+    @POST
     @Path("{remove : (?i)remove}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)

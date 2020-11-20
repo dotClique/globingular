@@ -1,6 +1,6 @@
 package globingular.core;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 /**
  * <p>
@@ -26,24 +26,27 @@ public class Visit {
     /**
      * The time of arrival in the country.
      */
-    private final LocalDateTime arrival;
+    private final LocalDate arrival;
 
     /**
      * The time of departure from the country.
      */
-    private final LocalDateTime departure;
+    private final LocalDate departure;
 
     /**
      * Initiate a new visit to the given country at the given time.
-     * 
-     * @param country   The country that has been visited
+     *  @param country   The country that has been visited
      * @param arrival   The arrival time to log in the visit
      * @param departure The departure time to log in the visit
      */
-    public Visit(final Country country, final LocalDateTime arrival, final LocalDateTime departure) {
+    public Visit(final Country country, final LocalDate arrival, final LocalDate departure) {
         this.country = country;
         this.arrival = arrival;
         this.departure = departure;
+        if (!isValidDateInterval(arrival, departure)) {
+            throw new IllegalArgumentException(
+                    "Both arrival and departure must be null, or arrival must not come before departure!");
+        }
     }
 
     /**
@@ -58,18 +61,18 @@ public class Visit {
     /**
      * Retrieve the date and time of arrival to the country.
      * 
-     * @return A LocalDateTime of the arrival in the country
+     * @return A LocalDate of the arrival in the country
      */
-    public LocalDateTime getArrival() {
+    public LocalDate getArrival() {
         return this.arrival;
     }
 
     /**
      * Retrieve the date and time of departure from the country.
      * 
-     * @return A LocalDateTime of the departure from the country
+     * @return A LocalDate of the departure from the country
      */
-    public LocalDateTime getDeparture() {
+    public LocalDate getDeparture() {
         return this.departure;
     }
 
@@ -152,5 +155,16 @@ public class Visit {
         }
         // Create a new Visit with the correct Country-instance
         return new Visit(country, visit.getArrival(), visit.getDeparture());
+    }
+
+    /**
+     * Check whether the given date-interval is valid for construction of a Visit.
+     * @param arrival Arrival-time.
+     * @param departure Departure-time.
+     * @return Whether the date-interval is valid.
+     */
+    public static boolean isValidDateInterval(final LocalDate arrival, final LocalDate departure) {
+        return (arrival != null && departure != null && !departure.isBefore(arrival))
+                || (arrival == null && departure == null);
     }
 }

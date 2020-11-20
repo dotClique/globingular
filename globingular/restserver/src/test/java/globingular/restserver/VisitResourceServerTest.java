@@ -23,7 +23,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.File;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 public class VisitResourceServerTest {
 
@@ -86,12 +86,12 @@ public class VisitResourceServerTest {
         assertEquals("true", responseMsg);
 
         // Visit with time values
-        Visit v1 = new Visit(c1, LocalDateTime.now(), LocalDateTime.now());
+        Visit v1 = new Visit(c1, LocalDate.now(), LocalDate.now());
         request = objectMapper.writeValueAsString(v1);
 
         response = target.path("globingular").path("countryCollector")
                 .path(username).path("visit").path("register").request()
-                .put(Entity.entity(request, MediaType.APPLICATION_JSON));
+                .post(Entity.entity(request, MediaType.APPLICATION_JSON));
 
         // Success
         assertEquals(200, response.getStatus());
@@ -106,7 +106,7 @@ public class VisitResourceServerTest {
 
         response = target.path("globingular").path("countryCollector")
                 .path(username).path("visit").path("register").request()
-                .put(Entity.entity(request, MediaType.APPLICATION_JSON));
+                .post(Entity.entity(request, MediaType.APPLICATION_JSON));
 
         // Success
         assertEquals(200, response.getStatus());
@@ -132,12 +132,12 @@ public class VisitResourceServerTest {
         assertEquals("true", responseMsg);
 
         // Visit with time values
-        Visit v1 = new Visit(c1, LocalDateTime.now(), LocalDateTime.now());
+        Visit v1 = new Visit(c1, LocalDate.now(), LocalDate.now());
         request = objectMapper.writeValueAsString(v1);
 
         response = target.path("globingular").path("countryCollector")
                 .path(username).path("visit").path("register").request()
-                .put(Entity.entity(request, MediaType.APPLICATION_JSON));
+                .post(Entity.entity(request, MediaType.APPLICATION_JSON));
 
         // Success
         assertEquals(200, response.getStatus());
@@ -149,7 +149,7 @@ public class VisitResourceServerTest {
         // Remove again
         response = target.path("globingular").path("countryCollector")
                 .path(username).path("visit").path("remove").request()
-                .put(Entity.entity(request, MediaType.APPLICATION_JSON));
+                .post(Entity.entity(request, MediaType.APPLICATION_JSON));
 
         // Success
         assertEquals(200, response.getStatus());
