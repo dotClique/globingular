@@ -28,7 +28,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.GridPane;
 import javafx.geometry.Insets;
 import javafx.scene.text.Font;
-import org.controlsfx.control.Notifications;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.events.EventTarget;
@@ -229,7 +228,6 @@ public class AppController implements Initializable {
             }
             updateStatistics();
             updateBadges();
-            showNotification();
 
         });
 
@@ -423,12 +421,13 @@ public class AppController implements Initializable {
 
         for (Map.Entry<String, String> entry : countryStatistics.getAllStatistics().entrySet()) {
             statisticsGrid.addRow(newRowIndex++, createConfiguredLabel(entry.getKey() + ": "),
-                createConfiguredLabel(entry.getValue()));
+                    createConfiguredLabel(entry.getValue()));
         }
     }
 
     /**
      * Creates a configured label with padding.
+     *
      * @param text a string which you want to display as a label
      * @return a label with the desired text
      */
@@ -443,13 +442,13 @@ public class AppController implements Initializable {
      */
     private void configureAutoComplete() {
         List<String> countryNamesAndCodes = world.getCountries()
-            .stream()
-            .map(Country::getShortName)
-            .collect(Collectors.toList());
+                .stream()
+                .map(Country::getShortName)
+                .collect(Collectors.toList());
         countryNamesAndCodes.addAll(world.getCountries()
-            .stream()
-            .map(Country::getCountryCode)
-            .collect(Collectors.toList()));
+                .stream()
+                .map(Country::getCountryCode)
+                .collect(Collectors.toList()));
 
         TextFields.bindAutoCompletion(countryInput, countryNamesAndCodes);
     }
@@ -535,19 +534,4 @@ public class AppController implements Initializable {
         return pi;
     }
 
-
-    /**
-     * Creates notification for when a badge is awarded.
-     */
-    private void showNotification() {
-        for (Map.Entry<String, String> entry : badges.getBadgeData().entrySet()) {
-            if (Double.parseDouble(entry.getValue()) == 1.0) {
-                Notifications.create()
-                        .title("Congratulations!")
-                        .text("You have completed the " + entry.getKey() + " badge!")
-                        .showInformation();
-            }
-        }
-
-    }
 }
