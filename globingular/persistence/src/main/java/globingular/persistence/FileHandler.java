@@ -22,7 +22,8 @@ public final class FileHandler {
     /**
      * Define Path to the apps datafolder, used for saving app-state.
      */
-    public static final Path DATA_FOLDER = Paths.get(System.getProperty("user.home"), "globingular");
+    public static final Path DATA_FOLDER = Paths.get(System.getProperty("user.home"),
+            System.getProperty("globingular.datafolder", "globingular"));
     /**
      * Define default username, used as path to Json-file used for saving CountryCollector-state.
      */

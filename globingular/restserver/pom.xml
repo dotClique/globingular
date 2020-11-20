@@ -13,6 +13,7 @@
 
     <properties>
         <jersey.version>3.0.0-M6</jersey.version>
+        <datafolder>globingularServer</datafolder>
     </properties>
 
     <dependencies>
@@ -78,8 +79,8 @@
             <version>${jakarta.ws.rs.api.version}</version>
         </dependency>
     </dependencies>
-    <build>
 
+    <build>
         <plugins>
             <!-- Compiling code -->
             <plugin>
@@ -101,6 +102,12 @@
                 </executions>
                 <configuration>
                     <mainClass>${restserver.main}</mainClass>
+                    <systemProperties>
+                        <systemProperty>
+                            <key>globingular.datafolder</key>
+                            <value>${datafolder}</value>
+                        </systemProperty>
+                    </systemProperties>
                 </configuration>
             </plugin>
 
