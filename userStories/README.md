@@ -33,7 +33,7 @@ User wants to see which date they first visited every country. They add a visit 
 
 ## User Story 3
 
-A user has been travelling through Andorra on their way from France to Spain, and wants to log the short visit to Andorra. They add the visit with a datetime-range (start / end). This requires that several visits can be registered on each country.
+A user has been travelling through Andorra on their way from France to Spain, and wants to log the short visit to Andorra. They add the visit with a date-range (start / end). This requires that several visits can be registered on each country.
 
 
 ## User Story 4
@@ -86,6 +86,13 @@ Upon visiting every country in Europe, the user gets a badge-popup.
 ## User Story 8
 
 The user can open a view showing all their achieved badges (and progress on new badges). 
+```plantuml
+
+actor User
+User -> "~#tab: Statistics" as tab: *click on Statistics*
+
+```
+
 
 
 ## User Story 9
