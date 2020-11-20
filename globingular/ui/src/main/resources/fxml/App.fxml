@@ -41,7 +41,7 @@
                         </VBox>
                         <AnchorPane GridPane.rowIndex="1" GridPane.columnIndex="0" GridPane.columnSpan="3">
                             <TextField fx:id="userInput" promptText="Username" styleClass="dualInputAndDisplay" onAction="#onChangeUserRequested" onMouseClicked="#onClickUserField" editable="false" AnchorPane.leftAnchor="0" AnchorPane.bottomAnchor="0"/>
-                            <Button text="Change" onAction="#onChangeUserRequested" AnchorPane.rightAnchor="0"/>
+                            <Button fx:id="changeUser" text="Change" onAction="#onChangeUserRequested" AnchorPane.rightAnchor="0"/>
                         </AnchorPane>
                         <ListView fx:id="countriesList" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2" GridPane.columnIndex="0" GridPane.columnSpan="3"/>
                         <TextField fx:id="countryInput" onAction="#onCountryAdd" prefHeight="27.0" GridPane.rowIndex="3" GridPane.columnIndex="0"/>

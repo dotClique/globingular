@@ -43,8 +43,7 @@ public class AppIT extends ApplicationTest {
     @BeforeEach
     public void setupItems() throws URISyntaxException {
         try (Reader reader = new InputStreamReader(getClass().getResourceAsStream("/json/sampleCollector.json"))) {
-            String port = System.getProperty("globingular.port");
-            assertNotNull(port, "No globingular.port system property set");
+            String port = "8081";
             URI baseUri = new URI("http://localhost:" + port + "/globingular/");
             System.out.println("Base URI: " + baseUri);
         } catch (IOException e) {
@@ -118,44 +117,5 @@ public class AppIT extends ApplicationTest {
         final ListView<Country> countriesList1 = (ListView<Country>) parent.lookup(
                 "#countriesList");
         Assertions.assertFalse(countriesList.getItems().contains(jp));
-
-    }
-
-    @Test
-    public void testSameCountriesOnOldUserAfterChangeUserAndAddCountries() {
-        final ListView<Country> countriesList = (ListView<Country>) parent.lookup(
-                "#countriesList");
-        final CountryCollector cc = controller.getCountryCollector();
-        final TextField countryInput = (TextField) parent.lookup("#countryInput");
-        final Button countryAdd = (Button) parent.lookup("#countryAdd");
-        final TextField userInput = (TextField) parent.lookup("#userInput");
-        final Button changeUser = (Button) parent.lookup("#changeUser");
-
-        clickOn(changeUser);
-        userInput.setText("heisenberg");
-        clickOn(changeUser);
-
-        Country no = cc.getWorld().getCountryFromCode("NO");
-        countryInput.setText("Norway");
-        clickOn(countryAdd);
-
-        clickOn(changeUser);
-        userInput.clear();
-        userInput.setText("einstein");
-        clickOn(changeUser);
-
-        Country jp = cc.getWorld().getCountryFromCode("JP");
-        countryInput.setText("Japan");
-        clickOn(countryAdd);
-
-        Assertions.assertTrue(countriesList.getItems().contains(jp));
-
-        clickOn(changeUser);
-        userInput.clear();
-        userInput.setText("heisenberg");
-        clickOn(changeUser);
-
-        Assertions.assertFalse(countriesList.getItems().contains(jp));
-        Assertions.assertTrue(countriesList.getItems().contains(no));
     }
 }
