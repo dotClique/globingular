@@ -225,14 +225,14 @@ public class RestGlobingularDataAccess implements GlobingularDataAccess {
                             new URI(baseUri + GLOBINGULAR_SERVICE_PATH + COUNTRY_COLLECTOR_RESOURCE_PATH
                             + username + VISIT_RESOURCE_PATH_ACTION_REGISTER))
                     .header(CONTENT_TYPE_HEADER_NAME, MEDIA_TYPE_JSON).header(ACCEPT_HEADER_NAME, MEDIA_TYPE_JSON)
-                    .PUT(HttpRequest.BodyPublishers.ofString(objectWriter.writeValueAsString(visit))).build();
+                    .POST(HttpRequest.BodyPublishers.ofString(objectWriter.writeValueAsString(visit))).build();
 
             final HttpResponse<InputStream> httpResponse = client.send(request,
                     HttpResponse.BodyHandlers.ofInputStream());
             if (httpResponse.statusCode() == HTTP_STATUS_CODE_SUCCESS) {
                 return persistenceHandler.getObjectMapper().readValue(httpResponse.body(), Boolean.class);
             } else {
-                System.err.println("Failed to PUT visit, received HTTP status code: "
+                System.err.println("Failed to POST visit, received HTTP status code: "
                         + httpResponse.statusCode() + " from " + httpResponse.uri().toString() + ". Visit was:");
                 System.err.println(visit);
                 System.err.println("Username was: \"" + username + "\"");
@@ -257,14 +257,14 @@ public class RestGlobingularDataAccess implements GlobingularDataAccess {
                             new URI(baseUri + GLOBINGULAR_SERVICE_PATH + COUNTRY_COLLECTOR_RESOURCE_PATH
                             + username + VISIT_RESOURCE_PATH_ACTION_REMOVE))
                     .header(CONTENT_TYPE_HEADER_NAME, MEDIA_TYPE_JSON).header(ACCEPT_HEADER_NAME, MEDIA_TYPE_JSON)
-                    .PUT(HttpRequest.BodyPublishers.ofString(objectWriter.writeValueAsString(visit))).build();
+                    .POST(HttpRequest.BodyPublishers.ofString(objectWriter.writeValueAsString(visit))).build();
 
             final HttpResponse<InputStream> httpResponse = client.send(request,
                     HttpResponse.BodyHandlers.ofInputStream());
             if (httpResponse.statusCode() == HTTP_STATUS_CODE_SUCCESS) {
                 return persistenceHandler.getObjectMapper().readValue(httpResponse.body(), Boolean.class);
             } else {
-                System.err.println("Failed to PUT visit, received HTTP status code: "
+                System.err.println("Failed to POST visit, received HTTP status code: "
                         + httpResponse.statusCode() + " from " + httpResponse.uri().toString() + ". Visit was:");
                 System.err.println(visit);
                 System.err.println("Username was: \"" + username + "\"");
