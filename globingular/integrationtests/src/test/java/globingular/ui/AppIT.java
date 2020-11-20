@@ -5,14 +5,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.net.URI;
-import java.net.URISyntaxException;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.testfx.framework.junit5.ApplicationTest;
 
@@ -23,8 +17,6 @@ import org.junit.jupiter.api.Assertions;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
-
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class AppIT extends ApplicationTest {
 
@@ -38,17 +30,6 @@ public class AppIT extends ApplicationTest {
         this.controller = loader.getController();
         primaryStage.setScene(new Scene(parent, 1300, 600));
         primaryStage.show();
-    }
-
-    @BeforeEach
-    public void setupItems() throws URISyntaxException {
-        try (Reader reader = new InputStreamReader(getClass().getResourceAsStream("/json/sampleCollector.json"))) {
-            String port = "8081";
-            URI baseUri = new URI("http://localhost:" + port + "/globingular/");
-            System.out.println("Base URI: " + baseUri);
-        } catch (IOException e) {
-            fail(e.getMessage());
-        }
     }
 
     @Test
