@@ -88,16 +88,6 @@ public class AppController implements Initializable {
     };
 
     /**
-     * Name of the Javascript-const in the WebView set to the map SVG-element.
-     */
-    private static final String MAP_ELEMENT_NAME = "countryMap";
-
-    /**
-     * ID of the map SVG element in the WebView.
-     */
-    private static final String MAP_ELEMENT_ID = "Earth";
-
-    /**
      * The HTML-attribute declaring that this element is a visited country.
      * Also serves as the value of the attribute, if set.
      */
@@ -337,8 +327,6 @@ public class AppController implements Initializable {
         webEngine.getLoadWorker().stateProperty().addListener(((observableValue, state, t1) -> {
             if (t1 == Worker.State.SUCCEEDED) {
                 this.document = webEngine.getDocument();
-                webEngine.executeScript("const " + MAP_ELEMENT_NAME + " = document.getElementById('" + MAP_ELEMENT_ID
-                        + "').getSVGDocument();");
                 postMapLoadConfigureState(countryCollector);
             }
         }));
@@ -587,8 +575,7 @@ public class AppController implements Initializable {
      * @throws ClassCastException If element does not exist
      */
     private Element getCountryMapElement(final Country country) {
-        return (Element) webEngine
-                .executeScript(MAP_ELEMENT_NAME + ".getElementById('" + country.getCountryCode() + "')");
+        return webEngine.getDocument().getElementById(country.getCountryCode());
     }
 
     /**

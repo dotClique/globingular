@@ -50,7 +50,7 @@
                                 </tooltip>
                             </TextField>
 
-                            <Button text="Change" onAction="#onChangeUserRequested" AnchorPane.rightAnchor="0">
+                            <Button fx:id="changeUser" text="Change" onAction="#onChangeUserRequested" AnchorPane.rightAnchor="0">
                                 <tooltip>
                                     <Tooltip text="Change current user"/>
                                 </tooltip>

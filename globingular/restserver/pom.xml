@@ -12,10 +12,6 @@
     <artifactId>restserver</artifactId>
 
     <properties>
-        <restserver.main>globingular.restserver.Main</restserver.main>
-
-        <jersey.version>3.0.0-M6</jersey.version>
-
         <!-- Changes where files are saved, see 'exec-maven-plugin' further down for more comments -->
         <datafolder>globingularServer</datafolder>
     </properties>
