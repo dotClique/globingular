@@ -318,8 +318,8 @@ public class AppController implements Initializable {
 
         // Re-validate the visits-popup date-pickers for every typed character,
         // instead of just on Enter-press.
-        departureDatePicker.getEditor().setOnKeyTyped(e -> validateVisitDates());
-        arrivalDatePicker.getEditor().setOnKeyTyped(e -> validateVisitDates());
+        departureDatePicker.getEditor().textProperty().addListener(e -> validateVisitDates());
+        arrivalDatePicker.getEditor().textProperty().addListener(e -> validateVisitDates());
 
         countryInput.textProperty().addListener(e -> onCountryInputChange());
         userInput.textProperty().addListener(e -> onUserInputChange());
@@ -819,7 +819,6 @@ public class AppController implements Initializable {
             // Reset the date pickers
             arrivalDatePicker.getEditor().setText("");
             departureDatePicker.getEditor().setText("");
-            validateVisitDates();
         }
     }
 
