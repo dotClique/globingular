@@ -11,7 +11,7 @@ import java.io.IOException;
 /**
  * Serializer for {@link World} objects.
  */
-public class WorldSerializer extends JsonSerializer<World> {
+class WorldSerializer extends JsonSerializer<World> {
 
     /**
      * Serialize a given {@link World} to JSON.

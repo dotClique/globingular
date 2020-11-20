@@ -4,6 +4,8 @@ module globingular.restserver {
     // Prevents compilation failure: cannot access org.glassfish.grizzly.GrizzlyFuture
     requires grizzly.framework;
 
+    requires com.fasterxml.jackson.databind;
+
     // JAX-RS Jersey REST framework
     requires jersey.server;
     requires jersey.container.grizzly2.http;

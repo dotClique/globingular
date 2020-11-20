@@ -16,7 +16,7 @@ import java.util.Map;
 /**
  * Deserializer for {@link Visit} objects.
  */
-public class VisitDeserializer extends JsonDeserializer<Visit> {
+class VisitDeserializer extends JsonDeserializer<Visit> {
 
     /**
      * Deserilize a Visit from JSON.

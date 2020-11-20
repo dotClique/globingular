@@ -1,12 +1,10 @@
 package globingular.ui;
 
-import com.fasterxml.jackson.databind.ObjectWriter;
 import globingular.core.CountryCollector;
 import globingular.core.Visit;
 import globingular.persistence.PersistenceHandler;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.http.HttpClient;
@@ -38,6 +36,26 @@ public class RestGlobingularDataAccess implements GlobingularDataAccess {
      * The HTTP status code signifying success with content.
      */
     public static final int HTTP_STATUS_CODE_SUCCESS = 200;
+
+    /**
+     * HTTP method for deleting.
+     */
+    public static final String HTTP_METHOD_DELETE = "DELETE";
+
+    /**
+     * HTTP method for getting.
+     */
+    public static final String HTTP_METHOD_GET = "GET";
+
+    /**
+     * HTTP method for putting.
+     */
+    public static final String HTTP_METHOD_PUT = "PUT";
+
+    /**
+     * HTTP method for posting.
+     */
+    public static final String HTTP_METHOD_POST = "POST";
 
     /**
      * The path to the Globingular-service, relative to the base-URI.
@@ -102,26 +120,8 @@ public class RestGlobingularDataAccess implements GlobingularDataAccess {
      */
     @Override
     public CountryCollector getCountryCollector() {
-        try {
-            final HttpRequest request = HttpRequest
-                    .newBuilder(
-                            new URI(baseUri + GLOBINGULAR_SERVICE_PATH + COUNTRY_COLLECTOR_RESOURCE_PATH + username))
-                    .header(CONTENT_TYPE_HEADER_NAME, MEDIA_TYPE_JSON).header(ACCEPT_HEADER_NAME, MEDIA_TYPE_JSON).GET()
-                    .build();
-
-            final HttpResponse<InputStream> httpResponse = client.send(request,
-                    HttpResponse.BodyHandlers.ofInputStream());
-
-            // If not NO_CONTENT, return it. If NO_CONTENT, return null.
-            if (httpResponse.statusCode() != HTTP_STATUS_CODE_NO_CONTENT) {
-                return persistenceHandler.getObjectMapper().readValue(httpResponse.body(), CountryCollector.class);
-            }
-        } catch (IOException | InterruptedException | URISyntaxException e) {
-            // Unexpected error. Print stack trace and return null.
-            e.printStackTrace();
-        }
-        // No data retrieved from the server. The caller needs to create a new instance and save it.
-        return null;
+        final String uri = baseUri + GLOBINGULAR_SERVICE_PATH + COUNTRY_COLLECTOR_RESOURCE_PATH + username;
+        return executeRequest(HTTP_METHOD_GET, uri, null, CountryCollector.class, null, HTTP_STATUS_CODE_SUCCESS);
     }
 
     /**
@@ -129,60 +129,17 @@ public class RestGlobingularDataAccess implements GlobingularDataAccess {
      */
     @Override
     public boolean saveCountryCollector(final CountryCollector collector) {
-        final ObjectWriter objectWriter = persistenceHandler.getObjectMapper().writerWithDefaultPrettyPrinter();
-
-        try {
-            final HttpRequest request = HttpRequest
-                    .newBuilder(
-                            new URI(baseUri + GLOBINGULAR_SERVICE_PATH + COUNTRY_COLLECTOR_RESOURCE_PATH + username))
-                    .header(CONTENT_TYPE_HEADER_NAME, MEDIA_TYPE_JSON).header(ACCEPT_HEADER_NAME, MEDIA_TYPE_JSON)
-                    .PUT(HttpRequest.BodyPublishers.ofString(objectWriter.writeValueAsString(collector))).build();
-
-            final HttpResponse<InputStream> httpResponse = client.send(request,
-                    HttpResponse.BodyHandlers.ofInputStream());
-            if (httpResponse.statusCode() == HTTP_STATUS_CODE_SUCCESS) {
-                return persistenceHandler.getObjectMapper().readValue(httpResponse.body(), Boolean.class);
-            } else {
-                System.err.println("Failed to PUT countryCollector, received HTTP status code: "
-                        + httpResponse.statusCode() + " from " + httpResponse.uri().toString()
-                        + ". CountryCollector was:");
-                System.err.println(collector);
-                System.err.println("Username was: \"" + username + "\"");
-                return false;
-            }
-        } catch (IOException | InterruptedException | URISyntaxException e) {
-            e.printStackTrace();
-            return false;
-        }
+        final String uri = baseUri + GLOBINGULAR_SERVICE_PATH + COUNTRY_COLLECTOR_RESOURCE_PATH + username;
+        return executeRequest(HTTP_METHOD_PUT, uri, collector);
     }
 
     /**
      * {@inheritDoc} Saves to a REST-API.
      */
     public boolean renameCountryCollector(final String newUsername, final CountryCollector collector) {
-        try {
-            final HttpRequest request = HttpRequest
-                    .newBuilder(
-                            new URI(baseUri + GLOBINGULAR_SERVICE_PATH + COUNTRY_COLLECTOR_RESOURCE_PATH
-                            + username + COUNTRY_COLLECTOR_RESOURCE_ACTION_RENAME + newUsername))
-                    .header(ACCEPT_HEADER_NAME, MEDIA_TYPE_JSON).POST(null).build();
-
-            final HttpResponse<InputStream> httpResponse = client.send(request,
-                    HttpResponse.BodyHandlers.ofInputStream());
-            if (httpResponse.statusCode() == HTTP_STATUS_CODE_SUCCESS) {
-                return persistenceHandler.getObjectMapper().readValue(httpResponse.body(), Boolean.class);
-            } else {
-                System.err.println("Failed to POST countryCollector-rename, received HTTP status code: "
-                        + httpResponse.statusCode() + " from " + httpResponse.uri().toString()
-                        + ". CountryCollector was:");
-                System.err.println("Username was: \"" + username + "\"");
-                System.err.println("New username was: \"" + newUsername + "\"");
-                return false;
-            }
-        } catch (IOException | InterruptedException | URISyntaxException e) {
-            e.printStackTrace();
-            return false;
-        }
+        final String uri = baseUri + GLOBINGULAR_SERVICE_PATH + COUNTRY_COLLECTOR_RESOURCE_PATH
+                + username + COUNTRY_COLLECTOR_RESOURCE_ACTION_RENAME + newUsername;
+        return executeRequest(HTTP_METHOD_POST, uri, null);
     }
 
     /**
@@ -190,26 +147,8 @@ public class RestGlobingularDataAccess implements GlobingularDataAccess {
      */
     @Override
     public boolean deleteCountryCollector() {
-        try {
-            final HttpRequest request = HttpRequest
-                    .newBuilder(
-                            new URI(baseUri + GLOBINGULAR_SERVICE_PATH + COUNTRY_COLLECTOR_RESOURCE_PATH + username))
-                    .header(ACCEPT_HEADER_NAME, MEDIA_TYPE_JSON).DELETE().build();
-
-            final HttpResponse<InputStream> httpResponse = client.send(request,
-                    HttpResponse.BodyHandlers.ofInputStream());
-            if (httpResponse.statusCode() == HTTP_STATUS_CODE_SUCCESS) {
-                return persistenceHandler.getObjectMapper().readValue(httpResponse.body(), Boolean.class);
-            } else {
-                System.err.println("Failed to DELETE countryCollector, received HTTP status code: "
-                        + httpResponse.statusCode() + " from " + httpResponse.uri().toString() + ".");
-                System.err.println("Username was: \"" + username + "\"");
-                return false;
-            }
-        } catch (IOException | InterruptedException | URISyntaxException e) {
-            e.printStackTrace();
-            return false;
-        }
+        final String uri = baseUri + GLOBINGULAR_SERVICE_PATH + COUNTRY_COLLECTOR_RESOURCE_PATH + username;
+        return executeRequest(HTTP_METHOD_DELETE, uri, null);
     }
 
     /**
@@ -217,31 +156,9 @@ public class RestGlobingularDataAccess implements GlobingularDataAccess {
      */
     @Override
     public boolean saveVisit(final CountryCollector collector, final Visit visit) {
-        final ObjectWriter objectWriter = persistenceHandler.getObjectMapper().writerWithDefaultPrettyPrinter();
-
-        try {
-            final HttpRequest request = HttpRequest
-                    .newBuilder(
-                            new URI(baseUri + GLOBINGULAR_SERVICE_PATH + COUNTRY_COLLECTOR_RESOURCE_PATH
-                            + username + VISIT_RESOURCE_PATH_ACTION_REGISTER))
-                    .header(CONTENT_TYPE_HEADER_NAME, MEDIA_TYPE_JSON).header(ACCEPT_HEADER_NAME, MEDIA_TYPE_JSON)
-                    .POST(HttpRequest.BodyPublishers.ofString(objectWriter.writeValueAsString(visit))).build();
-
-            final HttpResponse<InputStream> httpResponse = client.send(request,
-                    HttpResponse.BodyHandlers.ofInputStream());
-            if (httpResponse.statusCode() == HTTP_STATUS_CODE_SUCCESS) {
-                return persistenceHandler.getObjectMapper().readValue(httpResponse.body(), Boolean.class);
-            } else {
-                System.err.println("Failed to POST visit, received HTTP status code: "
-                        + httpResponse.statusCode() + " from " + httpResponse.uri().toString() + ". Visit was:");
-                System.err.println(visit);
-                System.err.println("Username was: \"" + username + "\"");
-                return false;
-            }
-        } catch (IOException | InterruptedException | URISyntaxException e) {
-            e.printStackTrace();
-            return false;
-        }
+        final String uri = baseUri + GLOBINGULAR_SERVICE_PATH + COUNTRY_COLLECTOR_RESOURCE_PATH
+                + username + VISIT_RESOURCE_PATH_ACTION_REGISTER;
+        return executeRequest(HTTP_METHOD_POST, uri, visit);
     }
 
     /**
@@ -249,30 +166,88 @@ public class RestGlobingularDataAccess implements GlobingularDataAccess {
      */
     @Override
     public boolean deleteVisit(final CountryCollector collector, final Visit visit) {
-        final ObjectWriter objectWriter = persistenceHandler.getObjectMapper().writerWithDefaultPrettyPrinter();
+        final String uri = baseUri + GLOBINGULAR_SERVICE_PATH + COUNTRY_COLLECTOR_RESOURCE_PATH
+                + username + VISIT_RESOURCE_PATH_ACTION_REMOVE;
+        return executeRequest(HTTP_METHOD_POST, uri, visit);
+    }
 
+
+    /**
+     * Performs a network-request with the given parameters.
+     * Uses {@code false} for defaultReturn and sets HTTP_STATUS_CODE_SUCCESS as accaptable return.
+     * 
+     * @param method                The method-type to call.
+     * @param uri                   The URI to access.
+     * @param parameter             A parameter to pass along to server.
+     *                              Only used for PUT and POST requests.
+     * @return                      Parsed boolean response from server,
+     *                              or default: false if the given requirements are not met.
+     */
+    private Boolean executeRequest(final String method, final String uri, final Object parameter) {
+        return executeRequest(method, uri, parameter, Boolean.class, false, HTTP_STATUS_CODE_SUCCESS);
+    }
+    /**
+     * Performs a network-request with the given parameters.
+     * 
+     * @param <T>                   The type to return.
+     * @param method                The method-type to call.
+     * @param uri                   The URI to access.
+     * @param parameter             A parameter to pass along to server.
+     *                              Only used for PUT and POST requests.
+     * @param returnType            The type to return.
+     * @param defaultReturn         Default return value.
+     *                              Returned if exceptions or non-acceptable status codes.
+     * @param acceptableStatusCodes Http status codes to accept.
+     *                              Returns defaultReturn if these status codes are not met.
+     * @return                      A parsed version of the response,
+     *                              or defaultReturn if the given requirements are not met.
+     */
+    private <T> T executeRequest(final String method, final String uri, final Object parameter,
+            final Class<T> returnType, final T defaultReturn, final int... acceptableStatusCodes) {
         try {
-            final HttpRequest request = HttpRequest
-                    .newBuilder(
-                            new URI(baseUri + GLOBINGULAR_SERVICE_PATH + COUNTRY_COLLECTOR_RESOURCE_PATH
-                            + username + VISIT_RESOURCE_PATH_ACTION_REMOVE))
-                    .header(CONTENT_TYPE_HEADER_NAME, MEDIA_TYPE_JSON).header(ACCEPT_HEADER_NAME, MEDIA_TYPE_JSON)
-                    .POST(HttpRequest.BodyPublishers.ofString(objectWriter.writeValueAsString(visit))).build();
+            final HttpRequest request;
+            switch (method) {
+                case HTTP_METHOD_GET:
+                    request = HttpRequest.newBuilder(new URI(uri)).header(ACCEPT_HEADER_NAME, MEDIA_TYPE_JSON).GET()
+                            .build();
+                    break;
+                case HTTP_METHOD_POST:
+                    request = HttpRequest.newBuilder(new URI(uri)).header(CONTENT_TYPE_HEADER_NAME, MEDIA_TYPE_JSON)
+                            .header(ACCEPT_HEADER_NAME, MEDIA_TYPE_JSON).POST(HttpRequest.BodyPublishers
+                            .ofString(persistenceHandler.serialize(parameter))).build();
+                    break;
+                case HTTP_METHOD_PUT:
+                    request = HttpRequest.newBuilder(new URI(uri)).header(CONTENT_TYPE_HEADER_NAME, MEDIA_TYPE_JSON)
+                            .header(ACCEPT_HEADER_NAME, MEDIA_TYPE_JSON).PUT(HttpRequest.BodyPublishers
+                            .ofString(persistenceHandler.serialize(parameter))).build();
+                    break;
+                case HTTP_METHOD_DELETE:
+                    request = HttpRequest.newBuilder(new URI(uri)).header(ACCEPT_HEADER_NAME, MEDIA_TYPE_JSON)
+                            .DELETE().build();
+                    break;
+                default:
+                    request = null;
+                    break;
+            }
+            final HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-            final HttpResponse<InputStream> httpResponse = client.send(request,
-                    HttpResponse.BodyHandlers.ofInputStream());
-            if (httpResponse.statusCode() == HTTP_STATUS_CODE_SUCCESS) {
-                return persistenceHandler.getObjectMapper().readValue(httpResponse.body(), Boolean.class);
-            } else {
-                System.err.println("Failed to POST visit, received HTTP status code: "
-                        + httpResponse.statusCode() + " from " + httpResponse.uri().toString() + ". Visit was:");
-                System.err.println(visit);
+            for (int statusCode : acceptableStatusCodes) {
+                if (response.statusCode() == statusCode) {
+                    return persistenceHandler.parse(response.body(), returnType);
+                }
+            }
+            System.err.println("Network " + method + " request failed, received HTTP status code: "
+                    + response.statusCode() + " from " + response.uri().toString() + ".");
+            if (parameter != null) {
+                System.err.println("Parameter was:");
+                System.err.println(parameter);
+            }
+            if (username != null) {
                 System.err.println("Username was: \"" + username + "\"");
-                return false;
             }
         } catch (IOException | InterruptedException | URISyntaxException e) {
             e.printStackTrace();
-            return false;
         }
+        return defaultReturn;
     }
 }

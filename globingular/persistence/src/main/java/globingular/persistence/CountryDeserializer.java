@@ -11,7 +11,7 @@ import java.io.IOException;
 /**
  * Deserializer for {@link Country} objects.
  */
-public class CountryDeserializer extends JsonDeserializer<Country> {
+class CountryDeserializer extends JsonDeserializer<Country> {
 
     /**
      * Deserilize a Country from JSON.

@@ -12,7 +12,7 @@ import java.io.IOException;
 /**
  * Deserializer for {@link World} objects.
  */
-public class WorldDeserializer extends JsonDeserializer<World> {
+class WorldDeserializer extends JsonDeserializer<World> {
 
     /**
      * Deserialize a {@link World} from JSON.
