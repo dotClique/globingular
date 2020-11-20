@@ -278,6 +278,7 @@ public class AppController implements Initializable {
             this.setNotVisitedOnMap(country);
         }
         updateStatistics();
+        updateBadges();
     };
 
     /**
@@ -708,6 +709,7 @@ public class AppController implements Initializable {
         this.countryCollector = toCountryCollector;
         toCountryCollector.addListener(countryCollectorListenerForSaving);
         countryStatistics = new CountryStatistics(toCountryCollector);
+        badges = new Badges(toCountryCollector);
         world = toCountryCollector.getWorld();
     }
 
@@ -721,6 +723,7 @@ public class AppController implements Initializable {
         configureAutoComplete();
         countryCollector.addListener(countryCollectorListenerForMapAndStatistics);
         updateStatistics();
+        updateBadges();
         countriesList.itemsProperty().set(createSortedVisitedCountriesList(toCountryCollector));
     }
 
