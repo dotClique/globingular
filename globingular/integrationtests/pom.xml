@@ -42,13 +42,6 @@
             <artifactId>junit-jupiter-engine</artifactId>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/org.mockito/mockito-core -->
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
-            <version>${mockito.version}</version>
-        </dependency>
-
         <!-- Test with TextFX -->
         <dependency>
             <groupId>org.testfx</groupId>
@@ -83,7 +76,7 @@
                 <artifactId>maven-compiler-plugin</artifactId>
             </plugin>
 
-            <!-- Reservere porter og tilordne dem til variabler -->
+            <!-- Reserve ports and assign them as variables -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>
