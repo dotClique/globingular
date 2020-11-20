@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import globingular.core.CountryCollector;
 import globingular.core.GlobingularModule;
+import globingular.persistence.FileHandler;
 import globingular.persistence.PersistenceHandler;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
@@ -67,45 +68,61 @@ public class CountryCollectorResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public CountryCollector getCountryCollector() {
-        return this.countryCollector;
+        try {
+            return this.countryCollector;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
     }
 
     /**
      * Retrieve a {@link CountryCollector} from the request
      * and save using the current {@link #username}.
      * NB: Overwrites if there's already a value
-     * 
-     * @param collector The {@link CountryCollector} to save
-     * @return          True if successfully saved
-     * 
+     *
+     * @param newCountryCollector The {@link CountryCollector} to save at this username.
+     * @return                    True if successfully saved, false otherwise
+     *
      * @throws WebApplicationException If CountryCollector is null
      * @throws IOException             If saving fails
      */
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public boolean putCountryCollector(final CountryCollector collector) throws WebApplicationException, IOException {
-        if (collector == null) {
-            throw new WebApplicationException("CountryCollector can't be null", Response.Status.BAD_REQUEST);
+    public boolean putCountryCollector(final CountryCollector newCountryCollector)
+            throws WebApplicationException, IOException {
+        try {
+            if (newCountryCollector == null) {
+                throw new WebApplicationException("CountryCollector can't be null", Response.Status.BAD_REQUEST);
+            }
+            boolean result = this.globingularModule.putCountryCollector(username, newCountryCollector);
+            this.saveCountryCollector(username, newCountryCollector);
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
         }
-        boolean result = this.globingularModule.putCountryCollector(username, collector);
-        this.saveAppState(username, collector);
-        return result;
     }
 
     /**
      * Delete a {@link CountryCollector} saved for the current {@link #username}.
-     * 
+     *
      * @return True if successfully deleted, or if there was nothing saved using that username in the first place
-     * 
+     *
      * @throws IOException If saving fails
      */
     @DELETE
     @Produces(MediaType.APPLICATION_JSON)
     public boolean deleteCountryCollector() throws IOException {
-        boolean result = this.globingularModule.removeCountryCollector(username);
-        this.saveAppState(username, null);
-        return result;
+        try {
+            boolean result = this.globingularModule.removeCountryCollector(username);
+            this.saveCountryCollector(username, null);
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
     }
 
     /**
@@ -113,10 +130,10 @@ public class CountryCollectorResource {
      * After this operation the old username will be available,
      * and the {@link #countryCollector} can be retrieved using the new username.
      * Using {@code : (?i)} in {@code @Path} to enable case-insensitivity.
-     * 
+     *
      * @param newName The new name to rename {@link #username} to
      * @return        True if successful, false if {@link #username} doesn't exist (no content to move)
-     * 
+     *
      * @throws WebApplicationException If the new username is already taken
      * @throws IOException             If saving fails
      */
@@ -125,60 +142,77 @@ public class CountryCollectorResource {
     @Produces(MediaType.APPLICATION_JSON)
     public boolean renameCountryCollector(@PathParam("newName") final String newName)
             throws WebApplicationException, IOException {
-        if (newName == null) {
-            // If newName is null, throw exception
-            throw new WebApplicationException("New username can't be null", Response.Status.BAD_REQUEST);
+        try {
+            if (newName == null) {
+                // If newName is null, throw exception
+                throw new WebApplicationException("New username can't be null", Response.Status.BAD_REQUEST);
+            }
+            final String newNameLowercase = newName.toLowerCase();
+
+            if (this.globingularModule.isUsernameAvailable(username)) {
+                // If there's no user with that username, return false
+                return false;
+            }
+            if (!this.globingularModule.isUsernameAvailable(newNameLowercase)) {
+                // If newName is taken, throw exception
+                throw new WebApplicationException("The new username is already taken: " + newNameLowercase,
+                        Response.Status.BAD_REQUEST);
+            }
+
+            boolean resultPut = this.globingularModule.putCountryCollector(newNameLowercase, countryCollector);
+            boolean resultRemove = this.globingularModule.removeCountryCollector(username);
+
+            this.saveCountryCollector(username, null);
+            this.saveCountryCollector(newNameLowercase, countryCollector);
+
+            return resultPut && resultRemove;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
         }
-        final String newNameLowercase = newName.toLowerCase();
-
-        if (this.globingularModule.isUsernameAvailable(username)) {
-            // If there's no user with that username, return false
-            return false;
-        }
-        if (!this.globingularModule.isUsernameAvailable(newNameLowercase)) {
-            // If newName is taken, throw exception
-            throw new WebApplicationException("The new username is already taken: " + newNameLowercase,
-                    Response.Status.BAD_REQUEST);
-        }
-
-        boolean resultPut = this.globingularModule.putCountryCollector(newNameLowercase, countryCollector);
-        boolean resultRemove = this.globingularModule.removeCountryCollector(username);
-
-        this.saveAppState(username, null);
-        this.saveAppState(newNameLowercase, countryCollector);
-
-        return resultPut && resultRemove;
     }
 
     /**
      * Retrieve a {@link VisitResource} to handle requests regarding visits.
      * Using {@code : (?i)} in {@code @Path} to enable case-insensitivity.
-     * 
+     *
      * @return A {@link VisitResource}-instance to handle these requests
-     * 
+     *
      * @throws WebApplicationException If username doesn't exist
      */
     @Path("{visit : (?i)visit}")
     public VisitResource getVisit() throws WebApplicationException {
-        // If username doesn't exist, throw exception
-        if (this.globingularModule.isUsernameAvailable(username)) {
-            throw new WebApplicationException("Username doesn't exist: " + username, Response.Status.BAD_REQUEST);
+        try {
+            // If username doesn't exist, throw exception
+            if (this.globingularModule.isUsernameAvailable(username)) {
+                throw new WebApplicationException("Username doesn't exist: " + username, Response.Status.BAD_REQUEST);
+            }
+            // Return a VisitResource to handle requests
+            return new VisitResource(username, countryCollector, persistenceHandler);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
         }
-        // Return a VisitResource to handle requests
-        return new VisitResource(username, countryCollector, persistenceHandler);
     }
 
     /**
-     * Saves the app-state for the active user, if {@link #persistenceHandler} is defined.
-     * 
-     * @param user         The username to save as
-     * @param collector    The countryCollector to save
-     * 
+     * Helper method to save the given CountryCollector at the given username,
+     * if {@link #persistenceHandler} is defined.
+     *
+     * @param usernameToSaveAt The username to save at.
+     * @param countryCollectorToSave The CountryCollector to save.
+     *
      * @throws IOException If saving fails
      */
-    private void saveAppState(final String user, final CountryCollector collector) throws IOException {
-        if (this.persistenceHandler != null) {
-            this.persistenceHandler.saveState(user, collector);
+    private void saveCountryCollector(final String usernameToSaveAt, final CountryCollector countryCollectorToSave)
+            throws IOException {
+        try {
+            if (this.persistenceHandler != null) {
+                FileHandler.saveCountryCollector(persistenceHandler, usernameToSaveAt, countryCollectorToSave);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
         }
     }
 }

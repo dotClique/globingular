@@ -10,7 +10,7 @@ import globingular.core.Visit;
 import globingular.core.World;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.Map;
 
 /**
@@ -50,8 +50,8 @@ public class VisitDeserializer extends JsonDeserializer<Visit> {
 
         // If World is null, create a new "dummy" Country using countryCode as name
         Country country = world == null ? new Country(countryCode, countryCode) : world.getCountryFromCode(countryCode);
-        LocalDateTime arrival = arrivalNode.isNull() ? null : LocalDateTime.parse(arrivalNode.asText());
-        LocalDateTime departure = departureNode.isNull() ? null : LocalDateTime.parse(departureNode.asText());
+        LocalDate arrival = arrivalNode.isNull() ? null : LocalDate.parse(arrivalNode.asText());
+        LocalDate departure = departureNode.isNull() ? null : LocalDate.parse(departureNode.asText());
 
         return new Visit(country, arrival, departure);
     }

@@ -7,8 +7,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
@@ -44,13 +47,15 @@ public class CountryCollectorTest {
         world3 = new World(country4, country3, country2);
         world4 = new World(country0, country1, country2, country3, country4);
 
-        visit0 = new Visit(country0, LocalDateTime.now(), LocalDateTime.now());
-        visit1 = new Visit(country1, LocalDateTime.now(), LocalDateTime.now());
-        visit2 = new Visit(country2, LocalDateTime.now(), LocalDateTime.now());
-        visit3 = new Visit(country3, LocalDateTime.now(), LocalDateTime.now());
-        visit4 = new Visit(country4, LocalDateTime.now(), LocalDateTime.now());
+        visit0 = new Visit(country0, LocalDate.now(), LocalDate.now());
+        visit1 = new Visit(country1, LocalDate.now(), LocalDate.now());
+        visit2 = new Visit(country2, LocalDate.now(), LocalDate.now());
+        visit3 = new Visit(country3, LocalDate.now(), LocalDate.now());
+        visit4 = new Visit(country4, LocalDate.now(), LocalDate.now());
 
-        visit0_2 = new Visit(country0, LocalDateTime.of(2020, 01, 01, 12, 0, 0), LocalDateTime.of(2020, 01, 31, 12, 0, 0));
+        visit0_2 = new Visit(country0,
+                LocalDate.of(2020, 1, 1),
+                LocalDate.of(2020, 1, 31));
     }
 
     @Test
@@ -105,21 +110,21 @@ public class CountryCollectorTest {
 
         // Test to make sure that arrival and departure is set to null
         Collection<Visit> visits = cc.getVisitsToCountry(country3);
-        assertTrue(visits.stream().anyMatch(v -> v.getArrival() == null && v .getDeparture() == null));
+        assertTrue(visits.stream().anyMatch(v -> v.getArrival() == null && v.getDeparture() == null));
     }
 
     @Test
     public void testRegisterVisitWithCountryAndTimeRange() {
-        LocalDateTime dt1 = LocalDateTime.of(2020, 01, 01, 12, 0, 0);
-        LocalDateTime dt2 = LocalDateTime.of(2020, 01, 31, 12, 0, 0);
+        LocalDate ld1 = LocalDate.of(2020, 1, 1);
+        LocalDate ld2 = LocalDate.of(2020, 1, 31);
 
         CountryCollector cc = new CountryCollector(world3);
         assertFalse(cc.isVisited(country3));
-        cc.registerVisit(country3, dt1, dt2);
+        cc.registerVisit(country3, ld1, ld2);
         assertTrue(cc.isVisited(country3));
 
         Collection<Visit> visits = cc.getVisitsToCountry(country3);
-        assertTrue(visits.stream().anyMatch(v -> v.getArrival() == dt1));
+        assertTrue(visits.stream().anyMatch(v -> v.getArrival() == ld1));
     }
 
     @Test
@@ -209,8 +214,9 @@ public class CountryCollectorTest {
         assertTrue(arr1.stream().allMatch(v -> v.getCountry() == country2),
                 "The returned collection didn't only contain visits with the correct country");
 
-        Collection<Visit> arr2 = cc.getVisits().stream().filter(v -> v.getCountry() == country2).collect(Collectors.toList());
-        assertTrue(arr1.equals(arr2), "The returned collection doesn't contain all the visits to the given country");
+        Collection<Visit> arr2 =
+                cc.getVisits().stream().filter(v -> v.getCountry() == country2).collect(Collectors.toList());
+        assertEquals(arr2, arr1, "The returned collection doesn't contain all the visits to the given country");
     }
 
     @Test
@@ -231,5 +237,34 @@ public class CountryCollectorTest {
             fail("Returned set is modifiable");
         } catch (UnsupportedOperationException ignored) {
         }
+    }
+
+    @Test
+    public void testListenerIsProperlyNotified() {
+        CountryCollector cc = new CountryCollector(world1);
+        @SuppressWarnings("unchecked")
+        Listener<Visit> listener = (Listener<Visit>) mock(Listener.class);
+
+        cc.addListener(listener);
+        Visit visit = new Visit(country0, null, null);
+        cc.registerVisit(visit);
+        verify(listener).notifyListener(eq(new ChangeEvent<>(ChangeEvent.Status.ADDED, visit)));
+    }
+
+    @Test
+    public void testRemoveListener() {
+        CountryCollector cc = new CountryCollector(world1);
+        @SuppressWarnings("unchecked")
+        Listener<Visit> listener = (Listener<Visit>) mock(Listener.class);
+
+        cc.addListener(listener);
+        Visit visit = new Visit(country0, null, null);
+        cc.registerVisit(visit);
+        verify(listener).notifyListener(eq(new ChangeEvent<>(ChangeEvent.Status.ADDED, visit)));
+
+        cc.removeListener(listener);
+        assertTrue(cc.getListeners().isEmpty());
+        cc.removeVisit(visit);
+        verify(listener).notifyListener(eq(new ChangeEvent<>(ChangeEvent.Status.ADDED, visit)));
     }
 }
