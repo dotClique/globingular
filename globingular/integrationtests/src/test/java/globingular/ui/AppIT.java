@@ -114,8 +114,6 @@ public class AppIT extends ApplicationTest {
         clickOn(changeUser);
         userInput.setText("tesla");
         clickOn(changeUser);
-        final ListView<Country> countriesList1 = (ListView<Country>) parent.lookup(
-                "#countriesList");
         Assertions.assertFalse(countriesList.getItems().contains(jp));
     }
 }
