@@ -52,7 +52,7 @@
                             <Separator/>
                         </VBox>
                         <ListView fx:id="countriesList" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="3" GridPane.columnIndex="0" GridPane.columnSpan="3"/>
-                        <TextField fx:id="countryInput" onAction="#onCountryAdd" prefHeight="27.0" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+                        <TextField fx:id="countryInput" promptText="Enter country" onAction="#onCountryAdd" prefHeight="27.0" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
                         <Button fx:id="countryAdd" mnemonicParsing="false" onAction="#onCountryAdd" prefHeight="27.0" prefWidth="32" text="+" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
                         <Button fx:id="countryDel" mnemonicParsing="false" onAction="#onCountryDel" prefHeight="27.0" prefWidth="32" text="-" GridPane.rowIndex="4" GridPane.columnIndex="2"/>
                         <Button fx:id="visitsButton" onAction="#popupVisitsForSelectedCountry" text="Visits" GridPane.rowIndex="5" GridPane.halignment="CENTER" GridPane.columnIndex="0" GridPane.columnSpan="3" prefWidth="220"/>
