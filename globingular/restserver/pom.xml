@@ -12,6 +12,8 @@
     <artifactId>restserver</artifactId>
 
     <properties>
+        <restserver.main>globingular.restserver.Main</restserver.main>
+
         <!-- Changes where files are saved, see 'exec-maven-plugin' further down for more comments -->
         <datafolder>globingularServer</datafolder>
     </properties>
