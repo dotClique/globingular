@@ -235,6 +235,10 @@ public class AppController implements Initializable {
      * Whether the FXML has been fully loaded.
      */
     private boolean initialized = false;
+    /**
+     * Store observable visits-set to allow deregistering.
+     */
+    private Listener<Visit> popupVisitsSetListener;
 
     /**
      * Manager of badges about countries the user has visited.
@@ -748,19 +752,19 @@ public class AppController implements Initializable {
     /**
      * Create a readonly sorted-list view for the countries visited.
      *
-     * @param countryCollector The countryCollector to synchronize with
+     * @param targetCountryCollector The countryCollector to synchronize with
      * @return A new sorted-list view for the countries visited
      */
-    private static ObservableList<Country> createSortedVisitedCountriesList(final CountryCollector countryCollector) {
+    private ObservableList<Country> createSortedVisitedCountriesList(final CountryCollector targetCountryCollector) {
         ObservableList<Country> backing = FXCollections.observableArrayList();
         SortedList<Country> sorted
                 = new SortedList<>(backing, Comparator.comparing(Country::getShortName));
-        backing.addAll(countryCollector.getVisitedCountries());
-        countryCollector.addListener(event -> {
+        backing.addAll(targetCountryCollector.getVisitedCountries());
+        targetCountryCollector.addListener(event -> {
             final Country country = event.getElement().getCountry();
             if (event.wasAdded() && !backing.contains(country)) {
                 backing.add(country);
-            } else if (event.wasRemoved() && !countryCollector.isVisited(country)) {
+            } else if (event.wasRemoved() && !targetCountryCollector.isVisited(country)) {
                 backing.remove(country);
             }
         });
@@ -774,13 +778,14 @@ public class AppController implements Initializable {
      * @param filterCountry The Country to filter the visits on.
      * @return A reaonly observable list of all visits to the filter Country.
      */
-    private static ObservableList<Visit> createObservableVisitsToCountryList(
+    private ObservableList<Visit> createObservableVisitsToCountryList(
             final CountryCollector targetCountryCollector, final Country filterCountry) {
         ObservableList<Visit> backing = FXCollections.observableArrayList();
         SortedList<Visit> sorted = new SortedList<>(backing,
                 Comparator.comparing(v -> v.getArrival() == null ? LocalDate.MIN : v.getArrival()));
         backing.addAll(targetCountryCollector.getVisitsToCountry(filterCountry));
-        targetCountryCollector.addListener(event -> {
+
+        final Listener<Visit> listener = event -> {
             if (event.wasAdded() && !backing.contains(event.getElement())) {
                 if (event.getElement().getCountry() == filterCountry) {
                     backing.add(event.getElement());
@@ -790,7 +795,10 @@ public class AppController implements Initializable {
                     backing.remove(event.getElement());
                 }
             }
-        });
+        };
+        popupVisitsSetListener = listener;
+
+        targetCountryCollector.addListener(listener);
         return sorted;
     }
 
@@ -903,6 +911,10 @@ public class AppController implements Initializable {
         popupCountry = country;
         visitsPopup.show(root.getScene().getWindow());
         visitsPopupCountryNameLabel.setText(country.getShortName());
+
+        if (popupVisitsSetListener != null) {
+            countryCollector.removeListener(popupVisitsSetListener);
+        }
         visitsPopupListView.setItems(createObservableVisitsToCountryList(countryCollector, popupCountry));
     }
 
