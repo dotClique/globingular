@@ -230,7 +230,13 @@ public class AppController implements Initializable {
      * The listener used for saving the {@link CountryCollector} when it is updated.
      */
     private final Listener<Visit> countryCollectorListenerForSaving =
-            e -> dataAccess.putCountryCollector(countryCollector);
+            e -> {
+                if (e.wasAdded()) {
+                    dataAccess.saveVisit(countryCollector, e.getElement());
+                } else if (e.wasRemoved()) {
+                    dataAccess.deleteVisit(countryCollector, e.getElement());
+                }
+            };
 
     /**
      * Initialize fields which do not require FXML to be loaded.
@@ -560,7 +566,14 @@ public class AppController implements Initializable {
             } else {
                 dataAccess = new RestGlobingularDataAccess(App.BASE_URI, currentUser.toLowerCase(), persistence);
             }
-            changeAppState(dataAccess.getCountryCollector());
+            // Retrieve CountryCollector from dataAccess
+            CountryCollector collector = dataAccess.getCountryCollector();
+            if (collector == null) {
+                // If retrieved CountryCollector is null, create a new instance and save it
+                collector = new CountryCollector(persistence.getPredominantDefaultWorld());
+                dataAccess.saveCountryCollector(collector);
+            }
+            changeAppState(collector);
         }
     }
 
