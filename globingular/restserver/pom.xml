@@ -15,6 +15,8 @@
         <restserver.main>globingular.restserver.Main</restserver.main>
 
         <jersey.version>3.0.0-M6</jersey.version>
+
+        <!-- Changes where files are saved, see 'exec-maven-plugin' further down for more comments -->
         <datafolder>globingularServer</datafolder>
     </properties>
 
@@ -84,6 +86,23 @@
 
     <build>
         <plugins>
+            <!-- Cleaning user data -->
+            <plugin>
+                <artifactId>maven-clean-plugin</artifactId>
+                <version>${maven.clean.version}</version>
+                <configuration>
+                    <filesets>
+                        <fileset>
+                            <!-- NB: 'mvn clean -pl restserver' will only clean data-folder defined in this module  -->
+                            <!-- Run 'mvn clean' to clean all, or 'mvn clean -pl ui' to clean client-folder -->
+                            <!-- This is due to plugin configuration overwriting the one in parent-pom -->
+                            <directory>${user.home}/${datafolder}</directory>
+                            <followSymlinks>false</followSymlinks>
+                        </fileset>
+                    </filesets>
+                </configuration>
+            </plugin>
+
             <!-- Compiling code -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -106,6 +125,7 @@
                     <mainClass>${restserver.main}</mainClass>
                     <systemProperties>
                         <!-- Using SystemProperties to tell FileHandler which folder to save files in -->
+                        <!-- NB: Relative to 'user.home' -->
                         <systemProperty>
                             <key>globingular.datafolder</key>
                             <value>${datafolder}</value>

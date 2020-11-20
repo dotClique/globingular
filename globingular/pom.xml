@@ -31,6 +31,7 @@
         <jacoco.version>0.8.5</jacoco.version>
         <mockito.version>3.6.0</mockito.version>
         <junit.version>5.4.2</junit.version>
+        <maven.clean.version>2.5</maven.clean.version>
     </properties>
 
     <!-- Actual location for GitLab Pages instance, relativizes any absolute site links -->
@@ -70,7 +71,7 @@
                 <!-- Cleaning user data -->
                 <plugin>
                     <artifactId>maven-clean-plugin</artifactId>
-                    <version>2.5</version>
+                    <version>${maven.clean.version}</version>
                     <configuration>
                         <filesets>
                             <fileset>
