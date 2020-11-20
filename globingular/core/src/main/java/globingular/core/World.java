@@ -36,7 +36,7 @@ public class World {
      * @return The target Country if existing, otherwise null
      */
     public Country getCountryFromCode(final String countryCode) {
-        return countriesByCode.get(countryCode);
+        return countriesByCode.get(countryCode.toUpperCase());
     }
 
     /**
@@ -46,7 +46,7 @@ public class World {
      * @return The target Country if existing, otherwise null
      */
     public Country getCountryFromName(final String countryName) {
-        return countriesByName.get(countryName);
+        return countriesByName.get(countryName.toLowerCase());
     }
 
     /**

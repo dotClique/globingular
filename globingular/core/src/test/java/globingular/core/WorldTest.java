@@ -88,4 +88,18 @@ public class WorldTest {
         Set<Country> countries = world.getCountries();
         assertEquals(Set.of(country0, country1, country3), countries);
     }
+
+    @Test
+    public void testGetCountryByCodeIsCaseInsensitive() {
+        World world = new World(country0);
+        assertEquals(country0, world.getCountryFromCode(country0.getCountryCode().toUpperCase()));
+        assertEquals(country0, world.getCountryFromCode(country0.getCountryCode().toLowerCase()));
+    }
+
+    @Test
+    public void testGetCountryByNameIsCaseInsensitive() {
+        World world = new World(country0);
+        assertEquals(country0, world.getCountryFromName(country0.getShortName().toUpperCase()));
+        assertEquals(country0, world.getCountryFromName(country0.getShortName().toLowerCase()));
+    }
 }
