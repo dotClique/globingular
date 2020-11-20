@@ -218,10 +218,11 @@ public class AppController implements Initializable {
      * Listener responsible for updating the map and statistics when something changes in {@link #countryCollector}.
      */
     private final Listener<Visit> countryCollectorListenerForMapAndStatistics = event -> {
+        final Country country = event.getElement().getCountry();
         if (event.wasAdded()) {
-            this.setVisitedOnMap(event.getElement().getCountry());
-        } else if (event.wasRemoved() && !countryCollector.isVisited(event.getElement().getCountry())) {
-            this.setNotVisitedOnMap(event.getElement().getCountry());
+            this.setVisitedOnMap(country);
+        } else if (event.wasRemoved() && !countryCollector.isVisited(country)) {
+            this.setNotVisitedOnMap(country);
         }
         updateStatistics();
     };
@@ -674,10 +675,11 @@ public class AppController implements Initializable {
         SortedList<Country> sorted = new SortedList<>(backing, Comparator.comparing(Country::getShortName));
         backing.addAll(countryCollector.getVisitedCountries());
         countryCollector.addListener(event -> {
-            if (event.wasAdded()) {
-                backing.add(event.getElement().getCountry());
-            } else if (event.wasRemoved()) {
-                backing.remove(event.getElement().getCountry());
+            final Country country = event.getElement().getCountry();
+            if (event.wasAdded() && !backing.contains(country)) {
+                backing.add(country);
+            } else if (event.wasRemoved() && !countryCollector.isVisited(country)) {
+                backing.remove(country);
             }
         });
         return sorted;
