@@ -1,7 +1,7 @@
 [![Gitpod Ready-to-Code](https://img.shields.io/badge/Gitpod-Ready--to--Code-darkred?logo=gitpod)](https://gitpod.idi.ntnu.no/#https://gitlab.stud.idi.ntnu.no/it1901/groups-2020/gr2002/gr2002)
 
 # Globingular
-![Demo image](https://i.imgur.com/vvJMFYq.png)
+![Demo image](https://gitlab.stud.idi.ntnu.no/it1901/groups-2020/gr2002/gr2002/-/blob/i72/new-globingular-icon/icons/globingular-app-overview.png)
 
 *Demo image of finished world map. Visited countries/regions are highlighted in teal.*
 
