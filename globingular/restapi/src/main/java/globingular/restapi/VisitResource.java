@@ -59,10 +59,15 @@ public class VisitResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public boolean registerVisit(final Visit visit) throws IOException {
-        // Validate visit, register it, save app-state and return
-        boolean result = this.countryCollector.registerVisit(validateAndReturnVisit(visit));
-        saveAppState(username, countryCollector);
-        return result;
+        try {
+            // Validate visit, register it, save app-state and return
+            boolean result = this.countryCollector.registerVisit(validateAndReturnVisit(visit));
+            saveAppState(username, countryCollector);
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
     }
 
     /**
@@ -81,10 +86,15 @@ public class VisitResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public boolean removeVisit(final Visit visit) throws IOException {
-        // Validate visit, remove it, save app-state and return
-        boolean result = this.countryCollector.removeVisit(validateAndReturnVisit(visit));
-        saveAppState(username, countryCollector);
-        return result;
+        try {
+            // Validate visit, remove it, save app-state and return
+            boolean result = this.countryCollector.removeVisit(validateAndReturnVisit(visit));
+            saveAppState(username, countryCollector);
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
     }
 
     /**
