@@ -781,7 +781,7 @@ public class AppController implements Initializable {
                 Comparator.comparing(v -> v.getArrival() == null ? LocalDate.MIN : v.getArrival()));
         backing.addAll(targetCountryCollector.getVisitsToCountry(filterCountry));
         targetCountryCollector.addListener(event -> {
-            if (event.wasAdded()) {
+            if (event.wasAdded() && !backing.contains(event.getElement())) {
                 if (event.getElement().getCountry() == filterCountry) {
                     backing.add(event.getElement());
                 }
