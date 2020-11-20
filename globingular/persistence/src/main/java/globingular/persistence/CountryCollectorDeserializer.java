@@ -18,7 +18,7 @@ import java.util.Map;
  * to do this.</p>
  */
 
-public class CountryCollectorDeserializer extends JsonDeserializer<CountryCollector> {
+class CountryCollectorDeserializer extends JsonDeserializer<CountryCollector> {
 
     /**
      * Deserialize a {@link CountryCollector}-object from JSON using JsonParser.
