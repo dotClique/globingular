@@ -25,7 +25,7 @@ The RestApi module handles the actual logic of the server endpoints that the des
 ### RestServer module
 The RestServer module sets up a webserver that the desktop-client can connect in order to access the RestApi.
 
-Restserver can be run using 'mvn exec:java -pl restserver'.
+Restserver can be run using the `mvn exec:java -pl restserver` command.
 
 
 ## Testing and coverage reports
