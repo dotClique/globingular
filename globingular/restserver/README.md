@@ -1,9 +1,14 @@
-# Class diagram for the RestServer module
+# Globingular.RestServer
 
-This page only shows this modules classes. For other diagrams, like modules, dependencies and user stories: [/diagrams](/diagrams)
+The RestServer module sets up and configures the RestApi-module to make it available for Http-requests.
 
 
-## Diagram
+## Diagrams
+
+This page contains class-diagrams for the Core-module. For other diagrams see [/diagrams](/diagrams).
+
+
+## The classes
 
 The following diagram shows the classes in this module. As this is a failry light module only rigging the launch and connection of `globingular.restapi`, there's not that many classes or connections. `GlobingularObjectMapperProvider` uses `globingular.persistence` to provide serialization/deserialization of requests and responses. `Main` starts the server, using `GlobingularConfig` as launch-configuration.
 

@@ -1,9 +1,14 @@
-# Class diagram for the RestApi module
+# Globingular.RestApi
 
-This page only shows this modules classes. For other diagrams, like modules, dependencies and user stories: [/diagrams](/diagrams)
+The RestApi module contains the REST (REpresentational State Transfer) resources handling requests from the client. It handles a multi-user setup with server-side persistence, saving users appstate to files on the server, and retrieving them when a user requests one not currently in cache. The module relies on a server to configure it and start. In this project that is the RestServer-module.
 
 
-## Diagram
+## Diagrams
+
+This page contains class-diagrams for the Core-module. For other diagrams see [/diagrams](/diagrams).
+
+
+## The classes
 
 In this diagram the resources found in this module can be seen. The main class is `GlobingularService` which acts as root-node, taking in all incoming requests and passing them along to the relevant resource-class. `CountryCollectorResource` handles requests regarding `CountryCollector`s, and passing requests regarding `Visit`s to `VisitResource`, which handles these smaller update-requests. `WorldResource` only has one endpoint, returning `World`-instances without being part of a `CountryCollector`.
 
