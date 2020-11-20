@@ -6,6 +6,9 @@ import globingular.core.Visit;
 import globingular.persistence.FileHandler;
 import globingular.persistence.PersistenceHandler;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseButton;
+import javafx.stage.Popup;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,7 +22,10 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.DatePicker;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -87,16 +93,76 @@ public class AppTest extends ApplicationTest {
 
     @Test
     public void testAddAndRemoveCountryVisit() {
-        Assertions.assertFalse(countriesList.getItems().contains(au), "Clean before running tests :)");
-        countryInput.setText(au.getCountryCode());
+        Assertions.assertFalse(countriesList.getItems().contains(no), "Clean before running tests :)");
+        countryInput.setText(no.getCountryCode());
         scrollPane.setVvalue(scrollPane.getVmax());
         clickOn(countryAdd);
         Assertions.assertEquals("", countryInput.getText());
-        Assertions.assertTrue(countriesList.getItems().contains(au));
-        countryInput.setText(au.getCountryCode());
+        Assertions.assertTrue(countriesList.getItems().contains(no));
+        countryInput.setText(no.getCountryCode());
         scrollPane.setVvalue(scrollPane.getVmax());
         clickOn(countryDel);
-        Assertions.assertFalse(countriesList.getItems().contains(au));
+        Assertions.assertFalse(countriesList.getItems().contains(no));
+    }
+
+    @Test
+    public void testAddCountryVisitWithDateRange() {
+        Assertions.assertFalse(countriesList.getItems().contains(jp), "Clean before running tests :)");
+        countryInput.setText(jp.getShortName());
+        scrollPane.setVvalue(scrollPane.getVmax());
+        clickOn(visitsButton);
+
+        definePopupDialogs();
+        arrival.setValue(LocalDate.now());
+        departure.setValue(LocalDate.now());
+        clickOn(visitAdd);
+        Assertions.assertTrue(countriesList.getItems().contains(jp));
+    }
+
+    @Test
+    public void testAddCountryVisitWithInvalidDateRangeFails() {
+        cc.removeAllVisitsToCountry(jp);
+        countryInput.setText(jp.getCountryCode());
+        scrollPane.setVvalue(scrollPane.getVmax());
+        clickOn(visitsButton);
+
+        definePopupDialogs();
+        arrival.getEditor().setText("12.");
+        departure.setValue(LocalDate.now());
+        clickOn(visitAdd);
+        Assertions.assertFalse(countriesList.getItems().contains(jp));
+    }
+
+    @Test
+    public void testAddCountryVisitUsingText() {
+        assertNotNull(cc);
+        Country dk = cc.getWorld().getCountryFromName("Denmark");
+        cc.removeAllVisitsToCountry(dk);
+        countryInput.setText(dk.getCountryCode());
+        scrollPane.setVvalue(scrollPane.getVmax());
+        clickOn(visitsButton);
+
+        definePopupDialogs();
+        arrival.getEditor().setText("12.12.2020");
+        departure.getEditor().setText("12.12.2020");
+        clickOn(visitAdd);
+        Assertions.assertTrue(countriesList.getItems().contains(dk));
+    }
+
+    @Test
+    public void testUserInputValidation() {
+        var userInput = (TextField) parent.lookup("#userInput");
+        doubleClickOn(userInput, MouseButton.PRIMARY);
+        userInput.setText("lars");
+        assertFalse(userInput.getPseudoClassStates().contains(AppController.INVALID));
+        userInput.setText("Local user");
+        assertFalse(userInput.getPseudoClassStates().contains(AppController.INVALID));
+        userInput.setText("he i");
+        assertTrue(userInput.getPseudoClassStates().contains(AppController.INVALID));
+        userInput.setText("");
+        type(KeyCode.ENTER);
+        assertEquals("Local user", userInput.getText());
+
     }
 
     private void defineGeneralDialogs() {
@@ -107,5 +173,61 @@ public class AppTest extends ApplicationTest {
         countryDel = (Button) parent.lookup("#countryDel");
         visitsButton = (Button) parent.lookup("#visitsButton");
         scrollPane = (ScrollPane) parent.lookup("#mapPageScroll");
+    }
+
+    private void definePopupDialogs() {
+        Popup popup = controller.getVisitsPopup();
+        Parent popupRoot = (Parent) popup.getContent().get(0);
+        visitsList = (ListView<Visit>) popupRoot.lookup("#visitsPopupListView");
+        arrival = (DatePicker) popupRoot.lookup("#arrivalDatePicker");
+        departure = (DatePicker) popupRoot.lookup("#departureDatePicker");
+        visitAdd = (Button) popupRoot.lookup("#addVisitButton");
+        visitDel = (Button) popupRoot.lookup("#removeVisitButton");
+    }
+
+    @Test
+    public void testRemoveVisitFromPopup() {
+        assertNotNull(cc);
+        Country is = cc.getWorld().getCountryFromName("Israel");
+        cc.removeAllVisitsToCountry(is);
+        countryInput.setText(is.getCountryCode());
+        scrollPane.setVvalue(scrollPane.getVmax());
+        clickOn(visitsButton);
+
+        definePopupDialogs();
+        var date = LocalDate.now();
+        arrival.setValue(date);
+        departure.setValue(date);
+        visitsList.getItems().clear();
+        clickOn(visitAdd);
+        assertEquals(date, visitsList.getItems().get(0).getArrival());
+        arrival.setValue(date);
+        departure.setValue(date);
+        clickOn(visitDel);
+        assertTrue(visitsList.getItems().isEmpty());
+    }
+
+    @Test
+    public void testRemoveVisitsFromPopupWithList() {
+        assertNotNull(cc);
+        Country is = cc.getWorld().getCountryFromName("Israel");
+        cc.removeAllVisitsToCountry(is);
+        countryInput.setText(is.getCountryCode());
+        scrollPane.setVvalue(scrollPane.getVmax());
+        clickOn(visitsButton);
+
+        definePopupDialogs();
+        var date = LocalDate.now();
+        arrival.setValue(date);
+        departure.setValue(date);
+        visitsList.getItems().clear();
+        clickOn(visitAdd);
+        assertEquals(date, visitsList.getItems().get(0).getArrival());
+        clickOn(visitsList);
+        type(KeyCode.ENTER);
+        sleep(1000);
+        clickOn(visitDel);
+        sleep(1000);
+        assertTrue(visitsList.getItems().isEmpty());
     }
 }
