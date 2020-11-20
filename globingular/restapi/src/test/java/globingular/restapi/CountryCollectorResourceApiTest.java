@@ -78,7 +78,7 @@ public class CountryCollectorResourceApiTest {
         verifyNoInteractions(cCollector1);
         verifyNoInteractions(cCollector2);
         verifyNoInteractions(pHandler);
-        verifyNoInteractions(fHandler);
+        fHandler.verify(times(0), () -> FileHandler.saveCountryCollector(any(PersistenceHandler.class), anyString(), any(CountryCollector.class)));
     }
 
     @AfterEach
