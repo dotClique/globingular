@@ -4,7 +4,7 @@
     <parent>
         <groupId>it1901.gr2002.globingular</groupId>
         <artifactId>parent</artifactId>
-        <version>0.0.2-SNAPSHOT</version>
+        <version>1.0</version>
     </parent>
 
     <properties>
