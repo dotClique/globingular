@@ -33,7 +33,7 @@ package globingular.core {
 		+CountryCollector(World world)
 		+World getWorld()
 		+void registerVisit(Country country)
-		+void registerVisit(Country country, LocalDateTime arrival, LocalDateTime departure)
+		+void registerVisit(Country country, LocalDate arrival, LocalDate departure)
 		+void registerVisit(Visit visit)
 		+void removeAllVisitsToCountry(Country country)
 		+void removeVisit(Visit visit)
@@ -66,12 +66,12 @@ package globingular.core {
 	
 	class Visit [[java:globingular.core.Visit]] {
 		-Country country
-		-LocalDateTime arrival
-		-LocalDateTime departure
-		+Visit(Country country, LocalDateTime arrival, LocalDateTime departure)
+		-LocalDate arrival
+		-LocalDate departure
+		+Visit(Country country, LocalDate arrival, LocalDate departure)
 		+Country getCountry()
-		+LocalDateTime getArrival()
-		+LocalDateTime getDeparture()
+		+LocalDate getArrival()
+		+LocalDate getDeparture()
 		+String toString()
 	}
 	

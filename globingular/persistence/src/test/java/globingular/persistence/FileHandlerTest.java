@@ -7,7 +7,7 @@ import globingular.core.World;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -31,9 +31,9 @@ public class FileHandlerTest {
     public void testSaveCountryCollector() throws IOException {
         Country country = new Country("NO","Norway");
         CountryCollector cc = new CountryCollector(new World(country));
-        LocalDateTime ldt1 = LocalDateTime.of(2000,12,21,12,0);
-        LocalDateTime ldt2 = LocalDateTime.of(2000,12,21,12,14);
-        cc.registerVisit(new Visit(country, ldt1, ldt2));
+        LocalDate ld1 = LocalDate.of(2000,12,21);
+        LocalDate ld2 = LocalDate.of(2000,12,21);
+        cc.registerVisit(new Visit(country, ld1, ld2));
 
         FileHandler.saveCountryCollector(new PersistenceHandler(), "testsavecountrycollector", cc);
     }
@@ -42,9 +42,9 @@ public class FileHandlerTest {
     public void testSaveAndLoadCountryCollector() throws IOException {
         Country country = new Country("NO","Norway");
         CountryCollector cc = new CountryCollector(new World(country));
-        LocalDateTime ldt1 = LocalDateTime.of(2000,12,21,12,0);
-        LocalDateTime ldt2 = LocalDateTime.of(2000,12,21,12,14);
-        cc.registerVisit(new Visit(country, ldt1, ldt2));
+        LocalDate ld1 = LocalDate.of(2000,12,21);
+        LocalDate ld2 = LocalDate.of(2000,12,21);
+        cc.registerVisit(new Visit(country, ld1, ld2));
 
         FileHandler.saveCountryCollector(new PersistenceHandler(), "testsaveandloadcountrycollector", cc);
         CountryCollector cc2 = FileHandler.loadCountryCollector(new PersistenceHandler(), "testsaveandloadcountrycollector");

@@ -11,7 +11,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
@@ -47,15 +47,15 @@ public class CountryCollectorTest {
         world3 = new World(country4, country3, country2);
         world4 = new World(country0, country1, country2, country3, country4);
 
-        visit0 = new Visit(country0, LocalDateTime.now(), LocalDateTime.now());
-        visit1 = new Visit(country1, LocalDateTime.now(), LocalDateTime.now());
-        visit2 = new Visit(country2, LocalDateTime.now(), LocalDateTime.now());
-        visit3 = new Visit(country3, LocalDateTime.now(), LocalDateTime.now());
-        visit4 = new Visit(country4, LocalDateTime.now(), LocalDateTime.now());
+        visit0 = new Visit(country0, LocalDate.now(), LocalDate.now());
+        visit1 = new Visit(country1, LocalDate.now(), LocalDate.now());
+        visit2 = new Visit(country2, LocalDate.now(), LocalDate.now());
+        visit3 = new Visit(country3, LocalDate.now(), LocalDate.now());
+        visit4 = new Visit(country4, LocalDate.now(), LocalDate.now());
 
         visit0_2 = new Visit(country0,
-                LocalDateTime.of(2020, 1, 1, 12, 0, 0),
-                LocalDateTime.of(2020, 1, 31, 12, 0, 0));
+                LocalDate.of(2020, 1, 1),
+                LocalDate.of(2020, 1, 31));
     }
 
     @Test
@@ -115,16 +115,16 @@ public class CountryCollectorTest {
 
     @Test
     public void testRegisterVisitWithCountryAndTimeRange() {
-        LocalDateTime dt1 = LocalDateTime.of(2020, 01, 01, 12, 0, 0);
-        LocalDateTime dt2 = LocalDateTime.of(2020, 01, 31, 12, 0, 0);
+        LocalDate ld1 = LocalDate.of(2020, 1, 1);
+        LocalDate ld2 = LocalDate.of(2020, 1, 31);
 
         CountryCollector cc = new CountryCollector(world3);
         assertFalse(cc.isVisited(country3));
-        cc.registerVisit(country3, dt1, dt2);
+        cc.registerVisit(country3, ld1, ld2);
         assertTrue(cc.isVisited(country3));
 
         Collection<Visit> visits = cc.getVisitsToCountry(country3);
-        assertTrue(visits.stream().anyMatch(v -> v.getArrival() == dt1));
+        assertTrue(visits.stream().anyMatch(v -> v.getArrival() == ld1));
     }
 
     @Test

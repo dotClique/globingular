@@ -23,7 +23,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.File;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 public class VisitResourceTest {
 
@@ -88,7 +88,7 @@ public class VisitResourceTest {
         assertEquals("true", responseMsg);
 
         // Visit with time values
-        Visit v1 = new Visit(c1, LocalDateTime.now(), LocalDateTime.now());
+        Visit v1 = new Visit(c1, LocalDate.now(), LocalDate.now());
         request = objectMapper.writeValueAsString(v1);
 
         response = target.path("globingular").path("countryCollector")
@@ -134,7 +134,7 @@ public class VisitResourceTest {
         assertEquals("true", responseMsg);
 
         // Visit with time values
-        Visit v1 = new Visit(c1, LocalDateTime.now(), LocalDateTime.now());
+        Visit v1 = new Visit(c1, LocalDate.now(), LocalDate.now());
         request = objectMapper.writeValueAsString(v1);
 
         response = target.path("globingular").path("countryCollector")
