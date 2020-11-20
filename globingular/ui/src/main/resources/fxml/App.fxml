@@ -19,6 +19,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Tooltip?>
 <StackPane fx:id="root" prefHeight="720" prefWidth="1280.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="globingular.ui.AppController">
     <TabPane tabClosingPolicy="UNAVAILABLE" HBox.hgrow="ALWAYS">
         <Tab text="Map">
@@ -27,9 +28,11 @@
                     <padding>
                         <Insets bottom="20" left="20" right="20" top="20" />
                     </padding>
+
                     <ScrollPane maxWidth="${mapFlow.width-35}" minWidth="0" prefViewportWidth="1000" vbarPolicy="NEVER">
                         <WebView fx:id="webView" maxHeight="507" minHeight="507" minWidth="1000" prefHeight="507" />
                     </ScrollPane>
+
                     <GridPane vgap="5" hgap="5" minHeight="200">
                         <VBox GridPane.rowIndex="0" GridPane.columnIndex="0" GridPane.columnSpan="3">
                             <Label styleClass="smallHeading" labelFor="$userInput" text="User:">
@@ -39,19 +42,60 @@
                             </Label>
                             <Separator/>
                         </VBox>
+
                         <AnchorPane GridPane.rowIndex="1" GridPane.columnIndex="0" GridPane.columnSpan="3">
-                            <TextField fx:id="userInput" promptText="Username" styleClass="dualInputAndDisplay" onAction="#onChangeUserRequested" onMouseClicked="#onClickUserField" editable="false" AnchorPane.leftAnchor="0" AnchorPane.bottomAnchor="0"/>
-                            <Button fx:id="changeUser" text="Change" onAction="#onChangeUserRequested" AnchorPane.rightAnchor="0"/>
+                            <TextField fx:id="userInput" promptText="Username" styleClass="dualInputAndDisplay" onAction="#onChangeUserRequested" onMouseClicked="#onClickUserField" editable="false" AnchorPane.leftAnchor="0" AnchorPane.bottomAnchor="0">
+                                <tooltip>
+                                    <Tooltip text="Current user"/>
+                                </tooltip>
+                            </TextField>
+
+                            <Button fx:id="changeUser" text="Change" onAction="#onChangeUserRequested" AnchorPane.rightAnchor="0">
+                                <tooltip>
+                                    <Tooltip text="Change current user"/>
+                                </tooltip>
+                            </Button>
                         </AnchorPane>
-                        <ListView fx:id="countriesList" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2" GridPane.columnIndex="0" GridPane.columnSpan="3"/>
-                        <TextField fx:id="countryInput" onAction="#onCountryAdd" prefHeight="27.0" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
-                        <Button fx:id="countryAdd" mnemonicParsing="false" onAction="#onCountryAdd" prefHeight="27.0" prefWidth="27.0" text="+" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
-                        <Button fx:id="countryDel" mnemonicParsing="false" onAction="#onCountryDel" prefHeight="27.0" prefWidth="27.0" text="-" GridPane.rowIndex="3" GridPane.columnIndex="2"/>
-                        <Button fx:id="visitsButton" onAction="#popupVisitsForSelectedCountry" text="Visits" GridPane.rowIndex="4" GridPane.halignment="CENTER" GridPane.columnIndex="0" GridPane.columnSpan="3" prefWidth="220"/>
+
+                        <VBox GridPane.rowIndex="2" GridPane.columnIndex="0" GridPane.columnSpan="3">
+                            <Label styleClass="smallHeading" labelFor="$countriesList" text="Visited countries">
+                                <padding>
+                                    <Insets left="7"/>
+                                </padding>
+                            </Label>
+                            <Separator/>
+                        </VBox>
+
+                        <ListView fx:id="countriesList" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="3" GridPane.columnIndex="0" GridPane.columnSpan="3"/>
+
+                        <TextField fx:id="countryInput" promptText="Enter country" onAction="#onCountryAdd" prefHeight="27.0" GridPane.rowIndex="4" GridPane.columnIndex="0">
+                            <tooltip>
+                                <Tooltip text="Enter country"/>
+                            </tooltip>
+                        </TextField>
+
+                        <Button fx:id="countryAdd" mnemonicParsing="false" onAction="#onCountryAdd" prefHeight="27.0" prefWidth="32" text="+" GridPane.rowIndex="4" GridPane.columnIndex="1">
+                            <tooltip>
+                                <Tooltip text="Mark country as visited without dates"/>
+                            </tooltip>
+                        </Button>
+
+                        <Button fx:id="countryDel" mnemonicParsing="false" onAction="#onCountryDel" prefHeight="27.0" prefWidth="32" text="-" GridPane.rowIndex="4" GridPane.columnIndex="2">
+                            <tooltip>
+                                <Tooltip text="Remove all visits to country"/>
+                            </tooltip>
+                        </Button>
+
+                        <Button fx:id="visitsButton" onAction="#popupVisitsForSelectedCountry" text="Visits" GridPane.rowIndex="5" GridPane.halignment="CENTER" GridPane.columnIndex="0" GridPane.columnSpan="3" prefWidth="220">
+                            <tooltip>
+                                <Tooltip text="View visits to country"/>
+                            </tooltip>
+                        </Button>
                     </GridPane>
                 </FlowPane>
             </ScrollPane>
         </Tab>
+
         <Tab text="Statistics">
             <HBox fx:id="statistics" prefHeight="690.0" prefWidth="1280.0">
                 <GridPane fx:id="statisticsGrid" prefHeight="125.0" prefWidth="639.0"/>
@@ -60,6 +104,7 @@
             </HBox>
         </Tab>
     </TabPane>
+
     <GridPane fx:id="visitsPopupRoot" styleClass="popup" prefHeight="500" prefWidth="300" hgap="5" vgap="5">
         <effect>
             <DropShadow color="gray"/>
@@ -67,6 +112,7 @@
         <padding>
             <Insets left="15" right="15" top="15" bottom="15"/>
         </padding>
+
         <Label fx:id="visitsPopupCountryNameLabel" styleClass="largeHeading" GridPane.rowIndex="0" GridPane.columnSpan="2"/>
         <VBox GridPane.rowIndex="1" GridPane.columnIndex="0" GridPane.columnSpan="2">
             <Label styleClass="smallHeading" text="Visits" labelFor="$visitsPopupListView">
@@ -78,9 +124,29 @@
         </VBox>
 
         <ListView fx:id="visitsPopupListView" styleClass="largeList" GridPane.rowIndex="2" GridPane.columnIndex="0" GridPane.columnSpan="2"/>
-        <DatePicker fx:id="arrivalDatePicker" promptText="Arrival" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
-        <DatePicker fx:id="departureDatePicker" promptText="Departure" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
-        <Button fx:id="addVisitButton" onAction="#requestRegisterVisit" text="+" prefHeight="54" prefWidth="27" GridPane.halignment="RIGHT" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
-        <Button fx:id="removeVisitButton" onAction="#removeVisit" text="-" prefHeight="54" prefWidth="27" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+
+        <DatePicker fx:id="arrivalDatePicker" promptText="Arrival" GridPane.rowIndex="3" GridPane.columnIndex="0">
+            <tooltip>
+                <Tooltip text="Arrival date of visit"/>
+            </tooltip>
+        </DatePicker>
+
+        <DatePicker fx:id="departureDatePicker" promptText="Departure" GridPane.rowIndex="3" GridPane.columnIndex="1">
+            <tooltip>
+                <Tooltip text="Departure date of visit"/>
+            </tooltip>
+        </DatePicker>
+
+        <Button fx:id="addVisitButton" onAction="#requestRegisterVisit" text="+" prefHeight="54" prefWidth="27" GridPane.halignment="RIGHT" GridPane.rowIndex="4" GridPane.columnIndex="0">
+            <tooltip>
+                <Tooltip text="Register visit"/>
+            </tooltip>
+        </Button>
+
+        <Button fx:id="removeVisitButton" onAction="#removeVisit" text="-" prefHeight="54" prefWidth="27" GridPane.rowIndex="4" GridPane.columnIndex="1">
+            <tooltip>
+                <Tooltip text="Delete visit"/>
+            </tooltip>
+        </Button>
     </GridPane>
 </StackPane>
