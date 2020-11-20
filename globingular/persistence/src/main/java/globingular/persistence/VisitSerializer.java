@@ -11,7 +11,7 @@ import java.time.LocalDate;
 /**
  * Serializer for {@link Visit} objects.
  */
-public class VisitSerializer extends JsonSerializer<Visit> {
+class VisitSerializer extends JsonSerializer<Visit> {
 
     /**
      * Serialize a given {@link Visit} to JSON.

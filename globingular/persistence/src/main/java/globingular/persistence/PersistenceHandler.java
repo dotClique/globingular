@@ -1,5 +1,6 @@
 package globingular.persistence;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.InjectableValues;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -121,5 +122,38 @@ public class PersistenceHandler {
      */
     public World getDefaultWorldOr(final String worldName, final World or) {
         return this.defaultWorlds.getOrDefault(worldName, or);
+    }
+
+    /**
+     * Serialize an object into a string representation of the object.
+     * Can be parsed back into an object-instance by calling {@link #parse(String, Class)}.
+     * Returns null if it fails to serialize.
+     * 
+     * @param object The object to serialize
+     * @return       A string representation of the object
+     */
+    public String serialize(final Object object) {
+        try {
+            return this.getObjectMapper().writeValueAsString(object);
+        } catch (JsonProcessingException e) {
+            return null;
+        }
+    }
+
+    /**
+     * Parse a serialized string representation of an object back into an object-instance.
+     * Returns null if it fails to parse.
+     * 
+     * @param <T>        The type you wish to retrieve
+     * @param serialized Serialized form of the object
+     * @param type       The type you wish to retrieve
+     * @return           A new instance of {@code <T>} from the parsed version
+     */
+    public <T> T parse(final String serialized, final Class<T> type) {
+        try {
+            return this.getObjectMapper().readValue(serialized, type);
+        } catch (JsonProcessingException e) {
+            return null;
+        }
     }
 }

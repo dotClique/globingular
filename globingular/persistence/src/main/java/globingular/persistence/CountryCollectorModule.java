@@ -22,7 +22,7 @@ import globingular.core.World;
  * </p>
  */
 
-public class CountryCollectorModule extends Module {
+class CountryCollectorModule extends Module {
 
     /**
      * Container-object holding Serializers.
@@ -37,7 +37,7 @@ public class CountryCollectorModule extends Module {
     /**
      * Container-object used for Serialization and Deserialization.
      */
-    public CountryCollectorModule() {
+    CountryCollectorModule() {
         serializers.addSerializer(CountryCollector.class, new CountryCollectorSerializer());
         serializers.addSerializer(World.class, new WorldSerializer());
         serializers.addSerializer(Visit.class, new VisitSerializer());
