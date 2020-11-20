@@ -17,6 +17,7 @@ As this module isn't to complex we've not included a diagram for dependencies to
 ```plantuml
 package globingular.restapi {
     class CountryCollectorResource [[java:globingular.restapi.CountryCollectorResource]] {
+        -{static}Logger LOG
         -GlobingularModule globingularModule
         -String username
         -CountryCollector countryCollector
@@ -30,6 +31,7 @@ package globingular.restapi {
         -void saveCountryCollector(String usernameToSaveAt, CountryCollector countryCollectorToSave)
     }
     class GlobingularService [[java:globingular.restapi.GlobingularService]] {
+        -{static}Logger LOG
         -GlobingularModule globingularModule
         -PersistenceHandler persistenceHandler
         +GlobingularService(GlobingularModule globingularModule, PersistenceHandler persistenceHandler)
@@ -37,6 +39,7 @@ package globingular.restapi {
         +WorldResource getWorld()
     }
     class VisitResource [[java:globingular.restapi.VisitResource]] {
+        -{static}Logger LOG
         -String username
         -CountryCollector countryCollector
         -PersistenceHandler persistenceHandler
@@ -47,6 +50,7 @@ package globingular.restapi {
         -boolean saveAppState(String user, CountryCollector collector)
     }
     class WorldResource [[java:globingular.restapi.WorldResource]] {
+        -{static}Logger LOG
         -PersistenceHandler persistenceHandler
         +WorldResource(PersistenceHandler persistenceHandler)
         +World getWorld(String worldName)
