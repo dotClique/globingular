@@ -2,7 +2,7 @@
 
 ## Modules
 
-The project is divided into 6 separate maven modules.
+The project is divided into 7 separate maven modules.
 
 ### Aggregator module
 This modules is not a proper modules, as it doesn't contain any actual source code, and doesn't compile a JAR-package. It's purpose is only to aggregate Maven-reports from the other modules for easier development.
@@ -25,6 +25,11 @@ The RestApi module handles the actual logic of the server endpoints that the des
 ### RestServer module
 The RestServer module sets up a webserver that the desktop-client can connect in order to access the RestApi.
 
+Restserver can be run using the `mvn exec:java -pl restserver` command.
+
+### Integrationtests module
+The Integrationtests module does tests on several modules, and looks at how they work together. It tests how UI and restserver modules work together.
+
 
 ## Testing and coverage reports
 The project uses Checkstyle to enforce styling guidelines, Spotbugs to check for overlooked bugs and Jacoco to check test coverage. Auto-generated reports can be viewed by running `mvn site` in the project directory, and viewing `target/staging/index.html`. From there you can browse into the individual modules' subfolder and reports. It can be run as a local web server by executing `mvn site:run` afterwards.
@@ -44,7 +49,7 @@ To get the aggregated test results without running the tests twice, use
 ## Build and launch
 In order to build and install the project run `mvn install` in the project folder. This must be done before launching the application, by using `mvn javafx:run -pl ui`. You will need to recompile and install for every code change, as the code is being run from the local Maven repository. To speed up this process you can use our handy shortcut: `mvn install -Dfast`, which effectively just runs `mvn install -DskipTests '-Djacoco.skip' '-Dcheckstyle.skip' '-spotbugs.skip'`. If omitted, `-Dfast` will be set to `false`, overwriting any of these values passed through the command line.
 
-To launch the desktop application in 'one line', run: `mvn install; mvn javafx:run -pl ui`.
+To launch the desktop application in 'one line', run: `mvn install; mvn javafx:run -pl ui`. As described above in restserver module paragraph, `mvn exec:java -pl restserver` must be run as well in a different terminal.
 
 ### Before commiting
 Before commiting changes remember to run a full `mvn install` to make sure that checkstyle, spotbugs and all tests are run before pushing. This is to ensure that code on master is fully functional.
