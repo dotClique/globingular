@@ -351,6 +351,14 @@ public class AppController implements Initializable {
     }
 
     /**
+     * Get the Popup containing country visit details.
+     * @return The Popup.
+     */
+    public Popup getVisitsPopup() {
+        return this.visitsPopup;
+    }
+
+    /**
      * Add the inputted country-code to list of visited countries.
      */
     @FXML
@@ -805,8 +813,7 @@ public class AppController implements Initializable {
     private void requestRegisterVisit() {
         LocalDate arrival = arrivalDatePicker.getValue();
         LocalDate departure = departureDatePicker.getValue();
-        if (!arrivalDatePicker.getPseudoClassStates().contains(INVALID)
-                && !departureDatePicker.getPseudoClassStates().contains(INVALID)) {
+        if (Visit.isValidDateInterval(arrival, departure)) {
             countryCollector.registerVisit(popupCountry, arrival, departure);
 
             // Reset the date pickers
@@ -822,8 +829,8 @@ public class AppController implements Initializable {
     @FXML
     private void removeVisit() {
         // Use the date-pickers if valid, list-view-selection if not
-        if (!arrivalDatePicker.getPseudoClassStates().contains(INVALID)
-                && !departureDatePicker.getPseudoClassStates().contains(INVALID)) {
+        if (departureDatePicker.getValue() != null && arrivalDatePicker.getValue() != null
+                && Visit.isValidDateInterval(arrivalDatePicker.getValue(), departureDatePicker.getValue())) {
             // Use the date-pickers to remove a Visit with those dates.
             countryCollector.removeVisit(
                     new Visit(popupCountry, arrivalDatePicker.getValue(), departureDatePicker.getValue()));
