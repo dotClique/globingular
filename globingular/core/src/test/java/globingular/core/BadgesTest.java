@@ -36,10 +36,10 @@ public class BadgesTest {
         collector.registerVisit(country0);
         collector.registerVisit(country1);
         collector.removeAllVisitsToCountry(country3);
-        assertEquals((double)2/3,badges.getCountriesVisitedBadge(),0.001);
+        assertEquals((double)2/3,badges.getNumberOfCountriesVisitedAsPercentageOfBadge(),0.001);
         collector.removeAllVisitsToCountry(country0);
         collector.removeAllVisitsToCountry(country1);
-        assertEquals(0.0, badges.getCountriesVisitedBadge(), 0.00001);
+        assertEquals(0.0, badges.getNumberOfCountriesVisitedAsPercentageOfBadge(), 0.00001);
     }
 
     @Test

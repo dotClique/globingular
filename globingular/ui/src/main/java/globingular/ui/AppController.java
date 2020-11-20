@@ -978,7 +978,6 @@ public class AppController implements Initializable {
         pi.setStyle(" -fx-progress-color: #9cc495;");
         pi.setPadding(new Insets(PROGRESSINDICATOR_PADDING));
 
-
         return pi;
     }
 

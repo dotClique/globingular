@@ -29,7 +29,7 @@ public class Badges {
      *
      * @return number between 0 and 1, representing a percentage.
      */
-    public Double getCountriesVisitedBadge() {
+    public Double getNumberOfCountriesVisitedAsPercentageOfBadge() {
         int visited = this.collector.numberOfCountriesVisited();
         int world = this.collector.getWorld().getCountries().size();
 
@@ -81,13 +81,13 @@ public class Badges {
         Map<String, String> map = new HashMap<>();
         map.put("Europe", getContinentBadge("EU").toString());
         map.put("Asia", getContinentBadge("AS").toString());
-        map.put("North-America", getContinentBadge("NA").toString());
+        map.put("North America", getContinentBadge("NA").toString());
         map.put("Africa", getContinentBadge("AF").toString());
         map.put("Antarctica", getContinentBadge("AN").toString());
-        map.put("South-America", getContinentBadge("SA").toString());
+        map.put("South America", getContinentBadge("SA").toString());
         map.put("Oceania", getContinentBadge("OC").toString());
         map.put("World Population", getWorldPopulationBadge().toString());
-        map.put("World", getCountriesVisitedBadge().toString());
+        map.put("World", getNumberOfCountriesVisitedAsPercentageOfBadge().toString());
         return map;
     }
 
