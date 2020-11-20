@@ -30,10 +30,14 @@ AppController --> User: *Map updated with colored countries*
 
 User wants to see which date they first visited every country. They add a visit to France with a start date for the first visit. This is then visible to the user in the form of a list over visited countries.
 
+- Click France on the map, add start and end date, press add (+), this will then show up in the listView on the right hand side in the UI.
+
 
 ## User Story 3
 
 A user has been travelling through Andorra on their way from France to Spain, and wants to log the short visit to Andorra. They add the visit with a date-range (start / end). This requires that several visits can be registered on each country.
+
+- Same as User Story 2.
 
 
 ## User Story 4
@@ -82,6 +86,9 @@ User -> "~#tab: Statistics" as tab: *click on Statistics*
 
 Upon visiting every country in Europe, the user gets a badge-popup.
 
+- User adds last country in Europe either by clicking on it or writing it in the inputField.
+- Badge is then completed, so popup is displayed in lower right corner of UI.
+
 
 ## User Story 8
 
@@ -98,3 +105,7 @@ User -> "~#tab: Statistics" as tab: *click on Statistics*
 ## User Story 9
 
 A user opens the app on two separate devices, and retains their data by using a username (on a server-backend).
+
+- User clicks on Change button. They write their username in the textField, before pressing Change button again to confirm the user change.
+- If the user is a new user, an empty map and listView will appear.
+- If the user is an existing one, the state for this user will be retrieved from the server and displayed to the user in the UI.
