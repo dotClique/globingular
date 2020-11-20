@@ -57,8 +57,6 @@ public class VisitResourceServerTest {
         c2 = new Country("SE", "Sweden");
         world = new World("testWorld", c1, c2);
         cc = new CountryCollector(world);
-
-        System.out.println(username);
     }
 
     @AfterAll
