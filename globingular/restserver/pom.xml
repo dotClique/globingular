@@ -12,6 +12,8 @@
     <artifactId>restserver</artifactId>
 
     <properties>
+        <restserver.main>globingular.restserver.Main</restserver.main>
+
         <jersey.version>3.0.0-M6</jersey.version>
         <datafolder>globingularServer</datafolder>
     </properties>
@@ -103,6 +105,7 @@
                 <configuration>
                     <mainClass>${restserver.main}</mainClass>
                     <systemProperties>
+                        <!-- Using SystemProperties to tell FileHandler which folder to save files in -->
                         <systemProperty>
                             <key>globingular.datafolder</key>
                             <value>${datafolder}</value>

@@ -16,8 +16,6 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <ui.main>globingular.ui.App</ui.main>
-        <restserver.main>globingular.restserver.Main</restserver.main>
 
         <!-- Adding -Dfast to maven commands will speed up the process by skipping tests, checkstyle and spotbugs -->
         <fast>false</fast>
