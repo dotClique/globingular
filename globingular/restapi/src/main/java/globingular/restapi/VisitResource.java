@@ -2,6 +2,9 @@ package globingular.restapi;
 
 import java.io.IOException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import globingular.core.CountryCollector;
 import globingular.core.Visit;
 import globingular.persistence.FileHandler;
@@ -17,6 +20,11 @@ import jakarta.ws.rs.core.MediaType;
  * See {@link CountryCollectorResource#getVisit()}
  */
 public class VisitResource {
+
+    /**
+     * Logger-instance used to log in terminal.
+     */
+    private static final Logger LOG = LoggerFactory.getLogger(VisitResource.class);
 
     /**
      * The username this instance is for.
@@ -61,6 +69,7 @@ public class VisitResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public boolean registerVisit(final Visit visit) throws IOException {
+        LOG.debug("registerVisit({}, {})", username, visit);
         try {
             // Validate visit, register it, save app-state and return
             boolean result = this.countryCollector.registerVisit(validateAndReturnVisit(visit));
@@ -91,6 +100,7 @@ public class VisitResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public boolean removeVisit(final Visit visit) throws IOException {
+        LOG.debug("removeVisit({}, {})", username, visit);
         try {
             // Validate visit, remove it, save app-state and return
             boolean result = this.countryCollector.removeVisit(validateAndReturnVisit(visit));

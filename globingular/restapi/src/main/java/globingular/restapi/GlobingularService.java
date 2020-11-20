@@ -1,5 +1,8 @@
 package globingular.restapi;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import globingular.core.CountryCollector;
 import globingular.persistence.FileHandler;
 import globingular.persistence.PersistenceHandler;
@@ -14,6 +17,11 @@ import jakarta.ws.rs.PathParam;
  */
 @Path("{globingular : (?i)globingular}")
 public class GlobingularService {
+
+    /**
+     * Logger-instance used to log in terminal.
+     */
+    private static final Logger LOG = LoggerFactory.getLogger(GlobingularService.class);
 
     /**
      * The service's {@link GlobingularModule} instance, holding app-state.
@@ -47,6 +55,7 @@ public class GlobingularService {
      */
     @Path("{countryCollector : (?i)countryCollector}/{username}")
     public CountryCollectorResource getCountryCollector(@PathParam("username") final String username) {
+        LOG.info("->CountryCollectorResource({})", username);
         // Only allow lowercase usernames
         String usernameLowercase = username.toLowerCase();
         // Throw exception if username is invalid
@@ -60,8 +69,10 @@ public class GlobingularService {
         if (countryCollector == null && persistenceHandler != null) {
             countryCollector = FileHandler.loadCountryCollector(persistenceHandler, usernameLowercase);
         }
-        return new CountryCollectorResource(this.globingularModule, usernameLowercase, countryCollector,
-                this.persistenceHandler);
+        CountryCollectorResource resource = new CountryCollectorResource(this.globingularModule, usernameLowercase,
+                countryCollector, this.persistenceHandler);
+        LOG.debug("CountryCollectorResource for {} : {}", username, resource);
+        return resource;
     }
 
     /**
@@ -72,7 +83,10 @@ public class GlobingularService {
      */
     @Path("{world : (?i)world}")
     public WorldResource getWorld() {
+        LOG.debug("->WorldResource()");
         // Return a WorldResource to handle requests
-        return new WorldResource(persistenceHandler);
+        WorldResource resource = new WorldResource(persistenceHandler);
+        LOG.debug("WorldResource: {}", resource);
+        return resource;
     }
 }
