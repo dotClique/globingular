@@ -111,7 +111,7 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.4</version>
                 <configuration>
-                    <mainClass>${package}.App</mainClass>
+                    <mainClass>${ui.main}</mainClass>
                     <options>
                         <option>--add-exports</option>
                         <option>javafx.base/com.sun.javafx.event=org.controlsfx.controls</option>
