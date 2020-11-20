@@ -23,9 +23,7 @@ The UI module handles the graphical part of the desktop application. It is depen
 The RestApi module handles the actual logic of the server endpoints that the desktop-client can contact for loading and storing app-state. The API is restful, which means that each request stands for itself, and state isn't stored between requests.
 
 ### RestServer module
-The RestServer module sets up a webserver that the desktop-client can connect in order to access the RestApi.
-
-Restserver can be run using the `mvn exec:java -pl restserver` command.
+The RestServer module sets up a webserver that the desktop-client can connect in order to access the RestApi. For instructions on launching the server, see [Build and launch](#build-and-launch).
 
 ### Integrationtests module
 The Integrationtests module does tests on several modules, and looks at how they work together. It tests how UI and restserver modules work together.
@@ -47,9 +45,15 @@ To get the aggregated test results without running the tests twice, use
 **Spotbugs** cannot be aggregated, so any errors are only visible on the page for each individual module, for example `target/staging/core/project-reports.html`, or when running `mvn verify`.
 
 ## Build and launch
+
+### Build
 In order to build and install the project run `mvn install` in the project folder. This must be done before launching the application, by using `mvn javafx:run -pl ui`. You will need to recompile and install for every code change, as the code is being run from the local Maven repository. To speed up this process you can use our handy shortcut: `mvn install -Dfast`, which effectively just runs `mvn install -DskipTests '-Djacoco.skip' '-Dcheckstyle.skip' '-spotbugs.skip'`. If omitted, `-Dfast` will be set to `false`, overwriting any of these values passed through the command line.
 
-To launch the desktop application in 'one line', run: `mvn install; mvn javafx:run -pl ui`. As described above in restserver module paragraph, `mvn exec:java -pl restserver` must be run as well in a different terminal.
+### Client
+To launch the desktop application in 'one line', run: `mvn install; mvn javafx:run -pl ui`. Remember to launch the server as well (next paragraph).
+
+### Server
+As described above in restserver module paragraph, `mvn exec:java -pl restserver` must be run as well in a different terminal. To select a logging level for the server use the parameter `-Dorg.slf4j.simpleLogger.defaultLogLevel`, like so: `mvn exec:java -pl restserver -Dorg.slf4j.simpleLogger.defaultLogLevel=debug`.
 
 ### Before commiting
 Before commiting changes remember to run a full `mvn install` to make sure that checkstyle, spotbugs and all tests are run before pushing. This is to ensure that code on master is fully functional.

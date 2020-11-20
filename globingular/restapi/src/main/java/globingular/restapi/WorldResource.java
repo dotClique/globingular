@@ -1,5 +1,8 @@
 package globingular.restapi;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import globingular.core.World;
 import globingular.persistence.PersistenceHandler;
 import jakarta.ws.rs.GET;
@@ -13,6 +16,11 @@ import jakarta.ws.rs.core.MediaType;
  * See {@link GlobingularService#getWorld()}
  */
 public class WorldResource {
+
+    /**
+     * Logger-instance used to log in terminal.
+     */
+    private static final Logger LOG = LoggerFactory.getLogger(WorldResource.class);
 
     /**
      * The {@link PersistenceHandler} used to store World data.
@@ -40,6 +48,7 @@ public class WorldResource {
     @Path("{worldName}")
     @Produces(MediaType.APPLICATION_JSON)
     public World getWorld(@PathParam("worldName") final String worldName) {
+        LOG.debug("getWorld({})", worldName);
         try {
             if (persistenceHandler != null) {
                 return persistenceHandler.getDefaultWorld(worldName);

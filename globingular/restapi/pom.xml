@@ -11,6 +11,10 @@
 
     <artifactId>restapi</artifactId>
 
+    <properties>
+        <slf4j.version>1.7.30</slf4j.version>
+    </properties>
+
     <dependencies>
         <!-- Dependency injection annotations -->
         <dependency>
@@ -57,6 +61,19 @@
             <artifactId>mockito-inline</artifactId>
             <version>${mockito.version}</version>
             <scope>test</scope>
+        </dependency>
+
+        <!-- Logging with slf4j -->
+        <!-- To run at debug-level add flag: '-Dorg.slf4j.simpleLogger.defaultLogLevel=debug' -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>${slf4j.version}</version>
         </dependency>
     </dependencies>
 

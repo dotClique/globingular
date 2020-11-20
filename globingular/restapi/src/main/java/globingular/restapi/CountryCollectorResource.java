@@ -2,6 +2,9 @@ package globingular.restapi;
 
 import java.io.IOException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import globingular.core.CountryCollector;
 import globingular.core.GlobingularModule;
 import globingular.persistence.FileHandler;
@@ -24,6 +27,11 @@ import jakarta.ws.rs.core.Response;
  * See {@link GlobingularService#getCountryCollector(String)}
  */
 public class CountryCollectorResource {
+
+    /**
+     * Logger-instance used to log in terminal.
+     */
+    private static final Logger LOG = LoggerFactory.getLogger(CountryCollectorResource.class);
 
     /**
      * This instance's {@link GlobingularModule}.
@@ -68,6 +76,7 @@ public class CountryCollectorResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public CountryCollector getCountryCollector() {
+        LOG.debug("getCountryCollector({})", username);
         try {
             return this.countryCollector;
         } catch (Exception e) {
@@ -92,6 +101,7 @@ public class CountryCollectorResource {
     @Produces(MediaType.APPLICATION_JSON)
     public boolean putCountryCollector(final CountryCollector newCountryCollector)
             throws WebApplicationException, IOException {
+        LOG.debug("putCountryCollector({}, {})", username, newCountryCollector);
         try {
             if (newCountryCollector == null) {
                 throw new WebApplicationException("CountryCollector can't be null", Response.Status.BAD_REQUEST);
@@ -115,6 +125,7 @@ public class CountryCollectorResource {
     @DELETE
     @Produces(MediaType.APPLICATION_JSON)
     public boolean deleteCountryCollector() throws IOException {
+        LOG.debug("deleteContryCollecto({})", username);
         try {
             boolean result = this.globingularModule.removeCountryCollector(username);
             this.saveCountryCollector(username, null);
@@ -142,6 +153,7 @@ public class CountryCollectorResource {
     @Produces(MediaType.APPLICATION_JSON)
     public boolean renameCountryCollector(@PathParam("newName") final String newName)
             throws WebApplicationException, IOException {
+        LOG.debug("renameCountryCollector({}, {})", username, newName);
         try {
             if (newName == null) {
                 // If newName is null, throw exception
@@ -182,13 +194,16 @@ public class CountryCollectorResource {
      */
     @Path("{visit : (?i)visit}")
     public VisitResource getVisit() throws WebApplicationException {
+        LOG.debug("->VisitResource({})", username);
         try {
             // If username doesn't exist, throw exception
             if (this.globingularModule.isUsernameAvailable(username)) {
                 throw new WebApplicationException("Username doesn't exist: " + username, Response.Status.BAD_REQUEST);
             }
             // Return a VisitResource to handle requests
-            return new VisitResource(username, countryCollector, persistenceHandler);
+            VisitResource resource = new VisitResource(username, countryCollector, persistenceHandler);
+            LOG.debug("VisitResouce for {} : {}", username, resource);
+            return resource;
         } catch (Exception e) {
             e.printStackTrace();
             throw e;
@@ -206,13 +221,8 @@ public class CountryCollectorResource {
      */
     private void saveCountryCollector(final String usernameToSaveAt, final CountryCollector countryCollectorToSave)
             throws IOException {
-        try {
-            if (this.persistenceHandler != null) {
-                FileHandler.saveCountryCollector(persistenceHandler, usernameToSaveAt, countryCollectorToSave);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw e;
+        if (this.persistenceHandler != null) {
+            FileHandler.saveCountryCollector(persistenceHandler, usernameToSaveAt, countryCollectorToSave);
         }
     }
 }
