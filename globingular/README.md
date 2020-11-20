@@ -25,6 +25,8 @@ The RestApi module handles the actual logic of the server endpoints that the des
 ### RestServer module
 The RestServer module sets up a webserver that the desktop-client can connect in order to access the RestApi.
 
+Restserver can be run using 'mvn exec:java -pl restserver'.
+
 
 ## Testing and coverage reports
 The project uses Checkstyle to enforce styling guidelines, Spotbugs to check for overlooked bugs and Jacoco to check test coverage. Auto-generated reports can be viewed by running `mvn site` in the project directory, and viewing `target/staging/index.html`. From there you can browse into the individual modules' subfolder and reports. It can be run as a local web server by executing `mvn site:run` afterwards.
