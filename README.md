@@ -1,9 +1,9 @@
 [![Gitpod Ready-to-Code](https://img.shields.io/badge/Gitpod-Ready--to--Code-darkred?logo=gitpod)](https://gitpod.idi.ntnu.no/#https://gitlab.stud.idi.ntnu.no/it1901/groups-2020/gr2002/gr2002)
 
 # Globingular
-![](https://gitlab.stud.idi.ntnu.no/it1901/groups-2020/gr2002/gr2002/-/blob/i72/new-globingular-icon/icons/globingular-app-overview.png)
+![](./icons/globingular-app-overview.png)
 
-*Demo image of finished world map. Visited countries/regions are highlighted in teal.*
+*Demo image of finished world map. Visited countries/regions are highlighted in green, and the different views are shown. Lines indicate actions that lead to the different views.*
 
 This is the repository for Group 2002's team project Globingular in the course IT1901-2020 of the Norwegian University of Science and Technology. Globingular is a solution for logging one's travels, currently supporting country-level precision. As development continues, the app is expected to support:
 - cloud-storage
@@ -25,7 +25,7 @@ The project is split into several modules for proper modularization and allowing
 
 ### Testing, building and launching
 
-Please see the [source-directory](/globingular) for details on testing, building and launching of the 
+Please see the [source-directory](/globingular) for details on testing, building and launching of the project.
 
 
 ## Diagrams
