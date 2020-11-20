@@ -68,7 +68,12 @@ public class CountryCollectorResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public CountryCollector getCountryCollector() {
-        return this.countryCollector;
+        try {
+            return this.countryCollector;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
     }
 
     /**
@@ -87,12 +92,17 @@ public class CountryCollectorResource {
     @Produces(MediaType.APPLICATION_JSON)
     public boolean putCountryCollector(final CountryCollector newCountryCollector)
             throws WebApplicationException, IOException {
-        if (newCountryCollector == null) {
-            throw new WebApplicationException("CountryCollector can't be null", Response.Status.BAD_REQUEST);
+        try {
+            if (newCountryCollector == null) {
+                throw new WebApplicationException("CountryCollector can't be null", Response.Status.BAD_REQUEST);
+            }
+            boolean result = this.globingularModule.putCountryCollector(username, newCountryCollector);
+            this.saveCountryCollector(username, newCountryCollector);
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
         }
-        boolean result = this.globingularModule.putCountryCollector(username, newCountryCollector);
-        this.saveCountryCollector(username, newCountryCollector);
-        return result;
     }
 
     /**
@@ -105,9 +115,14 @@ public class CountryCollectorResource {
     @DELETE
     @Produces(MediaType.APPLICATION_JSON)
     public boolean deleteCountryCollector() throws IOException {
-        boolean result = this.globingularModule.removeCountryCollector(username);
-        this.saveCountryCollector(username, null);
-        return result;
+        try {
+            boolean result = this.globingularModule.removeCountryCollector(username);
+            this.saveCountryCollector(username, null);
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
     }
 
     /**
@@ -127,29 +142,34 @@ public class CountryCollectorResource {
     @Produces(MediaType.APPLICATION_JSON)
     public boolean renameCountryCollector(@PathParam("newName") final String newName)
             throws WebApplicationException, IOException {
-        if (newName == null) {
-            // If newName is null, throw exception
-            throw new WebApplicationException("New username can't be null", Response.Status.BAD_REQUEST);
+        try {
+            if (newName == null) {
+                // If newName is null, throw exception
+                throw new WebApplicationException("New username can't be null", Response.Status.BAD_REQUEST);
+            }
+            final String newNameLowercase = newName.toLowerCase();
+
+            if (this.globingularModule.isUsernameAvailable(username)) {
+                // If there's no user with that username, return false
+                return false;
+            }
+            if (!this.globingularModule.isUsernameAvailable(newNameLowercase)) {
+                // If newName is taken, throw exception
+                throw new WebApplicationException("The new username is already taken: " + newNameLowercase,
+                        Response.Status.BAD_REQUEST);
+            }
+
+            boolean resultPut = this.globingularModule.putCountryCollector(newNameLowercase, countryCollector);
+            boolean resultRemove = this.globingularModule.removeCountryCollector(username);
+
+            this.saveCountryCollector(username, null);
+            this.saveCountryCollector(newNameLowercase, countryCollector);
+
+            return resultPut && resultRemove;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
         }
-        final String newNameLowercase = newName.toLowerCase();
-
-        if (this.globingularModule.isUsernameAvailable(username)) {
-            // If there's no user with that username, return false
-            return false;
-        }
-        if (!this.globingularModule.isUsernameAvailable(newNameLowercase)) {
-            // If newName is taken, throw exception
-            throw new WebApplicationException("The new username is already taken: " + newNameLowercase,
-                    Response.Status.BAD_REQUEST);
-        }
-
-        boolean resultPut = this.globingularModule.putCountryCollector(newNameLowercase, countryCollector);
-        boolean resultRemove = this.globingularModule.removeCountryCollector(username);
-
-        this.saveCountryCollector(username, null);
-        this.saveCountryCollector(newNameLowercase, countryCollector);
-
-        return resultPut && resultRemove;
     }
 
     /**
@@ -162,12 +182,17 @@ public class CountryCollectorResource {
      */
     @Path("{visit : (?i)visit}")
     public VisitResource getVisit() throws WebApplicationException {
-        // If username doesn't exist, throw exception
-        if (this.globingularModule.isUsernameAvailable(username)) {
-            throw new WebApplicationException("Username doesn't exist: " + username, Response.Status.BAD_REQUEST);
+        try {
+            // If username doesn't exist, throw exception
+            if (this.globingularModule.isUsernameAvailable(username)) {
+                throw new WebApplicationException("Username doesn't exist: " + username, Response.Status.BAD_REQUEST);
+            }
+            // Return a VisitResource to handle requests
+            return new VisitResource(username, countryCollector, persistenceHandler);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
         }
-        // Return a VisitResource to handle requests
-        return new VisitResource(username, countryCollector, persistenceHandler);
     }
 
     /**
@@ -181,8 +206,13 @@ public class CountryCollectorResource {
      */
     private void saveCountryCollector(final String usernameToSaveAt, final CountryCollector countryCollectorToSave)
             throws IOException {
-        if (this.persistenceHandler != null) {
-            FileHandler.saveCountryCollector(persistenceHandler, usernameToSaveAt, countryCollectorToSave);
+        try {
+            if (this.persistenceHandler != null) {
+                FileHandler.saveCountryCollector(persistenceHandler, usernameToSaveAt, countryCollectorToSave);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
         }
     }
 }

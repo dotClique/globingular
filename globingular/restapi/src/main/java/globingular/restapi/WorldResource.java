@@ -40,9 +40,14 @@ public class WorldResource {
     @Path("{worldName}")
     @Produces(MediaType.APPLICATION_JSON)
     public World getWorld(@PathParam("worldName") final String worldName) {
-        if (persistenceHandler != null) {
-            return persistenceHandler.getDefaultWorld(worldName);
+        try {
+            if (persistenceHandler != null) {
+                return persistenceHandler.getDefaultWorld(worldName);
+            }
+            return null;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
         }
-        return null;
     }
 }

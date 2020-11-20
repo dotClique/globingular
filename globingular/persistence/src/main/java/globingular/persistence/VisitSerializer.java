@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import globingular.core.Visit;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 /**
  * Serializer for {@link Visit} objects.
@@ -30,11 +30,11 @@ public class VisitSerializer extends JsonSerializer<Visit> {
         gen.writeString(value.getCountry().getCountryCode());
 
         gen.writeFieldName("arrival");
-        LocalDateTime arrival = value.getArrival();
+        LocalDate arrival = value.getArrival();
         gen.writeString(arrival == null ? null : arrival.toString());
 
         gen.writeFieldName("departure");
-        LocalDateTime departure = value.getDeparture();
+        LocalDate departure = value.getDeparture();
         gen.writeString(departure == null ? null : departure.toString());
 
         gen.writeEndObject();

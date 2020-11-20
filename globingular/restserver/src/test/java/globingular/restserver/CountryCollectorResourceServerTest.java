@@ -6,7 +6,6 @@ import globingular.core.Country;
 import globingular.core.CountryCollector;
 import globingular.core.World;
 import globingular.persistence.FileHandler;
-import globingular.persistence.PersistenceHandler;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
@@ -24,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.File;
 
-public class CountryCollectorResourceTest {
+public class CountryCollectorResourceServerTest {
 
     private static HttpServer server;
     private static WebTarget target;
