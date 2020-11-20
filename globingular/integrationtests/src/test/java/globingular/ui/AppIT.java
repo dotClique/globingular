@@ -104,6 +104,7 @@ public class AppIT extends ApplicationTest {
     public void checkCountriesUnclickedWhenChangeUser() {
         final ListView<Country> countriesList = (ListView<Country>) parent.lookup(
                 "#countriesList");
+        final ScrollPane scrollPane = (ScrollPane) parent.lookup("#mapPageScroll");
         final CountryCollector cc = controller.getCountryCollector();
         Country jp = cc.getWorld().getCountryFromCode("JP");
         final TextField countryInput = (TextField) parent.lookup("#countryInput");
@@ -111,6 +112,9 @@ public class AppIT extends ApplicationTest {
         countryInput.setText("Japan");
         final Button countryAdd = (Button) parent.lookup("#countryAdd");
         final Button changeUser = (Button) parent.lookup("#changeUser");
+        clickOn(countryAdd);
+        scrollPane.setVvalue(scrollPane.getVmax());
+
         clickOn(changeUser);
         userInput.setText("tesla");
         clickOn(changeUser);
