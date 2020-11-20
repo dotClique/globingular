@@ -38,6 +38,26 @@ public class RestGlobingularDataAccess implements GlobingularDataAccess {
     public static final int HTTP_STATUS_CODE_SUCCESS = 200;
 
     /**
+     * HTTP method for deleting.
+     */
+    public static final String HTTP_METHOD_DELETE = "DELETE";
+
+    /**
+     * HTTP method for getting.
+     */
+    public static final String HTTP_METHOD_GET = "GET";
+
+    /**
+     * HTTP method for putting.
+     */
+    public static final String HTTP_METHOD_PUT = "PUT";
+
+    /**
+     * HTTP method for posting.
+     */
+    public static final String HTTP_METHOD_POST = "POST";
+
+    /**
      * The path to the Globingular-service, relative to the base-URI.
      */
     private static final String GLOBINGULAR_SERVICE_PATH = "globingular/";
@@ -101,7 +121,7 @@ public class RestGlobingularDataAccess implements GlobingularDataAccess {
     @Override
     public CountryCollector getCountryCollector() {
         final String uri = baseUri + GLOBINGULAR_SERVICE_PATH + COUNTRY_COLLECTOR_RESOURCE_PATH + username;
-        return executeRequest("GET", uri, null, CountryCollector.class, null, HTTP_STATUS_CODE_SUCCESS);
+        return executeRequest(HTTP_METHOD_GET, uri, null, CountryCollector.class, null, HTTP_STATUS_CODE_SUCCESS);
     }
 
     /**
@@ -110,7 +130,7 @@ public class RestGlobingularDataAccess implements GlobingularDataAccess {
     @Override
     public boolean saveCountryCollector(final CountryCollector collector) {
         final String uri = baseUri + GLOBINGULAR_SERVICE_PATH + COUNTRY_COLLECTOR_RESOURCE_PATH + username;
-        return executeRequest("PUT", uri, collector);
+        return executeRequest(HTTP_METHOD_PUT, uri, collector);
     }
 
     /**
@@ -119,7 +139,7 @@ public class RestGlobingularDataAccess implements GlobingularDataAccess {
     public boolean renameCountryCollector(final String newUsername, final CountryCollector collector) {
         final String uri = baseUri + GLOBINGULAR_SERVICE_PATH + COUNTRY_COLLECTOR_RESOURCE_PATH
                 + username + COUNTRY_COLLECTOR_RESOURCE_ACTION_RENAME + newUsername;
-        return executeRequest("POST", uri, null);
+        return executeRequest(HTTP_METHOD_POST, uri, null);
     }
 
     /**
@@ -128,7 +148,7 @@ public class RestGlobingularDataAccess implements GlobingularDataAccess {
     @Override
     public boolean deleteCountryCollector() {
         final String uri = baseUri + GLOBINGULAR_SERVICE_PATH + COUNTRY_COLLECTOR_RESOURCE_PATH + username;
-        return executeRequest("DELETE", uri, null);
+        return executeRequest(HTTP_METHOD_DELETE, uri, null);
     }
 
     /**
@@ -138,7 +158,7 @@ public class RestGlobingularDataAccess implements GlobingularDataAccess {
     public boolean saveVisit(final CountryCollector collector, final Visit visit) {
         final String uri = baseUri + GLOBINGULAR_SERVICE_PATH + COUNTRY_COLLECTOR_RESOURCE_PATH
                 + username + VISIT_RESOURCE_PATH_ACTION_REGISTER;
-        return executeRequest("POST", uri, visit);
+        return executeRequest(HTTP_METHOD_POST, uri, visit);
     }
 
     /**
@@ -148,7 +168,7 @@ public class RestGlobingularDataAccess implements GlobingularDataAccess {
     public boolean deleteVisit(final CountryCollector collector, final Visit visit) {
         final String uri = baseUri + GLOBINGULAR_SERVICE_PATH + COUNTRY_COLLECTOR_RESOURCE_PATH
                 + username + VISIT_RESOURCE_PATH_ACTION_REMOVE;
-        return executeRequest("POST", uri, visit);
+        return executeRequest(HTTP_METHOD_POST, uri, visit);
     }
 
 
@@ -187,21 +207,21 @@ public class RestGlobingularDataAccess implements GlobingularDataAccess {
         try {
             final HttpRequest request;
             switch (method) {
-                case "GET":
+                case HTTP_METHOD_GET:
                     request = HttpRequest.newBuilder(new URI(uri)).header(ACCEPT_HEADER_NAME, MEDIA_TYPE_JSON).GET()
                             .build();
                     break;
-                case "POST":
+                case HTTP_METHOD_POST:
                     request = HttpRequest.newBuilder(new URI(uri)).header(CONTENT_TYPE_HEADER_NAME, MEDIA_TYPE_JSON)
                             .header(ACCEPT_HEADER_NAME, MEDIA_TYPE_JSON).POST(HttpRequest.BodyPublishers
                             .ofString(persistenceHandler.serialize(parameter))).build();
                     break;
-                case "PUT":
+                case HTTP_METHOD_PUT:
                     request = HttpRequest.newBuilder(new URI(uri)).header(CONTENT_TYPE_HEADER_NAME, MEDIA_TYPE_JSON)
                             .header(ACCEPT_HEADER_NAME, MEDIA_TYPE_JSON).PUT(HttpRequest.BodyPublishers
                             .ofString(persistenceHandler.serialize(parameter))).build();
                     break;
-                case "DELETE":
+                case HTTP_METHOD_DELETE:
                     request = HttpRequest.newBuilder(new URI(uri)).header(ACCEPT_HEADER_NAME, MEDIA_TYPE_JSON)
                             .DELETE().build();
                     break;
