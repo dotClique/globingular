@@ -2,8 +2,12 @@ package globingular.ui;
 
 import globingular.core.Country;
 import globingular.core.CountryCollector;
+import globingular.core.Visit;
+import globingular.persistence.FileHandler;
+import globingular.persistence.PersistenceHandler;
 import javafx.scene.control.ScrollPane;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.testfx.framework.junit5.ApplicationTest;
 import javafx.fxml.FXMLLoader;
@@ -13,17 +17,39 @@ import javafx.stage.Stage;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.DatePicker;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import java.io.IOException;
+import java.time.LocalDate;
+
 /**
- * <p>The AppTest is a test class that allows for testing of the
- * functionality in AppController.</p>
+ * <p>
+ * The AppTest is a test class that allows for testing of the functionality in
+ * AppController.
+ * </p>
  */
 public class AppTest extends ApplicationTest {
 
     private Parent parent;
     private AppController controller;
+
+    private ListView<Country> countriesList;
+    private CountryCollector cc;
+    private TextField countryInput;
+    private Button countryAdd;
+    private Button countryDel;
+    private Button visitsButton;
+    private ScrollPane scrollPane;
+
+    private ListView<Visit> visitsList;
+    private DatePicker arrival;
+    private DatePicker departure;
+    private Button visitAdd;
+    private Button visitDel;
+
+    private Country au, jp, no;
 
     @Override
     public void start(final Stage stage) throws Exception {
@@ -34,26 +60,34 @@ public class AppTest extends ApplicationTest {
         stage.show();
     }
 
-    @Test
-    public void testController() {
-        final ListView<Country> countriesList = (ListView<Country>) parent.lookup(
-                "#countriesList");
-        final CountryCollector cc = controller.getCountryCollector();
+    @BeforeEach
+    public void beforeEach() throws IllegalArgumentException, IOException {
+        defineGeneralDialogs();
+
         assertNotNull(cc);
         assertNotNull(cc.getWorld());
-        final TextField countryInput = (TextField) parent.lookup("#countryInput");
-        final Button countryAdd = (Button) parent.lookup("#countryAdd");
-        final Button countryDel = (Button) parent.lookup("#countryDel");
-        final ScrollPane scrollPane = (ScrollPane) parent.lookup("#mapPageScroll");
-        Country au = cc.getWorld().getCountryFromCode("AU");
+        au = cc.getWorld().getCountryFromCode("AU");
+        jp = cc.getWorld().getCountryFromCode("JP");
+        no = cc.getWorld().getCountryFromCode("NO");
 
-        if (countriesList.getItems().contains(au)) {
-            countryInput.setText(au.getCountryCode());
-            scrollPane.setVvalue(scrollPane.getVmax());
-            clickOn(countryDel);
-            Assertions.assertFalse(countriesList.getItems().contains(au));
-        }
-        Assertions.assertFalse(countriesList.getItems().contains(au));
+        // Reset fileStorage
+        FileHandler.saveCountryCollector(new PersistenceHandler(), null, null);
+    }
+
+    @Test
+    public void testAddCountryVisit() {
+        Assertions.assertFalse(countriesList.getItems().contains(au), "Clean before running tests :)");
+        countryInput.setText(au.getCountryCode());
+        // Scroll in case the window is to low to display button
+        scrollPane.setVvalue(scrollPane.getVmax());
+        clickOn(countryAdd);
+        Assertions.assertEquals("", countryInput.getText());
+        Assertions.assertTrue(countriesList.getItems().contains(au));
+    }
+
+    @Test
+    public void testAddAndRemoveCountryVisit() {
+        Assertions.assertFalse(countriesList.getItems().contains(au), "Clean before running tests :)");
         countryInput.setText(au.getCountryCode());
         scrollPane.setVvalue(scrollPane.getVmax());
         clickOn(countryAdd);
@@ -63,5 +97,15 @@ public class AppTest extends ApplicationTest {
         scrollPane.setVvalue(scrollPane.getVmax());
         clickOn(countryDel);
         Assertions.assertFalse(countriesList.getItems().contains(au));
+    }
+
+    private void defineGeneralDialogs() {
+        countriesList = (ListView<Country>) parent.lookup("#countriesList");
+        cc = controller.getCountryCollector();
+        countryInput = (TextField) parent.lookup("#countryInput");
+        countryAdd = (Button) parent.lookup("#countryAdd");
+        countryDel = (Button) parent.lookup("#countryDel");
+        visitsButton = (Button) parent.lookup("#visitsButton");
+        scrollPane = (ScrollPane) parent.lookup("#mapPageScroll");
     }
 }
