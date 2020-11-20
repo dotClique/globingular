@@ -12,6 +12,7 @@
         <module>aggregator</module>
         <module>restserver</module>
         <module>restapi</module>
+        <module>integrationtests</module>
     </modules>
 
     <properties>
@@ -33,6 +34,8 @@
         <jacoco.version>0.8.5</jacoco.version>
         <mockito.version>3.6.0</mockito.version>
         <junit.version>5.4.2</junit.version>
+        <testfx.version>4.0.16-alpha</testfx.version>
+        <jersey.version>3.0.0-M6</jersey.version>
     </properties>
 
     <!-- Actual location for GitLab Pages instance, relativizes any absolute site links -->

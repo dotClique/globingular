@@ -9,7 +9,6 @@
 
     <properties>
         <javafx.version>14.0.1</javafx.version>
-        <testfx.version>4.0.16-alpha</testfx.version>
     </properties>
 
     <artifactId>ui</artifactId>

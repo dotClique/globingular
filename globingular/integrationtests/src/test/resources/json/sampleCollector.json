@@ -1,0 +1,43 @@
+{
+    "World": {
+        "WorldName": "Earth",
+        "Countries": [
+            {
+                "countryCode": "NO",
+                "shortName": "Norway",
+                "longName": "The Kingdom of Norway",
+                "sovereignty": "UN",
+                "region": "EU",
+                "population": 5367580
+            },
+            {
+                "countryCode": "SE",
+                "shortName": "Sweden",
+                "longName": "The Kingdom of Sweden",
+                "sovereignty": "UN",
+                "region": "EU",
+                "population": 10333456
+            },
+            {
+                "countryCode": "DK",
+                "shortName": "Denmark",
+                "longName": "The Kingdom of Denmark",
+                "sovereignty": "UN",
+                "region": "EU",
+                "population": 5822763
+            }
+        ]
+    },
+    "Visits": [
+        {
+            "countryCode": "NO",
+            "arrival": "2020-11-05T19:15:57.213462",
+            "departure": "2020-11-08T19:15:57.213462"
+        },
+        {
+            "countryCode": "SE",
+            "arrival": "2020-10-16T19:15:57.213462",
+            "departure": "2020-10-17T19:15:57.213462"
+        }
+    ]
+}

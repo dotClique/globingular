@@ -11,10 +11,6 @@
 
     <artifactId>restserver</artifactId>
 
-    <properties>
-        <jersey.version>3.0.0-M6</jersey.version>
-    </properties>
-
     <dependencies>
         <!-- Globingular REST API -->
         <dependency>
