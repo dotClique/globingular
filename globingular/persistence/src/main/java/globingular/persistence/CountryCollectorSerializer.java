@@ -15,7 +15,7 @@ import globingular.core.Visit;
  * that serializes CountryCollector objects into JSON format.</p>
  */
 
-public class CountryCollectorSerializer extends JsonSerializer<CountryCollector> {
+class CountryCollectorSerializer extends JsonSerializer<CountryCollector> {
 
     /**
      * Serialize a CountryCollector object into Json format.
