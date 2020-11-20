@@ -1,6 +1,6 @@
 package globingular.core;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -83,7 +83,7 @@ public class CountryCollector implements Observable<Visit> {
      * @throws IllegalArgumentException If Country does not exist in this instance's world
      * @throws IllegalArgumentException If Country has already been visited
      */
-    public boolean registerVisit(final Country country, final LocalDateTime arrival, final LocalDateTime departure) {
+    public boolean registerVisit(final Country country, final LocalDate arrival, final LocalDate departure) {
         return this.registerVisit(new Visit(country, arrival, departure));
     }
 
@@ -249,6 +249,15 @@ public class CountryCollector implements Observable<Visit> {
         return this.visits.toString();
     }
 
+    /**
+     * {@inheritDoc}
+     * Get listeners for changes in visited countries.
+     */
+    @Override
+    public Collection<Listener<Visit>> getListeners() {
+        // Return a new unmodifiable set containing the listeners.
+        return Set.copyOf(listeners);
+    }
     /**
      * {@inheritDoc}
      * Allows for listening to changes in visited countries.

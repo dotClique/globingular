@@ -46,7 +46,7 @@ public class GlobingularModule {
 
     /**
      * Remove {@link CountryCollector} stored with given username.
-     * 
+     *
      * @param username The username to remove CountryCollector for
      * @return true if successfully removed
      */

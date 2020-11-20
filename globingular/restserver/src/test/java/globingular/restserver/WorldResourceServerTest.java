@@ -17,7 +17,7 @@ import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.Response;
 
-public class WorldResourceTest {
+public class WorldResourceServerTest {
 
     private static HttpServer server;
     private static WebTarget target;

@@ -1,0 +1,27 @@
+:invalid {
+    -fx-border-color: red;
+    -fx-border-style: solid;
+    -fx-border-width: 2px;
+    /* Preserve total dimensions */
+    -fx-padding: -2px;
+}
+
+.largeHeading {
+    -fx-font-size: 20;
+    -fx-font-weight: bold;
+    /*-fx-underline: true;*/
+}
+
+.popup {
+    -fx-padding: 20 20 20 20;
+    -fx-background-color: #f0f0f0;
+}
+
+.largeList {
+    -fx-font-size: 15;
+}
+
+.smallHeading {
+    -fx-text-fill: #5f5f5f;
+    -fx-font-size: 15
+}

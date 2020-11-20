@@ -8,6 +8,7 @@ module globingular.ui {
 	requires org.controlsfx.controls;
 	
 	requires java.desktop;
+	requires java.net.http;
 
 	opens globingular.ui to javafx.fxml, javafx.graphics;
 }

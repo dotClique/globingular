@@ -2,20 +2,19 @@ package globingular.restapi;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
 
 import java.io.IOException;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.endsWith;
+import static org.mockito.Mockito.*;
 
+import globingular.persistence.FileHandler;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.MockedStatic;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
@@ -23,7 +22,7 @@ import globingular.core.CountryCollector;
 import globingular.core.GlobingularModule;
 import globingular.persistence.PersistenceHandler;
 
-public class CountryCollectorResourceTest {
+public class CountryCollectorResourceApiTest {
 
     // The usernames used for testing
     private static String username = "hablebable";
@@ -42,6 +41,7 @@ public class CountryCollectorResourceTest {
     private PersistenceHandler pHandler;
     private CountryCollectorResource ccrNewUser;
     private CountryCollectorResource ccrOldUser;
+    private MockedStatic<FileHandler> fHandler;
 
     @BeforeEach
     public void beforeEach() throws IllegalArgumentException, IOException {
@@ -50,6 +50,7 @@ public class CountryCollectorResourceTest {
         cCollector1 = mock(CountryCollector.class, new RuntimeExceptionAnswer());
         cCollector2 = mock(CountryCollector.class, new RuntimeExceptionAnswer());
         pHandler = mock(PersistenceHandler.class, new RuntimeExceptionAnswer());
+        fHandler = mockStatic(FileHandler.class, new RuntimeExceptionAnswer());
 
         // Mock define
         // Using doReturn in order to use RuntimeExceptionAnswer() to report stubs not mocked
@@ -67,7 +68,7 @@ public class CountryCollectorResourceTest {
         doReturn(false).when(gModule).isUsernameAvailable(endsWith("taken"));
 
         // Always accept saving
-        doReturn(true).when(pHandler).saveState(any(String.class), any());
+        fHandler.when(() -> FileHandler.saveCountryCollector(any(), any(), any())).thenReturn(true);
 
         ccrNewUser =  new CountryCollectorResource(gModule, usernameNew, null, pHandler);
         ccrOldUser =  new CountryCollectorResource(gModule, usernameOld, cCollector1, pHandler);
@@ -77,36 +78,45 @@ public class CountryCollectorResourceTest {
         verifyNoInteractions(cCollector1);
         verifyNoInteractions(cCollector2);
         verifyNoInteractions(pHandler);
+        fHandler.verify(times(0), () -> FileHandler.saveCountryCollector(any(PersistenceHandler.class), anyString(), any(CountryCollector.class)));
+    }
+
+    @AfterEach
+    public void afterEach() {
+        if (fHandler != null && !fHandler.isClosed()) {
+            fHandler.close();
+        }
     }
 
     /**
      * Helper method to avoid duplicating code too much.
-     * Verifies that {@link PersistenceHandler#saveState(String, CountryCollector)} has been called
+     * Verifies that {@link FileHandler#saveCountryCollector(PersistenceHandler, String, CountryCollector)} has been called
      * the given amount of times for the parameters username and countryCollector.
      * 
+     * @param persistenceHandler        The PersistenceHandler to count for
      * @param username                  The username to count for
      * @param countryCollector          The countryCollector to count for
      * @param times                     The amount of times to check, usually 1
      * @throws IllegalArgumentException If username is invalid: {@link GlobingularModule#isUsernameValid(String)}
      * @throws IOException              If saving fails (not really gonna happen, as it's a mocked instance)
      */
-    private void internalTestSaveAppState(final String username, final CountryCollector countryCollector,
+    private void internalTestSaveAppState(final PersistenceHandler persistenceHandler, final String username, final CountryCollector countryCollector,
             final int times) throws IllegalArgumentException, IOException {
-        verify(pHandler, times(times)).saveState(username, countryCollector);
+        fHandler.verify(times(times), () -> FileHandler.saveCountryCollector(eq(persistenceHandler), eq(username), eq(countryCollector)));
     }
 
     @Test
     public void testPutCountryCollectorForNewUser() throws IllegalArgumentException, IOException {
         assertEquals(true, ccrNewUser.putCountryCollector(cCollector1));
         verify(gModule).putCountryCollector(usernameNewLower, cCollector1);
-        internalTestSaveAppState(usernameNewLower, cCollector1, 1);
+        internalTestSaveAppState(pHandler, usernameNewLower, cCollector1, 1);
     }
 
     @Test
     public void testPutCountryCollectorForOldUser() throws IllegalArgumentException, IOException {
         assertEquals(true, ccrOldUser.putCountryCollector(cCollector2));
         verify(gModule).putCountryCollector(usernameOldLower, cCollector2);
-        internalTestSaveAppState(usernameOldLower, cCollector2, 1);
+        internalTestSaveAppState(pHandler, usernameOldLower, cCollector2, 1);
     }
 
     @Test
@@ -133,14 +143,14 @@ public class CountryCollectorResourceTest {
     public void testDeleteCountryCollectorForNewUser() throws IllegalArgumentException, IOException {
         assertEquals(true, ccrNewUser.deleteCountryCollector());
         verify(gModule).removeCountryCollector(usernameNewLower);
-        internalTestSaveAppState(usernameNewLower, null, 1);
+        internalTestSaveAppState(pHandler, usernameNewLower, null, 1);
     }
 
     @Test
     public void testDeleteCountryCollectorForOldUser() throws IOException {
         assertEquals(true, ccrOldUser.deleteCountryCollector());
         verify(gModule).removeCountryCollector(usernameOldLower);
-        internalTestSaveAppState(usernameOldLower, null, 1);
+        internalTestSaveAppState(pHandler, usernameOldLower, null, 1);
     }
 
     @Test
@@ -154,8 +164,8 @@ public class CountryCollectorResourceTest {
         assertEquals(true, ccrOldUser.renameCountryCollector(usernameOldRenamed));
         verify(gModule).putCountryCollector(usernameOldRenamedLower, cCollector1);
         verify(gModule).removeCountryCollector(usernameOldLower);
-        internalTestSaveAppState(usernameOldLower, null, 1);
-        internalTestSaveAppState(usernameOldRenamedLower, cCollector1, 1);
+        internalTestSaveAppState(pHandler, usernameOldLower, null, 1);
+        internalTestSaveAppState(pHandler, usernameOldRenamedLower, cCollector1, 1);
     }
 
     @Test

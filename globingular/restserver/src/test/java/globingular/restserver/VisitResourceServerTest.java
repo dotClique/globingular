@@ -6,7 +6,7 @@ import globingular.core.Country;
 import globingular.core.CountryCollector;
 import globingular.core.Visit;
 import globingular.core.World;
-import globingular.persistence.PersistenceHandler;
+import globingular.persistence.FileHandler;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
@@ -23,9 +23,9 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.File;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
-public class VisitResourceTest {
+public class VisitResourceServerTest {
 
     private static HttpServer server;
     private static WebTarget target;
@@ -57,15 +57,13 @@ public class VisitResourceTest {
         c2 = new Country("SE", "Sweden");
         world = new World("testWorld", c1, c2);
         cc = new CountryCollector(world);
-
-        System.out.println(username);
     }
 
     @AfterAll
     public static void tearDown() {
         server.shutdownNow();
 
-        File folder = PersistenceHandler.DATA_FOLDER.toFile();
+        File folder = FileHandler.DATA_FOLDER.toFile();
         for (File f : folder.listFiles()) {
                 f.delete();
         }
@@ -88,12 +86,12 @@ public class VisitResourceTest {
         assertEquals("true", responseMsg);
 
         // Visit with time values
-        Visit v1 = new Visit(c1, LocalDateTime.now(), LocalDateTime.now());
+        Visit v1 = new Visit(c1, LocalDate.now(), LocalDate.now());
         request = objectMapper.writeValueAsString(v1);
 
         response = target.path("globingular").path("countryCollector")
                 .path(username).path("visit").path("register").request()
-                .put(Entity.entity(request, MediaType.APPLICATION_JSON));
+                .post(Entity.entity(request, MediaType.APPLICATION_JSON));
 
         // Success
         assertEquals(200, response.getStatus());
@@ -108,7 +106,7 @@ public class VisitResourceTest {
 
         response = target.path("globingular").path("countryCollector")
                 .path(username).path("visit").path("register").request()
-                .put(Entity.entity(request, MediaType.APPLICATION_JSON));
+                .post(Entity.entity(request, MediaType.APPLICATION_JSON));
 
         // Success
         assertEquals(200, response.getStatus());
@@ -134,12 +132,12 @@ public class VisitResourceTest {
         assertEquals("true", responseMsg);
 
         // Visit with time values
-        Visit v1 = new Visit(c1, LocalDateTime.now(), LocalDateTime.now());
+        Visit v1 = new Visit(c1, LocalDate.now(), LocalDate.now());
         request = objectMapper.writeValueAsString(v1);
 
         response = target.path("globingular").path("countryCollector")
                 .path(username).path("visit").path("register").request()
-                .put(Entity.entity(request, MediaType.APPLICATION_JSON));
+                .post(Entity.entity(request, MediaType.APPLICATION_JSON));
 
         // Success
         assertEquals(200, response.getStatus());
@@ -151,7 +149,7 @@ public class VisitResourceTest {
         // Remove again
         response = target.path("globingular").path("countryCollector")
                 .path(username).path("visit").path("remove").request()
-                .put(Entity.entity(request, MediaType.APPLICATION_JSON));
+                .post(Entity.entity(request, MediaType.APPLICATION_JSON));
 
         // Success
         assertEquals(200, response.getStatus());

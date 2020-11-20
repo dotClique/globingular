@@ -5,24 +5,24 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 public class VisitTest {
     static Country country0;
-    static LocalDateTime time0, time1;
+    static LocalDate date0, date1;
 
     @BeforeAll
     public static void start() {
         country0 = new Country("_C0", "_country0");
-        time0 = LocalDateTime.now();
-        time1 = LocalDateTime.now();
+        date0 = LocalDate.now();
+        date1 = LocalDate.now();
     }
 
     @Test
     public void testConstructor() {
-        Visit v = new Visit(country0, time0, time1);
+        Visit v = new Visit(country0, date0, date1);
         assertEquals(country0, v.getCountry());
-        assertEquals(time0, v.getArrival());
-        assertEquals(time1, v.getDeparture());
+        assertEquals(date0, v.getArrival());
+        assertEquals(date1, v.getDeparture());
     }
 }
