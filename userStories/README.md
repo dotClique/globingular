@@ -1,6 +1,6 @@
 # User Stories
 
-Below are descriptions and sequence diagrams for the user stories implemented in this app.
+For the development of this app we have used the following 9 user stories. All of them are described with a short text. Some are then described with a short *"how to"*, while some have a sequence-diagram to show the apps behavior.
 
 
 ## User Story 1
@@ -19,7 +19,12 @@ AppController -> World: getCountryFromCode("ES")
 return ~#Spain: Country
 AppController -> World: getCountryFromName("ES")
 return null
-AppController -> CountryCollector: setVisited(#Spain: Country)
+AppController -> CountryCollector: registerVisit(#Spain: Country)
+CountryCollector -> CountryCollector: registerVisit(#Spain: Country, null, null)
+CountryCollector -> Visit: new Visit(#Spain: Country, null, null)
+Visit --> CountryCollector: ~#Spain00: Visit
+CountryCollector -> CountryCollector: registerVisit(#Spain00: Visit)
+CountryCollector -> CountryCollector: throwExceptionIfInvalidCountry(#Spain: Country)
 CountryCollector -> AppController: *notifyListener: setColor(#Spain: Country, Colors.COUNTRY_VISITED)*
 AppController --> User: *Map updated with colored countries*
 
@@ -44,14 +49,24 @@ A user has been travelling through Andorra on their way from France to Spain, an
 
 User has been in Italy on holiday. They open the app and click on Italy on the map to tag it as visited.
 
+- This has since been expanded. The user now gets a dialog to set their arrival and departure time.
+
 ```plantuml
 
 actor User
 User -> "~#webView: WebView" as webView: *click on Italy*
-webView -> AppController: *notifyListener(#Italy: Country)*
-AppController -> CountryCollector: isVisited(#Italy: Country)
-CountryCollector --> AppController: false
-AppController -> CountryCollector: registerVisit(#Italy: Country)
+webView -> AppController: *notifyListener("IT")*
+AppController -> World: getCountryFromCode("IT")
+World --> AppController: ~#Italy: Country
+AppController -> AppController: popupVisits(#Italy: Country)
+AppController --> User: *Display popup*
+User -> Appcontroller: "~#addVisitButton: Button" as addVisitButton: *click on '+'*
+addVisitButton -> AppController: requestRegisterVisit()
+AppController -> CountryCollector: registerVisit(#Italy: Country, null, null)
+CountryCollector -> Visit: new Visit(#Italy: Country, null, null)
+Visit --> CountryCollector: ~#Italy00: Visit
+CountryCollector -> CountryCollector: registerVisit(#Italy00: Visit)
+CountryCollector -> CountryCollector: throwExceptionIfInvalidCountry(#Italy: Country)
 CountryCollector --> webView: *notifyListener*
 webView --> User: *Map updated with colored countries*
 
@@ -61,6 +76,7 @@ webView --> User: *Map updated with colored countries*
 ## User Story 5
 
 A user went to Azerbaijan, but doesn't know how to spell it. They enter the first few letters and choose Azerbaijan from a drop-down list of suggestions.
+
 ```plantuml
 
 actor User
@@ -74,6 +90,7 @@ suggestions -> countryInput: "Azerbaijan"
 ## User Story 6
 
 A user gets statistics on how many countries they've visited on each continent.
+
 ```plantuml
 
 actor User
@@ -93,12 +110,8 @@ Upon visiting every country in Europe, the user gets a badge-popup.
 ## User Story 8
 
 The user can open a view showing all their achieved badges (and progress on new badges). 
-```plantuml
 
-actor User
-User -> "~#tab: Statistics" as tab: *click on Statistics*
-
-```
+- This has part of the Badge-system has not been implemented
 
 
 
