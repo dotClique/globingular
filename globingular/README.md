@@ -53,7 +53,11 @@ In order to build and install the project run `mvn install` in the project folde
 To launch the desktop application in 'one line', run: `mvn install; mvn javafx:run -pl ui`. Remember to launch the server as well (next paragraph).
 
 ### Server
-As described above in restserver module paragraph, `mvn exec:java -pl restserver` must be run as well in a different terminal. To select a logging level for the server use the parameter `-Dorg.slf4j.simpleLogger.defaultLogLevel`, like so: `mvn exec:java -pl restserver -Dorg.slf4j.simpleLogger.defaultLogLevel=debug`.
+As described above in restserver module paragraph, `mvn exec:java -pl restserver` must be run as well in a different terminal.
+
+To select a logging level for the server use the parameter `-Dorg.slf4j.simpleLogger.defaultLogLevel`, like so: `mvn exec:java -pl restserver -Dorg.slf4j.simpleLogger.defaultLogLevel=debug`.
+
+By default the RestServer module launches with parameter `-Ddatafolder=globingularServer`. This can be specified, to have the server use a different location. Note that it has to be relative to `user.home`.
 
 ### Before commiting
 Before commiting changes remember to run a full `mvn install` to make sure that checkstyle, spotbugs and all tests are run before pushing. This is to ensure that code on master is fully functional.
