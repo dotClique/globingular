@@ -22,7 +22,7 @@ import globingular.core.CountryCollector;
 import globingular.core.GlobingularModule;
 import globingular.persistence.PersistenceHandler;
 
-public class CountryCollectorResourceTest {
+public class CountryCollectorResourceApiTest {
 
     // The usernames used for testing
     private static String username = "hablebable";
@@ -50,7 +50,7 @@ public class CountryCollectorResourceTest {
         cCollector1 = mock(CountryCollector.class, new RuntimeExceptionAnswer());
         cCollector2 = mock(CountryCollector.class, new RuntimeExceptionAnswer());
         pHandler = mock(PersistenceHandler.class, new RuntimeExceptionAnswer());
-        fHandler = mockStatic(FileHandler.class);
+        fHandler = mockStatic(FileHandler.class, new RuntimeExceptionAnswer());
 
         // Mock define
         // Using doReturn in order to use RuntimeExceptionAnswer() to report stubs not mocked
@@ -78,6 +78,7 @@ public class CountryCollectorResourceTest {
         verifyNoInteractions(cCollector1);
         verifyNoInteractions(cCollector2);
         verifyNoInteractions(pHandler);
+        verifyNoInteractions(fHandler);
     }
 
     @AfterEach

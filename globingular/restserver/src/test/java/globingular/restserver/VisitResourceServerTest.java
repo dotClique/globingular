@@ -7,7 +7,6 @@ import globingular.core.CountryCollector;
 import globingular.core.Visit;
 import globingular.core.World;
 import globingular.persistence.FileHandler;
-import globingular.persistence.PersistenceHandler;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
@@ -26,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.io.File;
 import java.time.LocalDateTime;
 
-public class VisitResourceTest {
+public class VisitResourceServerTest {
 
     private static HttpServer server;
     private static WebTarget target;
